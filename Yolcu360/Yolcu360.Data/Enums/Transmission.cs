@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yolcu360.Core.Entities
+namespace Yolcu360.Data.Enums
 {
-    public class Brand:BaseEntity
+    public enum Transmission
     {
-        public string Name { get; set; }
+        Automatic=1,
+        Manuel=2
     }
 }

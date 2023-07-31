@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yolcu360.Core.Entities
+namespace Yolcu360.Service.Dtos.Brand
 {
-    public class Brand:BaseEntity
+    public class BrandGetDto
     {
         public string Name { get; set; }
     }

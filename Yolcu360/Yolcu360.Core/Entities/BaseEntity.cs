@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Yolcu360.Core.Entities
 {
-    public class Brand:BaseEntity
+    public class BaseEntity
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
     }
 }

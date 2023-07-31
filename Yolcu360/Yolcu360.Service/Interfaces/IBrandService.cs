@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yolcu360.Core.Entities
+namespace Yolcu360.Service.Interfaces
 {
-    public class Brand:BaseEntity
+    public class IBrandService
     {
-        public string Name { get; set; }
+
     }
 }

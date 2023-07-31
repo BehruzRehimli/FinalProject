@@ -14,7 +14,9 @@ namespace Yolcu360.Data
         public Yolcu360DbContext(DbContextOptions<Yolcu360DbContext> opt ):base(opt) { }
 
         public DbSet<Brand> Brands { get; set; }
-
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Office> Offices { get; set; }
+        public DbSet<Yolcu360.Core.Entities.Type> Types { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
