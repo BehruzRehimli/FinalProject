@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Yolcu360.Data;
 
@@ -11,9 +12,10 @@ using Yolcu360.Data;
 namespace Yolcu360.Data.Migrations
 {
     [DbContext(typeof(Yolcu360DbContext))]
-    partial class Yolcu360DbContextModelSnapshot : ModelSnapshot
+    [Migration("20230731161732_addCArsTAble")]
+    partial class addCArsTAble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,18 +54,16 @@ namespace Yolcu360.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("CancelationPrice")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("DepozitPrice")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("FuelType")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsFreeCancelation")
                         .HasColumnType("bit");
@@ -78,18 +78,16 @@ namespace Yolcu360.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OfficeId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("PriceFor3Days")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TotalMillage")
                         .HasColumnType("decimal(18,2)");
@@ -186,19 +184,16 @@ namespace Yolcu360.Data.Migrations
             modelBuilder.Entity("Yolcu360.Core.Entities.Car", b =>
                 {
                     b.HasOne("Yolcu360.Core.Entities.Brand", "Brand")
-                        .WithMany("Cars")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .WithMany()
+                        .HasForeignKey("BrandId");
 
                     b.HasOne("Yolcu360.Core.Entities.Office", "Office")
-                        .WithMany("Cars")
-                        .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .WithMany()
+                        .HasForeignKey("OfficeId");
 
                     b.HasOne("Yolcu360.Core.Entities.Type", "Type")
-                        .WithMany("Cars")
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .WithMany()
+                        .HasForeignKey("TypeId");
 
                     b.Navigation("Brand");
 
@@ -217,24 +212,9 @@ namespace Yolcu360.Data.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("Yolcu360.Core.Entities.Brand", b =>
-                {
-                    b.Navigation("Cars");
-                });
-
             modelBuilder.Entity("Yolcu360.Core.Entities.City", b =>
                 {
                     b.Navigation("Offices");
-                });
-
-            modelBuilder.Entity("Yolcu360.Core.Entities.Office", b =>
-                {
-                    b.Navigation("Cars");
-                });
-
-            modelBuilder.Entity("Yolcu360.Core.Entities.Type", b =>
-                {
-                    b.Navigation("Cars");
                 });
 #pragma warning restore 612, 618
         }

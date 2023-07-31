@@ -9,5 +9,6 @@ namespace Yolcu360.Core.Entities
     public class Type:BaseEntity
     {
         public string Name { get; set; }
+        public List<Car> Cars { get; set; }
     }
 }

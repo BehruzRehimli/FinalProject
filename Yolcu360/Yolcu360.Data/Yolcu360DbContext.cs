@@ -17,6 +17,7 @@ namespace Yolcu360.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Office> Offices { get; set; }
         public DbSet<Yolcu360.Core.Entities.Type> Types { get; set; }
+        public DbSet<Car> Cars { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
