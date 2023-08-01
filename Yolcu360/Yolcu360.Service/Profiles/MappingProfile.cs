@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Yolcu360.Core.Entities;
 using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Dtos.Common;
+using Yolcu360.Service.Dtos.Type;
 
 namespace Yolcu360.Service.Profiles
 {
@@ -17,10 +18,14 @@ namespace Yolcu360.Service.Profiles
             CreateMap<BrandCreateDto, Brand>();
             CreateMap<Brand, BrandGetDto>();
             CreateMap<Brand, BrandGetAllDto>();
-
+            CreateMap<TypeCreateDto,Yolcu360.Core.Entities.Type>();
+            CreateMap<Yolcu360.Core.Entities.Type, TypeGetDto>();
+            CreateMap<Yolcu360.Core.Entities.Type, TypeGetAllDto>();
 
 
             CreateMap<Brand, CreateResultDto>();
+            CreateMap<Core.Entities.Type, CreateResultDto>();
+
         }
     }
 }

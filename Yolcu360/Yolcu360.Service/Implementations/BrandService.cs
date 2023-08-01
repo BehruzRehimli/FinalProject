@@ -57,7 +57,7 @@ namespace Yolcu360.Service.Implementations
             }
 
             Brand brand = _brandRepository.Get(x => x.Id == id);
-            if (brand.Name!=dto.Name && _brandRepository.IsExsist(x => x.Name == dto.Name))
+            if (_brandRepository.IsExsist(x => x.Name == dto.Name &&x.Id!=brand.Id))
             {
                 throw new RestException(System.Net.HttpStatusCode.BadRequest, "Name", ErrorMessages.NameTaken(dto.Name));
             }

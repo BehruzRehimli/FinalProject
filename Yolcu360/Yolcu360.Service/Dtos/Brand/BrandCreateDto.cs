@@ -15,7 +15,7 @@ namespace Yolcu360.Service.Dtos.Brand
     {
         public BrandCreateDtoValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
+            RuleFor(x => x.Name).NotEmpty().MaximumLength(50).MinimumLength(3);
         }
     }
 }
