@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Yolcu360.API.Middlewares;
 using Yolcu360.Core.Entities;
@@ -14,6 +15,7 @@ using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Exceptions;
 using Yolcu360.Service.Implementations;
 using Yolcu360.Service.Interfaces;
+using Yolcu360.Service.Mail;
 using Yolcu360.Service.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,11 +65,14 @@ builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<ITypeRepository, TypeRepository>();
 builder.Services.AddScoped<ITypeService, TypeService>();
+builder.Services.AddTransient<IMailService, MailService>();
 
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
 {
     policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(origin => true);
 }));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

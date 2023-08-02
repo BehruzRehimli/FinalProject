@@ -8,6 +8,7 @@ using Yolcu360.Core.Entities;
 using Yolcu360.Service.Dtos.Account;
 using Yolcu360.Service.Exceptions;
 using Yolcu360.Service.Helpers;
+using Yolcu360.Service.Mail;
 
 namespace Yolcu360.API.Controllers
 {
@@ -17,11 +18,13 @@ namespace Yolcu360.API.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IMailService _mailService;
 
-        public AccountsController(UserManager<AppUser> userManager, IConfiguration configuration)
+        public AccountsController(UserManager<AppUser> userManager, IConfiguration configuration, IMailService mailService)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _mailService = mailService;
         }
 
         [HttpPost("Register")]
@@ -37,6 +40,14 @@ namespace Yolcu360.API.Controllers
             user.UserName = dto.Username;
             await _userManager.CreateAsync(user, dto.Password);
             await _userManager.AddToRoleAsync(user, "Member");
+
+            await _mailService.SendEmailAsync(new MailRequest()
+            {
+                ToEmail = user.Email,
+                Subject = "Mail Configuration!!!",
+                Body = "<h1>Salam</h1>"
+            });
+
             return Ok();
         }
         [HttpPost("Login")]
@@ -69,6 +80,7 @@ namespace Yolcu360.API.Controllers
                 issuer: _configuration.GetSection("JWT:Issuer").Value,
                 audience: _configuration.GetSection("JWT:Audience").Value);
             var tokestr=new JwtSecurityTokenHandler().WriteToken(token);
+
             return Ok(new { token=tokestr });
         }
 
