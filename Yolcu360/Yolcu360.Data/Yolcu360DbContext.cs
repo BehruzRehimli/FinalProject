@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using Yolcu360.Data.Configurations;
 
 namespace Yolcu360.Data
 {
-    public class Yolcu360DbContext:DbContext
+    public class Yolcu360DbContext:IdentityDbContext
     {
         public Yolcu360DbContext(DbContextOptions<Yolcu360DbContext> opt ):base(opt) { }
 
@@ -18,6 +19,7 @@ namespace Yolcu360.Data
         public DbSet<Office> Offices { get; set; }
         public DbSet<Yolcu360.Core.Entities.Type> Types { get; set; }
         public DbSet<Car> Cars { get; set; }
+        public DbSet<AppUser> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
