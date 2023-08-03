@@ -36,5 +36,12 @@ namespace Yolcu360.API.Controllers
         //    await _userManeger.CreateAsync(superAdmin,"admin123");
         //    return Ok(superAdmin.Id);
         //}
+        //[HttpGet("SetRole")]
+        //public async Task<IActionResult> SetRole()
+        //{
+        //    var superAdmin =await _userManeger.FindByNameAsync("SuperAdmin");
+        //    await _userManeger.AddToRoleAsync(superAdmin,"SuperAdmin");
+        //    return Ok();
+        //}
     }
 }

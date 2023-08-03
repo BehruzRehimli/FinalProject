@@ -10,5 +10,6 @@ namespace Yolcu360.Core.Entities
     public class AppUser:IdentityUser
     {
         public string Fullname { get; set; }
+        public int MailConfirmCode { get; set; }
     }
 }

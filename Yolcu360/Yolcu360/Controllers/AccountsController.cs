@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -41,14 +42,32 @@ namespace Yolcu360.API.Controllers
             await _userManager.CreateAsync(user, dto.Password);
             await _userManager.AddToRoleAsync(user, "Member");
 
+            int key=new Random().Next(1,9999);
+            user.MailConfirmCode= key;
+            await _userManager.UpdateAsync(user);
             await _mailService.SendEmailAsync(new MailRequest()
             {
                 ToEmail = user.Email,
                 Subject = "Mail Configuration!!!",
-                Body = "<h1>Salam</h1>"
+                Body = $"<h3>Salam</h3><h4>Sizin təsdiq kodunuz</h4><h1>{key}</h1>"
             });
 
             return Ok();
+        }
+        [Authorize(Roles = "Member")]
+        [HttpPost("MailConfirm")]
+        public async Task<IActionResult> MailConfirm(MailConfirmDto dto)
+        {
+            AppUser user =await _userManager.FindByNameAsync(User?.Identity?.Name);
+            if (user==null)
+                return NotFound();
+            if (user.MailConfirmCode!=dto.ConfirmCode)
+            {
+                throw new RestException(System.Net.HttpStatusCode.BadRequest, "ConfirmCode", "Code is not true!");
+            }
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            await _userManager.ConfirmEmailAsync(user, token);
+            return NoContent();
         }
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginDto dto)
@@ -67,7 +86,7 @@ namespace Yolcu360.API.Controllers
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
             claims.Add(new Claim("Fullname", user.Fullname));
-            var roles=_userManager.GetRolesAsync(user).Result.Select(x=>new Claim(ClaimTypes.Role,x)).ToList() ;
+            var roles=(_userManager.GetRolesAsync(user).Result).Select(x=>new Claim(ClaimTypes.Role,x)).ToList() ;
             claims.AddRange(roles);
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:Secret").Value));
@@ -78,7 +97,8 @@ namespace Yolcu360.API.Controllers
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(3),
                 issuer: _configuration.GetSection("JWT:Issuer").Value,
-                audience: _configuration.GetSection("JWT:Audience").Value);
+                audience: _configuration.GetSection("JWT:Audience").Value
+                );
             var tokestr=new JwtSecurityTokenHandler().WriteToken(token);
 
             return Ok(new { token=tokestr });

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 using Yolcu360.API.Middlewares;
 using Yolcu360.Core.Entities;
 using Yolcu360.Core.Repositories;
@@ -34,18 +36,59 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
     };
 });
 builder.Services.AddDbContext<Yolcu360DbContext>(opt=>opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<BrandCreateDtoValidator>();
-builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
 {
     opt.Password.RequireNonAlphanumeric = false;
-    opt.Password.RequireUppercase= false;
-    opt.Password.RequiredLength= 8;
+    opt.Password.RequireUppercase = false;
+    opt.Password.RequiredLength = 8;
 }).AddDefaultTokenProviders().AddEntityFrameworkStores<Yolcu360DbContext>();
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "My API",
+        Version = "v1"
+    });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT with Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+   {
+     new OpenApiSecurityScheme
+     {
+       Reference = new OpenApiReference
+       {
+         Type = ReferenceType.SecurityScheme,
+         Id = "Bearer"
+       }
+      },
+      new string[] { }
+    }
+  });
+});
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<BrandCreateDtoValidator>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<ITypeRepository, TypeRepository>();
+builder.Services.AddScoped<ITypeService, TypeService>();
+builder.Services.AddTransient<IMailService, MailService>();
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
+{
+    policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(origin => true);
+}));
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -60,19 +103,6 @@ builder.Services.AddAuthentication(opt =>
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JWT:Secret").Value))
     };
 });
-
-builder.Services.AddScoped<IBrandRepository, BrandRepository>();
-builder.Services.AddScoped<IBrandService, BrandService>();
-builder.Services.AddScoped<ITypeRepository, TypeRepository>();
-builder.Services.AddScoped<ITypeService, TypeService>();
-builder.Services.AddTransient<IMailService, MailService>();
-
-builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
-{
-    policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(origin => true);
-}));
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -84,6 +114,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization(); 
 
 app.MapControllers();
