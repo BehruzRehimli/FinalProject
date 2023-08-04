@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yolcu360.Core.Entities
+namespace Yolcu360.Service.Dtos.Country
 {
-    public class City:BaseEntity
+    public class CountryGetAllDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public List<Office> Offices { get; set; }
-        public Country Country { get; set; }
+        public int CitiesCount { get; set; }
+
     }
 }

@@ -25,5 +25,6 @@ namespace Yolcu360.Core.Entities
         public Brand Brand { get; set; }
         public Type Type { get; set; }
         public Office Office { get; set; }
+        public List<Review> Reviews { get; set; }
     }
 }

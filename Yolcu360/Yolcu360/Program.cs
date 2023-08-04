@@ -85,6 +85,8 @@ builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
 builder.Services.AddTransient<IReviewService, ReviewService>();
+builder.Services.AddTransient<ICountryRepository, CountryRepository>();
+builder.Services.AddTransient<ICountryService, CountryService>();
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
@@ -115,7 +117,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization(); 
 
