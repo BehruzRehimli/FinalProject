@@ -20,6 +20,7 @@ namespace Yolcu360.Data
         public DbSet<Yolcu360.Core.Entities.Type> Types { get; set; }
         public DbSet<Car> Cars { get; set; }
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
