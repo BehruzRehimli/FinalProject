@@ -39,10 +39,14 @@ namespace Yolcu360.Service.Implementations
 
         public void Delete(int id)
         {
-            Country country = _countryRepository.Get(x=>x.Id==id);
+            Country country = _countryRepository.Get(x=>x.Id==id,"Cities");
             if (country==null)
             {
                 throw new RestException(System.Net.HttpStatusCode.NotFound, ErrorMessages.NotFoundId(id, "Country"));
+            }
+            if (country.Cities.Count>0)
+            {
+                throw new RestException(System.Net.HttpStatusCode.BadRequest, ErrorMessages.NoDelete("Country", "Cities"));
             }
             _countryRepository.Delete(country);
             _countryRepository.Commit();

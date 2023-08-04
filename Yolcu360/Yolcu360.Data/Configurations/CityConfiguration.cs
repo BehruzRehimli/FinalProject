@@ -14,6 +14,8 @@ namespace Yolcu360.Data.Configurations
         public void Configure(EntityTypeBuilder<City> builder)
         {
             builder.Property(x=>x.Name).IsRequired().HasMaxLength(50);
+            builder.Property(x=>x.ImageName).HasMaxLength(100);
+            builder.HasOne(x => x.Country).WithMany(x=>x.Cities).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

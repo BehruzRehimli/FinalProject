@@ -16,5 +16,9 @@ namespace Yolcu360.Service.Helpers
         {
             return $"There is no {entityName} with {id} id!";
         }
+        public static string NoDelete(string deleteOne,string objects)
+        {
+            return $"You can't delete this {deleteOne}.First you must delete relational {objects}!";
+        }
     }
 }

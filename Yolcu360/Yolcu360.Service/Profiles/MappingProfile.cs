@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Yolcu360.Core.Entities;
 using Yolcu360.Service.Dtos.Brand;
+using Yolcu360.Service.Dtos.City;
 using Yolcu360.Service.Dtos.Common;
 using Yolcu360.Service.Dtos.Country;
 using Yolcu360.Service.Dtos.Type;
@@ -25,6 +26,10 @@ namespace Yolcu360.Service.Profiles
             CreateMap<CountryCreateDto, Country>();
             CreateMap<Country, CountryGetDto>();
             CreateMap<Country, CountryGetAllDto>();
+            CreateMap<Country, CityGetAllCountry>();
+            CreateMap<City, CityGetAllDto>();
+            CreateMap<Country, CityGetCountry>();
+            CreateMap<City, CityGetDto>();
 
             CreateMap<Brand, CreateResultDto>();
             CreateMap<Core.Entities.Type, CreateResultDto>();
