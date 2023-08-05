@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Yolcu360.Service\Yolcu360.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Uploads\City\" />
+  </ItemGroup>
+
 </Project>

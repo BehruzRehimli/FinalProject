@@ -10,7 +10,7 @@ namespace Yolcu360.Service.Dtos.City
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string IamgeName { get; set; }
+        public string ImageName { get; set; }
         public int OfficesCount { get; set; }
         public CityGetAllCountry Country { get; set; }
     }

@@ -15,6 +15,7 @@ using Yolcu360.Data;
 using Yolcu360.Data.Repositories;
 using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Exceptions;
+using Yolcu360.Service.Helpers;
 using Yolcu360.Service.Implementations;
 using Yolcu360.Service.Interfaces;
 using Yolcu360.Service.Mail;
@@ -87,6 +88,8 @@ builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
 builder.Services.AddTransient<IReviewService, ReviewService>();
 builder.Services.AddTransient<ICountryRepository, CountryRepository>();
 builder.Services.AddTransient<ICountryService, CountryService>();
+builder.Services.AddTransient<ICityRepository, CityRepository>();
+builder.Services.AddTransient<ICityService, CityService>();
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
@@ -120,6 +123,7 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization(); 
+app.UseStaticFiles();
 
 app.MapControllers();
 app.UseMiddleware<ExceptionHandlerMiddleware>();

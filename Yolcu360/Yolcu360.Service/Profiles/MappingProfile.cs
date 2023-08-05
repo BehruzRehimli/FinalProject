@@ -10,6 +10,7 @@ using Yolcu360.Service.Dtos.City;
 using Yolcu360.Service.Dtos.Common;
 using Yolcu360.Service.Dtos.Country;
 using Yolcu360.Service.Dtos.Type;
+using Yolcu360.Service.Helpers;
 
 namespace Yolcu360.Service.Profiles
 {
@@ -27,9 +28,11 @@ namespace Yolcu360.Service.Profiles
             CreateMap<Country, CountryGetDto>();
             CreateMap<Country, CountryGetAllDto>();
             CreateMap<Country, CityGetAllCountry>();
-            CreateMap<City, CityGetAllDto>();
+            CreateMap<City, CityGetAllDto>()
+                .ForMember(x => x.ImageName, s => s.MapFrom(m => BaseUrl.GetUrl("City") + m.ImageName));
             CreateMap<Country, CityGetCountry>();
-            CreateMap<City, CityGetDto>();
+            CreateMap<City, CityGetDto>()
+                .ForMember(x=>x.ImageName,s=>s.MapFrom(m=>BaseUrl.GetUrl("City")+m.ImageName));
 
             CreateMap<Brand, CreateResultDto>();
             CreateMap<Core.Entities.Type, CreateResultDto>();
