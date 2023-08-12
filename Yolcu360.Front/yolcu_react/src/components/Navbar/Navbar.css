@@ -1,0 +1,93 @@
+.my-navbar{
+    display: flex;
+    justify-content: end;
+}
+.my-navbar .my-nav-element .valyuta{
+    color: #0e568c;
+    font-size: 12px;
+    margin-right: 15px;
+}
+.my-nav-element{
+    padding: 10px 8px;
+    border-left: 1px solid #eff1f3;
+    height: 20px;
+    display: flex;
+    position: relative;
+}
+.my-nav-element span{
+    margin-top: 5px;
+}
+.my-navbar .my-nav-element .valyuta .valyuta-tab{
+    position: absolute;
+    bottom:0%;
+
+}
+.valyuta-nav.my-nav-element{
+    width: 75px;
+    height: 40px;
+    padding: 0%;
+}
+.valyuta-nav .valyuta{
+    position: absolute;
+    left: 8px;
+    top: 10px;
+}
+.my-navbar .my-nav-element .valyuta-tab{
+    position: absolute;
+    top: 40px;
+    width: 75px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+.my-navbar .my-nav-element .language-tab{
+    position: absolute;
+    top: 40px;
+    width: 56px;
+    right: 0;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.my-navbar .my-nav-element .valyuta-tab p{
+    font-size: 13px;
+    color: #0e568c;
+    font-weight: 700;
+    border-bottom: 1px solid #eff1f3;
+    height: 50px;
+    margin: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.my-navbar .my-nav-element .valyuta-tab p:hover{
+    background-color: #f1f1f1;
+}
+.my-navbar .my-nav-element .valyuta-tab .lan{
+    height: 30px;
+    width: 56px;
+}
+.my-navbar .my-nav-element .valyuta-tab .last{
+    border: none;
+}
+.my-nav-element span{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    color: #9b9b9b;
+    font-size: 11px;
+    margin-left: 8px;
+}
+.my-navbar .my-nav-element .down-arrow{
+    position: absolute;
+    right: 5px;
+    top: 15px;
+}
+.my-navbar .my-nav-element .valyuta-tab::after{
+    content: '';
+    width: 10px;
+    height: 8px;
+    background-color: white;
+    position: absolute;
+    top:-8px !important;
+    right: 20px !important;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
