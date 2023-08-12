@@ -32,3 +32,7 @@ footer .top-footer ul a{
 footer .top-footer ul li{
     text-align: left !important;
 }
+footer .bottom-footer{
+    border-top: 1px solid #d8d8d8;
+    padding: 15px;
+}
