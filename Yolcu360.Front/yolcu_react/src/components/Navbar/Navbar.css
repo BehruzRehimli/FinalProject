@@ -10,7 +10,7 @@
 .my-nav-element{
     padding: 10px 8px;
     border-left: 1px solid #eff1f3;
-    height: 20px;
+    height: 100%;
     display: flex;
     position: relative;
 }
@@ -24,7 +24,7 @@
 }
 .valyuta-nav.my-nav-element{
     width: 75px;
-    height: 40px;
+    height: 100%;
     padding: 0%;
 }
 .valyuta-nav .valyuta{
@@ -34,14 +34,15 @@
 }
 .my-navbar .my-nav-element .valyuta-tab{
     position: absolute;
-    top: 40px;
+    top: 45px;
     width: 75px;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
+    background-color: white;
 }
 .my-navbar .my-nav-element .language-tab{
     position: absolute;
-    top: 40px;
+    top: 45px;
     width: 56px;
     right: 0;
     border-bottom-left-radius: 2px;
