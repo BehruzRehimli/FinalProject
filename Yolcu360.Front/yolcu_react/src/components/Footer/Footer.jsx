@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Footer.css"
 import { Link } from 'react-router-dom';
 import {FaFacebookF,FaTwitter,FaInstagram,FaLinkedin,FaYoutube} from "react-icons/fa"
 import {MdHeadsetMic} from "react-icons/md"
+import axios from "axios"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const Footer = () => {
+  const [offices,setOffices]=useState([])
+
+  useEffect(()=>{
+    axios.get("https://localhost:7079/api/Offices/footer").then(response=>setOffices(response.data))
+  },[]);
   return (
     <footer >
       <div className="my-container">
@@ -15,54 +21,46 @@ const Footer = () => {
           <div className="row">
             <div className="col-lg-3 col-md-6 col-xs-12">
               <ul>
-              <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>
-              </ul>
-            </div>
-            <div className="col-lg-3 col-md-6 col-xs-12">
-              <ul>
-              <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>
+                {
+                  offices.slice(0,4).map(x=>{
+                    return                     <li key={x.Id}>
+                    <Link to="/airport">{x.name}</Link>
+                  </li>
+                  })
+                }
               </ul>
             </div>
             <div className="col-lg-3 col-md-6 col-xs-12">
             <ul>
-              <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>
+                {
+                  offices.slice(4,8).map(x=>{
+                    return                     <li key={x.Id}>
+                    <Link to="/airport">{x.name}</Link>
+                  </li>
+                  })
+                }
               </ul>
             </div>
             <div className="col-lg-3 col-md-6 col-xs-12">
             <ul>
-              <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>                <li>
-                  <Link to="/airport">Barcelona El Prat Airport</Link>
-                </li>
+                {
+                  offices.slice(8,12).map(x=>{
+                    return                     <li key={x.Id}>
+                    <Link to="/airport">{x.name}</Link>
+                  </li>
+                  })
+                }
+              </ul>            
+              </div>
+            <div className="col-lg-3 col-md-6 col-xs-12">
+            <ul>
+                {
+                  offices.slice(12,16).map(x=>{
+                    return                     <li key={x.Id}>
+                    <Link to="/airport">{x.name}</Link>
+                  </li>
+                  })
+                }
               </ul>
             </div>
           </div>

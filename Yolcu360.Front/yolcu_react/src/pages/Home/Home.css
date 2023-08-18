@@ -217,3 +217,287 @@
     margin-bottom: 64px;
     text-align: left;
 }
+.main-input-div{
+    text-align: left;
+    background-color: #f8f8f8;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.15);
+    /* flex-direction: row-reverse; */
+    height: 60px;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+}
+.main-input-div .main-input{
+    background-color: inherit;
+    border: none;
+    border-radius: 5px;
+    color: #888888;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding-left: 0;
+    width: 85%;
+}
+.main-input-div .main-input:focus{
+    outline: none;
+}
+.main-input-icon{
+    align-items: center;
+    display: flex;
+    padding: 0 20px;
+    height: 100%;
+    width: 13%;
+}
+.rental-time{
+    width: 355px;
+    align-items: center;
+    background-color: transparent;
+    display: flex;
+    left: 12px;
+    position: absolute;
+    top: -40px;
+}
+.daily-rental{
+    align-items: center;
+    background-color: #ff9f19;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    display: flex;
+    flex: 1;
+    height: 45px;
+    justify-content: center;
+    padding: 10px 0 18px;
+    transition: all ease-in-out 0.2s;
+    z-index: 0;
+}
+.daily-rental span{
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 10px;
+}
+.daily-rental svg{
+    color: #fff;
+    font-size: 20px;
+    font-weight: 3  00;
+}
+.montly{
+    margin-left: 4px;
+}
+.daily-rental.active{
+    background-color: #f8f8f8;
+}
+.daily-rental.active span{
+    color: #758493;
+}
+.daily-rental.active svg{
+    color: #758493;
+}
+.picker-div{
+    align-items: center;
+    background-color: #f8f8f8;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.15);
+    display: flex;
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+.picker-left{
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex: 1;
+    height: 100%;
+    justify-content: center;
+    position: relative;
+}
+.picker-right{
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex: 1;
+    height: 100%;
+    justify-content: center;
+    position: relative;
+}
+.picker-div span{
+    color: #384959;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+.picker-line{
+    width: 2px;
+    height: 30px;
+    background-color: #888888;
+    opacity: 0.37;
+}
+.find-btn{
+    align-items: center;
+    background-color: #ffa900;
+    border-radius: 5px;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+.find-btn span{
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+}
+.find-btn svg{
+    position: relative;
+    right: -2px;
+    font-size: 19px;
+}
+.calendar-div{
+    position: absolute;
+    top: 70px;
+}
+.calendar-div.start{
+    right: -367px;
+}
+.calendar-div.end{
+    right: -190px;
+}
+.rc_root{
+    width: 543px;
+    padding: 15px;
+    height: 260px;
+}
+.rc_header_label span{
+    font-weight: 600;
+    font-size: 16px !important;
+}
+.rc_body-weekdays_cell span{
+    color: #008dd4;
+    opacity: 0.5;
+    font-weight: 400;
+}
+.rc_body-row:last-child{
+    display: none !important;
+    height: 0 !important;
+}
+.rc_body-days-of-month{
+    height: 75% !important;
+}
+/* .rc_wknd button{
+    color: black !important;
+} */
+.different-drop{
+    position: absolute;
+    bottom: -70px;
+    width: 96%;
+}
+.different-drop button{
+    position: absolute;
+    right: 10px;
+    top:5px;
+    border: none;
+    background-color: transparent;
+    font-size: 24px;
+}
+.dif-drop-btn{
+    position: absolute;
+    bottom: -65px;
+    width: 96%;
+    text-align: left;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: 60px;
+}
+.dif-drop-btn span{
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    margin-left: 10px;
+}
+.dif-drop-btn .checkbox{
+    display: inline-block;
+    border-width: 2px;
+    height: 18px !important;
+    width: 18px !important;
+    background-color: #f8f8f8;
+    border: 2px solid #e3e3e3;
+    border-color: #758493;
+    margin-left: 20px;
+    border-radius: 5px;
+}
+
+@media (max-width:992px){
+    .top-content-home h1{
+        text-align: center;
+        font-size: 23px;
+    }
+    .top-content-home{
+        min-height: 870px;
+        background-size: cover;
+        background-position: center bottom;
+    }
+    .top-content-home .slider-desc{
+        text-align: center;
+        font-size: 16px;
+        letter-spacing: 2.3px;
+    }
+    .slider-item{
+        text-align: center !important;
+    }
+    .picker-div{
+        margin-top: 5rem;
+    }
+    .different-drop{
+        width: 96%;
+    }
+    .find-btn{
+        margin-top: 2.5rem;
+        display: flex;
+        justify-content: center;
+    }
+    .find-btn svg{
+        position: absolute;
+        right: 10px;
+    }
+    .top-content-home .my-container{
+        padding: 1.5rem 7rem;
+    }
+    .picker-div{
+        height: 55%;
+    }
+    .calendar-div.end{
+        right: 0%;
+        z-index: 5;
+    }
+    .calendar-div.start{
+        left: -47%;
+        z-index: 5;
+    }
+}
+@media (max-width:576px){
+    .top-content-home .my-container{
+        padding: 1rem 0.5rem;
+    }
+    .daily-rental{
+        width: 40%;
+    }
+    .calendar-div{
+        display: none ;
+    }
+
+}
+

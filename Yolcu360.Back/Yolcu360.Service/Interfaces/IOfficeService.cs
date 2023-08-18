@@ -16,5 +16,7 @@ namespace Yolcu360.Service.Interfaces
         CreateResultDto Create(OfficeCreateDto dto);
         List<OfficeGetAllDto> GetAll();
         OfficeGetDto Get(int id);
+        List<OfficeGetAllDto> GetForFooter();
+
     }
 }

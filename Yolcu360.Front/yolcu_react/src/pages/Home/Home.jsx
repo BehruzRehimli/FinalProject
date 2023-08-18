@@ -1,18 +1,64 @@
-import React, { useState } from 'react'
+import React, { useState,useCallback,useRef, useEffect } from 'react'
 import "./Home.css"
-import {FaChevronRight} from "react-icons/fa"
-import {MdLocalOffer,MdHeadsetMic} from "react-icons/md"
+import {FaChevronRight,FaCalendarAlt} from "react-icons/fa"
+import {MdLocalOffer,MdHeadsetMic,MdLocationOn,MdOutlineToday,MdClose} from "react-icons/md"
 import {BiSolidCar} from "react-icons/bi"
 import { PiCopyBold } from "react-icons/pi";
+import {RiCalendarTodoFill} from "react-icons/ri"
+import {BiSolidChevronRight} from "react-icons/bi"
 import Slider from '../../components/Slider/Slider'
-
+import { Calendar } from '@natscale/react-calendar';
+import '@natscale/react-calendar/dist/main.css';
 
 
 const Home = () => {
+  const [startDate, setStartDate] = useState(new Date());
+  const [openStartDate,setOpenStartDate]=useState(false);
   const [hiddenDiv,setHiddenDiv]=useState(true)
+  const [rentalTime,setRentalTime] = useState(true);
+  const startRef=useRef();
+  const startDateTab=useRef();
+  const [dropLoc,setDropLoc]=useState(false)
+
+  const [endDate, setEndDate] = useState(new Date());
+  const [openEndDate,setOpenEndDate]=useState(false);
+  const endRef=useRef();
+  const endDateTab=useRef();
+
+  document.onclick= function(e){
+    if(!startRef.current.contains(e.target) && !startDateTab.current.contains(e.target)){
+      setOpenStartDate(false)
+    }
+    if(!endRef.current.contains(e.target) && !endDateTab.current.contains(e.target)){
+      setOpenEndDate(false)
+    }
+  }
+
+
+  const StartDateHandler = useCallback(
+    (val) => {
+      setStartDate(val);
+    },
+    [setStartDate],
+  );
+  const EndDateHandler = useCallback(
+    (val) => {
+      setEndDate(val);
+    },
+    [setEndDate],
+  );
   const HiddenDivHandler=function(){
     setHiddenDiv(!hiddenDiv)
   }
+
+
+  useEffect(()=>{
+    setOpenStartDate(false)
+  },[startDate]);
+
+  useEffect(()=>{
+    setOpenEndDate(false)
+  },[endDate]);
   return (
     <div >
         <section className='top-content-home d-flex justify-content-center align-item-center pt-5'>
@@ -20,6 +66,63 @@ const Home = () => {
           <Slider/>
           <h1 >Easy car rental!</h1>
           <p className='slider-desc'><b>Compare</b> and rent your ideal car at <b>the best prices</b>, worldwide!</p>
+          <div className="row">
+            <div className="col-lg-6 col-xl-6 col-md-12 col-sm-12 col-xs-12" style={{position:"relative"}}>
+              <div className='rental-time'>
+                <div onClick={()=>{setRentalTime(true)}} className={rentalTime?"daily-rental active":"daily-rental"}> <MdOutlineToday/><span>Daily Rental</span></div>
+                <div onClick={()=>{setRentalTime(false)}} className={rentalTime?"daily-rental montly":"daily-rental active montly"}><FaCalendarAlt style={{fontSize:"16px"}}/><span>Monthly Rental</span></div>
+              </div>
+              <div className='main-input-div'>
+                <div className="main-input-icon"> <MdLocationOn style={{color:"#888888",fontSize:"26px"}}/></div>
+                <input className='main-input' type="text" placeholder='Pick-Up Information' />
+              </div>
+
+              {
+                dropLoc?
+                <div className="different-drop main-input-div">
+                <div className="main-input-icon"> <MdLocationOn style={{color:"#888888",fontSize:"26px"}}/></div>
+                <input className='main-input' type="text" placeholder='Drop-Off Information' />
+                <button onClick={()=>{setDropLoc(false)}}><MdClose style={{color:'#cecece'}}/></button>
+              </div>:
+              <div className='dif-drop-btn' onClick={()=>{setDropLoc(true)}}>
+                  <span className='checkbox'></span>
+                  <span>Different Drop Off Location?</span>
+              </div>
+              }
+            </div>
+            <div className="col-xl-4 col-lg-4 col-sm-12 col-md-12 col-xs-12">
+              <div className="picker-div">
+                <div onClick={()=>{setOpenStartDate(true)}} className="picker-left" ref={startDateTab}>
+                  <RiCalendarTodoFill style={{color:'#888888',opacity:"0.37",fontSize:"20px"}}/>
+                  <span className='ms-2'>Pick-Up-Date</span>
+                  <div className="calendar-div start" ref={startRef}>
+                  {
+                    openStartDate?
+                    <Calendar  showDualCalendar isRangeSelector value={startDate} onChange={StartDateHandler} />:null                
+                  }
+                </div>
+                </div>
+                <div className='picker-line'></div>
+                <div onClick={()=>{setOpenEndDate(true)}} className="picker-right" ref={endDateTab}>
+                <RiCalendarTodoFill style={{color:'#888888',opacity:"0.37",fontSize:"20px"}}/>
+                  <span className='ms-2'>Drop-Off-Date</span>
+                  <div className="calendar-div end" ref={endRef}>
+                  {
+                    openEndDate?
+                    <Calendar  showDualCalendar isRangeSelector value={endDate} onChange={EndDateHandler} />:null                
+                  }
+                </div>
+                </div>
+
+              </div>
+            </div>
+            <div className="col-xl-2 col-lg-2 col-sm-12 col-md-12 col-xs-12" >
+              <div className="find-btn">
+                <span>Find the Best Price</span>
+                <BiSolidChevronRight/>
+              </div>
+            </div>
+          </div>
           </div>
         </section>
         <div className="my-container mx-auto">
@@ -88,7 +191,7 @@ const Home = () => {
         </section>
         <section className='mt-5'>
           <h3 style={{textAlign:"left"}} className='heading'>Why rent with Yolcu360?</h3>
-          <div className="row mt-5">
+          <div className="row mt-5 g-4">
             <div className="col-lg-4 col-md-12">
               <div className="home-box">
                 <div className="icon-outside">

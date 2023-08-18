@@ -53,7 +53,10 @@ namespace Yolcu360.Service.Implementations
                 throw new RestException(System.Net.HttpStatusCode.BadRequest, "CountryId", ErrorMessages.NotFoundId(dto.CountryId, "Country"));
             }
             City city = _mapper.Map<City>(dto);
-            city.ImageName = FileManager.UploadFile(_rootPath, "Uploads/City", dto.ImageFile);
+            if (dto.ImageFile!=null)
+            {
+                city.ImageName = FileManager.UploadFile(_rootPath, "Uploads/City", dto.ImageFile);
+            }
             _cityRepository.Add(city);
             _cityRepository.Commit();
             return _mapper.Map<CreateResultDto>(city);

@@ -45,5 +45,10 @@ namespace Yolcu360.API.Controllers
             _officeService.Delete(id);
             return NoContent();
         }
+        [HttpGet("footer")]
+        public ActionResult<List<OfficeGetAllDto>> GetForFooter()
+        {
+            return _officeService.GetForFooter();
+        }
     }
 }

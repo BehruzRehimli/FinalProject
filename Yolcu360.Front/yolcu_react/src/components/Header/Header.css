@@ -13,7 +13,7 @@ header .Logo-div img{
     justify-content: space-between;
     position: fixed;
     top: 0%;
-    width: 100%;
+    width: 100vw;
     background-color: white;
     z-index: 99999;
     height: 45px;
@@ -96,9 +96,13 @@ header .Logo-div img{
     .top-header .burger-menu-con{
         display: block !important;
     }
+    .top-header{
+        width: 100%;
+    }
 }
 @media (min-width:992px){
     .top-header .burger-menu{
         display: none !important;
     }
+
 }

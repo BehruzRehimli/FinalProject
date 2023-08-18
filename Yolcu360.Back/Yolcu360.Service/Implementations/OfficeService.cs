@@ -83,5 +83,11 @@ namespace Yolcu360.Service.Implementations
             List<Office> offices = _officeRepository.GetAll(x => true).Include(x=>x.City).ThenInclude(x=>x.Country).Include(x=>x.Cars).ToList();
             return _mapper.Map<List<OfficeGetAllDto>>(offices);
         }
+
+        public List<OfficeGetAllDto> GetForFooter()
+        {
+            List<Office> offices = _officeRepository.GetAll(x => x.Id>3 && x.Id<20).Include(x => x.City).ThenInclude(x => x.Country).Include(x => x.Cars).ToList();
+            return _mapper.Map<List<OfficeGetAllDto>>(offices);
+        }
     }
 }

@@ -21,7 +21,6 @@ namespace Yolcu360.Service.Dtos.City
         {
             RuleFor(x=>x.Name).NotEmpty().MaximumLength(50);
             RuleFor(x => x.CountryId).GreaterThan(0);
-            RuleFor(x => x.ImageFile).NotNull();
             RuleFor(x => x).Custom((x, context) =>
             {
                 if (x.ImageFile != null)
