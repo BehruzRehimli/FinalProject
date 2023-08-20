@@ -367,6 +367,7 @@
 .calendar-div{
     position: absolute;
     top: 70px;
+    z-index: 5;
 }
 .calendar-div.start{
     right: -367px;
