@@ -23,7 +23,7 @@ const Footer = () => {
               <ul>
                 {
                   offices.slice(0,4).map(x=>{
-                    return                     <li key={x.Id}>
+                    return <li key={x.id}>
                     <Link to="/airport">{x.name}</Link>
                   </li>
                   })
@@ -34,7 +34,7 @@ const Footer = () => {
             <ul>
                 {
                   offices.slice(4,8).map(x=>{
-                    return                     <li key={x.Id}>
+                    return <li key={x.id}>
                     <Link to="/airport">{x.name}</Link>
                   </li>
                   })
@@ -45,7 +45,7 @@ const Footer = () => {
             <ul>
                 {
                   offices.slice(8,12).map(x=>{
-                    return                     <li key={x.Id}>
+                    return  <li key={x.id}>
                     <Link to="/airport">{x.name}</Link>
                   </li>
                   })
@@ -56,7 +56,7 @@ const Footer = () => {
             <ul>
                 {
                   offices.slice(12,16).map(x=>{
-                    return                     <li key={x.Id}>
+                    return <li key={x.id}>
                     <Link to="/airport">{x.name}</Link>
                   </li>
                   })

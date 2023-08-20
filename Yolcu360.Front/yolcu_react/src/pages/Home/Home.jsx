@@ -1,14 +1,15 @@
-import React, { useState,useCallback,useRef, useEffect } from 'react'
+import React, { useState,useCallback,useRef, useEffect,Component } from 'react'
 import "./Home.css"
 import {FaChevronRight,FaCalendarAlt} from "react-icons/fa"
-import {MdLocalOffer,MdHeadsetMic,MdLocationOn,MdOutlineToday,MdClose} from "react-icons/md"
-import {BiSolidCar} from "react-icons/bi"
+import {MdLocationOn,MdOutlineToday,MdClose} from "react-icons/md"
 import { PiCopyBold } from "react-icons/pi";
 import {RiCalendarTodoFill} from "react-icons/ri"
 import {BiSolidChevronRight} from "react-icons/bi"
 import Slider from '../../components/Slider/Slider'
 import { Calendar } from '@natscale/react-calendar';
 import '@natscale/react-calendar/dist/main.css';
+import axios from "axios"
+import WhyYolcu from '../../components/WhyYolcu/WhyYolcu'
 
 
 const Home = () => {
@@ -19,20 +20,16 @@ const Home = () => {
   const startRef=useRef();
   const startDateTab=useRef();
   const [dropLoc,setDropLoc]=useState(false)
+  const [popularCities,setPopularCities]=useState([])
+  const [loadPopular,setLoadPopular]=useState(false)
+  const [loadSliderCity,setLoadSliderCity]=useState(false)
 
   const [endDate, setEndDate] = useState(new Date());
   const [openEndDate,setOpenEndDate]=useState(false);
   const endRef=useRef();
   const endDateTab=useRef();
 
-  document.onclick= function(e){
-    if(!startRef.current.contains(e.target) && !startDateTab.current.contains(e.target)){
-      setOpenStartDate(false)
-    }
-    if(!endRef.current.contains(e.target) && !endDateTab.current.contains(e.target)){
-      setOpenEndDate(false)
-    }
-  }
+
 
 
   const StartDateHandler = useCallback(
@@ -51,6 +48,40 @@ const Home = () => {
     setHiddenDiv(!hiddenDiv)
   }
 
+  const [sliderCities,setSliderCities]=useState([])
+
+  const compClick= function(e){
+    if(!startRef.current.contains(e.target) && !startDateTab.current.contains(e.target)){
+      setOpenStartDate(false)
+    }
+    if(!endRef.current.contains(e.target) && !endDateTab.current.contains(e.target)){
+      setOpenEndDate(false)
+    }
+  }
+
+
+  useEffect(()=>{
+    const getSliderCities= async ()=>{
+      const cities= await  axios.get("https://localhost:7079/api/Cities/homeSlider");
+      setSliderCities(cities.data)
+      setLoadSliderCity(true)
+    }
+    const getPopularCities= async ()=>{
+      const cities=await axios.get("https://localhost:7079/api/Offices/HomePopular");
+      setPopularCities(cities.data)
+      setLoadPopular(true)
+    }
+    getSliderCities();  
+    getPopularCities();
+  },[]);
+
+  useEffect(() => {
+    document.addEventListener('click', compClick);
+
+    return () => {
+      document.removeEventListener('click', compClick);
+    };
+  }, []);
 
   useEffect(()=>{
     setOpenStartDate(false)
@@ -63,7 +94,11 @@ const Home = () => {
     <div >
         <section className='top-content-home d-flex justify-content-center align-item-center pt-5'>
           <div className="my-container mt-2">
-          <Slider/>
+            {
+              loadSliderCity? 
+          <Slider cities={sliderCities}/>:null
+
+            }
           <h1 >Easy car rental!</h1>
           <p className='slider-desc'><b>Compare</b> and rent your ideal car at <b>the best prices</b>, worldwide!</p>
           <div className="row">
@@ -129,115 +164,43 @@ const Home = () => {
         <section className='mt-3'>
             <h3 style={{textAlign:"left"}} className='heading'>Popular Locations</h3>
             <div className="row mt-1 g-4">
-              <div style={{padding:"0 15px"}}  className="col-lg-4 col-md-6 col-xs-12">
-                <div className="location">
-                  <img src="https://staticf.yolcu360.com/static/image/mallorca_720.jpg" alt="location" />
-                  <span className='location-tag'>AIRPORT</span>
-                  <div className='content'>
-                      <p className="city">SPAIN</p>
-                      <p className="location-name ps-4">PALMA DE MALLORCA AIRPORT</p>
-                      <div className="rent-btn">RENT NOW <FaChevronRight/></div>
-                  </div>
-                </div>
-              </div>
-              <div style={{padding:"0 15px"}} className="col-lg-4 col-md-6 col-xs-12">
-              <div className="location">
-                  <img src="	https://staticf.yolcu360.com/static/image/berlin_720.jpg" alt="location" />
-                  <span className='location-tag'>AIRPORT</span>
-                  <div className='content'>
-                      <p className="city">GERMANY</p>
-                      <p className="location-name ps-4">BERLIN BRANDENBURG AIRPORT</p>
-                      <div className="rent-btn">RENT NOW <FaChevronRight/></div>
 
+                {
+                  loadPopular? popularCities.slice(0,4).map(x=>{
+                    return  <div key={x.id} style={{padding:"0 15px"}}  className="col-lg-4 col-md-6 col-xs-12">
+                    <div className="location">
+                      <img src={x.city.imageName} alt="location" />
+                      <span className='location-tag'>AIRPORT</span>
+                      <div className='content'>
+                          <p className="city">{x.city.country.name.toUpperCase()}</p>
+                          <p className="location-name ps-4">{x.name.toUpperCase()}</p>
+                          <div className="rent-btn">RENT NOW <FaChevronRight/></div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div  style={{padding:"0 15px"}} className="col-lg-4 col-md-6 col-xs-12">
-              <div className="location">
-                  <img src="	https://staticf.yolcu360.com/static/image/roma_720.jpg" alt="location" />
-                  <span className='location-tag'>AIRPORT</span>
-                  <div className='content'>
-                      <p className="city">ITALY</p>
-                      <p className="location-name ps-4">ROME AIRPORT</p>
-                      <div className="rent-btn">RENT NOW <FaChevronRight/></div>
+                  })
+                  
+                  :null
+                }
+                {
+                  loadPopular?
+                  <div  style={{padding:"0 15px"}} className="col-lg-8 col-md-12 col-xs-12">
+                  <div className="location">
+                      <img src={popularCities[4].city.imageName} alt="location" />
+                      <span className='location-tag'>City Center</span>
+                      <div className='content'>
+                          <p className="city">{popularCities[4].city.country.name.toUpperCase()}</p>
+                          <p className="location-name ps-4">{popularCities[4].name.toUpperCase()}</p>
+                          <div className="rent-btn">RENT NOW <FaChevronRight/></div>
+                      </div>
+                    </div>
+    
+                  </div>:null
+                }
 
-                  </div>
-                </div>
-              </div>
-              <div style={{padding:"0 15px"}} className="col-lg-4 col-md-6 col-xs-12">
-              <div className="location">
-                  <img src="https://staticf.yolcu360.com/static/image/paris_720.jpg" alt="location" />
-                  <span className='location-tag'>AIRPORT</span>
-                  <div className='content'>
-                      <p className="city">FRANCE</p>
-                      <p className="location-name ps-4">PARIS CHARLES DE GAULLE AIRPORT</p>
-                      <div className="rent-btn">RENT NOW <FaChevronRight/></div>
-                  </div>
-                </div>
-              </div>
-              <div  style={{padding:"0 15px"}} className="col-lg-8 col-md-12 col-xs-12">
-              <div className="location">
-                  <img src="https://staticf.yolcu360.com/static/image/london_720.jpg" alt="location" />
-                  <span className='location-tag'>City Center</span>
-                  <div className='content'>
-                      <p className="city">UNITED KINGDOM</p>
-                      <p className="location-name ps-4">HEATHROW AIRPORT</p>
-                      <div className="rent-btn">RENT NOW <FaChevronRight/></div>
-                  </div>
-                </div>
-
-              </div>
             </div>
         </section>
-        <section className='mt-5'>
-          <h3 style={{textAlign:"left"}} className='heading'>Why rent with Yolcu360?</h3>
-          <div className="row mt-5 g-4">
-            <div className="col-lg-4 col-md-12">
-              <div className="home-box">
-                <div className="icon-outside">
-                  <div className="icon-middle">
-                    <MdLocalOffer className='icon-center'/>
-                  </div>
-                </div>
-                <div className="box-title">
-                +250K Cars and +30.000 Locations Worldwide  
-                </div>
-                <div className="box-desc">
-                Yolcu360 makes car rental super easy by letting you rent a car in under a minute. More than 300.000 cars in 6.000+ locations are readily available.
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-12">
-              <div className="home-box">
-                <div className="icon-outside">
-                  <div className="icon-middle">
-                    <BiSolidCar style={{fontSize:"40px"}} className='icon-center'/>
-                  </div>
-                </div>
-                <div className="box-title">
-                Best Price Guarantee
-                </div>
-                <div className="box-desc">
-                Best rental prices can be found easily in the economy, luxury, and family segments in more than 6.000 locations.                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-12">
-              <div className="home-box">
-                <div className="icon-outside">
-                  <div className="icon-middle">
-                    <MdHeadsetMic className='icon-center'/>
-                  </div>
-                </div>
-                <div className="box-title">
-                Award-Winning Customer Service
-                </div>
-                <div className="box-desc">
-                Yolcu360 is the only customer-obsessed company in the car rental industry. Our 24/7 and instantly accessible call center is always with our customers, providing them with a hassle-free experience.                </div>
-              </div>
-            </div>
-          </div>
-
-        </section>
+        <WhyYolcu/>
         <section className='mt-5'>
           <h1 className='rental-header' >Car Rental (Rent a Car)</h1>
           <p className="rental-text">

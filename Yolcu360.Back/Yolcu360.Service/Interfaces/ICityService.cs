@@ -15,5 +15,6 @@ namespace Yolcu360.Service.Interfaces
         CreateResultDto Create(CityCreateDto dto);
         void Edit(int id, CityEditDto dto);
         void Delete(int id);
+        List<CityGetAllDto> GetSliderCity();
     }
 }

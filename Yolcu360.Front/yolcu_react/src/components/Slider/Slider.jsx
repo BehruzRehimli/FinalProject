@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default class VerticalSwipeToSlide extends Component {
-  render() {
+  render(props) {
     const settings = {
       dots: false,
       arrows: false,
@@ -23,27 +23,18 @@ export default class VerticalSwipeToSlide extends Component {
       afterChange: function(currentSlide) {
       }
     };
+
     return (
       <div>
         <Slider {...settings}>
-          <div>
-            <h3 className="slider-item">In Paris</h3>
-          </div>
-          <div>
-            <h3 className="slider-item">In Roma</h3>
-          </div>
-          <div>
-            <h3 className="slider-item">In Madrid</h3>
-          </div>
-          <div>
-            <h3 className="slider-item">In Ankara</h3>
-          </div>
-          <div>
-            <h3 className="slider-item">In Baku</h3>
-          </div>
-          <div>
-            <h3 className="slider-item">In Berlin</h3>
-          </div>
+          {
+            this.props.cities.map(x=>{
+              return               <div key={x.id}>
+              <h3 className="slider-item">In {x.name}</h3>
+            </div>
+            })
+          }
+
         </Slider>
       </div>
     );

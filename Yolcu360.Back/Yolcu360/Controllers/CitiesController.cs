@@ -45,5 +45,11 @@ namespace Yolcu360.API.Controllers
             _cityService.Delete(id);
             return NoContent();
         }
+        [HttpGet("homeSlider")]
+        public ActionResult<List<CityGetAllDto>> GetSliderCity()
+        {
+            return _cityService.GetSliderCity();
+        }
+
     }
 }

@@ -50,5 +50,10 @@ namespace Yolcu360.API.Controllers
         {
             return _officeService.GetForFooter();
         }
+        [HttpGet("HomePopular")]
+        public ActionResult<List<OfficeGetAllDto>> GetHomePopular()
+        {
+            return _officeService.GetHomePopular();
+        }
     }
 }

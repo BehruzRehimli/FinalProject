@@ -326,6 +326,12 @@ namespace Yolcu360.Data.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
+                    b.Property<int>("HomePopularOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HomeSliderOrder")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -373,7 +379,7 @@ namespace Yolcu360.Data.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int?>("CityId")
+                    b.Property<int>("CityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -382,7 +388,9 @@ namespace Yolcu360.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("OpenTimes")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -556,7 +564,8 @@ namespace Yolcu360.Data.Migrations
                     b.HasOne("Yolcu360.Core.Entities.City", "City")
                         .WithMany("Offices")
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("City");
                 });

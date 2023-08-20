@@ -63,7 +63,8 @@ namespace Yolcu360.Service.Implementations
         }
         public void Edit(int id, CityEditDto dto)
         {
-            if (_cityRepository.IsExsist(x => x.Name == dto.Name && x.Id!=dto.CountryId))
+            City city = _cityRepository.Get(x => x.Id == id, "Country");
+            if (_cityRepository.IsExsist(x => x.Name == dto.Name && dto.Name!=city.Name))
             {
                 throw new RestException(System.Net.HttpStatusCode.BadRequest, "Name", ErrorMessages.NameTaken("City"));
             }
@@ -71,7 +72,8 @@ namespace Yolcu360.Service.Implementations
             {
                 throw new RestException(System.Net.HttpStatusCode.BadRequest, "CountryId", ErrorMessages.NotFoundId(dto.CountryId, "Country"));
             }
-            City city = _cityRepository.Get(x => x.Id == id, "Country");
+            city.HomeSliderOrder=dto.HomeSliderOrder;
+            city.HomePopularOrder=dto.HomePopularOrder;
             city.Name = dto.Name;
             city.CountryId = dto.CountryId;
             string rvmImage = null;
@@ -106,6 +108,12 @@ namespace Yolcu360.Service.Implementations
             _cityRepository.Delete(city);
             _cityRepository.Commit();
             if (rmvImage!=null) { FileManager.DeleteFile(_rootPath, "Uploads/City", rmvImage); }
+        }
+
+        public List<CityGetAllDto> GetSliderCity()
+        {
+            List<City> cities = _cityRepository.GetAll(x => x.HomeSliderOrder>0, "Offices", "Country").OrderBy(x=>x.HomeSliderOrder).ToList();
+            return _mapper.Map<List<CityGetAllDto>>(cities);
         }
     }
 }
