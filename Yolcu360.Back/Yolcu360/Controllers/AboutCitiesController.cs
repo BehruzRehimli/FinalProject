@@ -22,5 +22,27 @@ namespace Yolcu360.API.Controllers
         {
             return _aboutCityService.Create(dto);
         }
+        [HttpGet("{id}")]
+        public ActionResult<GetAboutCityDto> Get(int id)
+        {
+            return _aboutCityService.Get(id);
+        }
+        [HttpGet("")]
+        public ActionResult<List<GetAllAboutCityDto>> Get()
+        {
+            return _aboutCityService.GetAll();
+        }
+        [HttpPut("{id}")]
+        public ActionResult Edit(int id,[FromForm]EditAboutCityDto dto)
+        {
+            _aboutCityService.Edit(id, dto);
+            return NoContent();
+        }
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            _aboutCityService.Delete(id);
+            return NoContent();
+        }
     }
 }

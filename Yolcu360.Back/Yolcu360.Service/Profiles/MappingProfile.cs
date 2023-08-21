@@ -48,7 +48,7 @@ namespace Yolcu360.Service.Profiles
             CreateMap<City, GetAboutCityDtoCity>();
             CreateMap<AboutCity, GetAboutCityDto>().
                 ForMember(x=> x.ImageName, s=>s.MapFrom(m=> BaseUrl.GetUrl("AboutCity")+m.ImageName));
-            CreateMap<City, GetAllAboutCityDto>();
+            CreateMap<City, GetAllAboutCityDtoCity>();
             CreateMap<AboutCity, GetAllAboutCityDto>().
                 ForMember(x => x.ImageName, s => s.MapFrom(m => BaseUrl.GetUrl("AboutCity") + m.ImageName));
             CreateMap<CreateAboutCityDto, AboutCity>();

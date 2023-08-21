@@ -47,22 +47,67 @@ namespace Yolcu360.Service.Implementations
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            AboutCity about = _aboutCityRepository.Get(x => x.Id == id, "City");
+            if (about == null)
+            {
+                throw new RestException(System.Net.HttpStatusCode.NotFound, ErrorMessages.NotFoundId(id, "AboutCity"));
+            }
+            string rmnimg = null;
+            if (about.ImageName!=null)
+            {
+                rmnimg= about.ImageName;
+            }
+            _aboutCityRepository.Delete(about);
+            _aboutCityRepository.Commit();
+            if (rmnimg!=null)
+            {
+                FileManager.DeleteFile(_rootPath, "Uploads/AboutCity", rmnimg);
+            }
         }
 
         public void Edit(int id, EditAboutCityDto dto)
         {
-            throw new NotImplementedException();
+            if (!_cityRepository.IsExsist(x => x.Id == dto.CityId))
+            {
+                throw new RestException(System.Net.HttpStatusCode.BadRequest, "CityId", ErrorMessages.NotFoundId(dto.CityId, "City"));
+            }
+
+            AboutCity about = _aboutCityRepository.Get(x => x.Id == id, "City");
+            if (about == null)
+            {
+                throw new RestException(System.Net.HttpStatusCode.NotFound, ErrorMessages.NotFoundId(id, "AboutCity"));
+            }
+            about.Title = dto.Title;
+            about.Desc= dto.Desc;
+            about.Order=dto.Order;
+            about.CityId= dto.CityId;
+            string rmvimg=null;
+            if (dto.ImageFile!=null)
+            {
+                rmvimg = about.ImageName;
+                about.ImageName = FileManager.UploadFile(_rootPath, "Uploads/AboutCity", dto.ImageFile);
+            }
+            _aboutCityRepository.Commit();
+            if (rmvimg!=null)
+            {
+                FileManager.DeleteFile(_rootPath, "Uploads/AboutCity", rmvimg);
+            }
         }
 
         public GetAboutCityDto Get(int id)
         {
-            throw new NotImplementedException();
+            AboutCity about = _aboutCityRepository.Get(x => x.Id == id, "City");
+            if (about == null)
+            {
+                throw new RestException(System.Net.HttpStatusCode.NotFound, ErrorMessages.NotFoundId(id, "AboutCity"));
+            }
+            return _mapper.Map<GetAboutCityDto>(about);
         }
 
         public List<GetAllAboutCityDto> GetAll()
         {
-            throw new NotImplementedException();
+            List<AboutCity> abouts=_aboutCityRepository.GetAll(x=>true,"City").ToList();
+            return _mapper.Map<List<GetAllAboutCityDto>>(abouts);
         }
     }
 }

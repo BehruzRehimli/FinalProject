@@ -9,9 +9,9 @@ namespace Yolcu360.Service.Dtos.AboutCity
     public class GetAboutCityDto
     {
         public string Title { get; set; }   
-        public int Desc { get; set; }
+        public string Desc { get; set; }
         public int Order { get; set; }
-        public int ImageName { get; set; }
+        public string ImageName { get; set; }
         public GetAboutCityDtoCity City { get; set; }
 
     }
