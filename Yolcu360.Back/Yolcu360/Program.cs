@@ -92,6 +92,8 @@ builder.Services.AddTransient<ICityRepository, CityRepository>();
 builder.Services.AddTransient<ICityService, CityService>();
 builder.Services.AddTransient<IOfficeRepository, OfficeRepository>();
 builder.Services.AddTransient<IOfficeService, OfficeService>();
+builder.Services.AddTransient<IAboutCityRepository, AboutCityRepository>();
+builder.Services.AddTransient<IAboutCityService, AboutCityService>();
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>

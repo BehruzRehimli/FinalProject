@@ -13,7 +13,10 @@ namespace Yolcu360.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<AboutCity> builder)
         {
-
+            builder.Property(x=>x.Title).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.Desc).IsRequired().HasMaxLength(1500);
+            builder.HasOne(x => x.City).WithMany(x=>x.AboutCities).OnDelete(DeleteBehavior.Cascade);
+            builder.Property(x=>x.ImageName).HasMaxLength(100);
         }
     }
 }

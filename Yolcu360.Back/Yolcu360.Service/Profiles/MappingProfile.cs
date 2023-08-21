@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yolcu360.Core.Entities;
+using Yolcu360.Service.Dtos.AboutCity;
 using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Dtos.City;
 using Yolcu360.Service.Dtos.Common;
@@ -44,6 +45,13 @@ namespace Yolcu360.Service.Profiles
                 ForMember(x => x.ImageName, s => s.MapFrom(m => BaseUrl.GetUrl("City") + m.ImageName));
             CreateMap<Office, OfficeGetDto>();
             CreateMap<OfficeCreateDto, Office>();
+            CreateMap<City, GetAboutCityDtoCity>();
+            CreateMap<AboutCity, GetAboutCityDto>().
+                ForMember(x=> x.ImageName, s=>s.MapFrom(m=> BaseUrl.GetUrl("AboutCity")+m.ImageName));
+            CreateMap<City, GetAllAboutCityDto>();
+            CreateMap<AboutCity, GetAllAboutCityDto>().
+                ForMember(x => x.ImageName, s => s.MapFrom(m => BaseUrl.GetUrl("AboutCity") + m.ImageName));
+            CreateMap<CreateAboutCityDto, AboutCity>();
 
 
             CreateMap<Brand, CreateResultDto>();
@@ -51,6 +59,7 @@ namespace Yolcu360.Service.Profiles
             CreateMap<Country, CreateResultDto>();
             CreateMap<City,CreateResultDto>();
             CreateMap<Office, CreateResultDto>();
+            CreateMap<AboutCity, CreateResultDto>();
         }
     }
 }

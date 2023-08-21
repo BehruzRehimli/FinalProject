@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Uploads\City\" />
+    <Folder Include="wwwroot\Uploads\AboutCity\" />
   </ItemGroup>
 
 </Project>
