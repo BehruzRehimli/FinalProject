@@ -10,6 +10,8 @@ import { Calendar } from '@natscale/react-calendar';
 import '@natscale/react-calendar/dist/main.css';
 import axios from "axios"
 import WhyYolcu from '../../components/WhyYolcu/WhyYolcu'
+import { Link } from 'react-router-dom';
+
 
 
 const Home = () => {
@@ -23,6 +25,8 @@ const Home = () => {
   const [popularCities,setPopularCities]=useState([])
   const [loadPopular,setLoadPopular]=useState(false)
   const [loadSliderCity,setLoadSliderCity]=useState(false)
+  const [searchInput,setSearchInput]=useState("")
+  const [searchOffice,setSearchOffice]=useState([])
 
   const [endDate, setEndDate] = useState(new Date());
   const [openEndDate,setOpenEndDate]=useState(false);
@@ -46,6 +50,15 @@ const Home = () => {
   );
   const HiddenDivHandler=function(){
     setHiddenDiv(!hiddenDiv)
+  }
+  const SearchHandler=async (e)=>{
+    await setSearchInput(e.target.value);
+    if(searchInput.length>0)
+    {
+      const data=await axios.get(`https://localhost:7079/api/Offices/${searchInput}`)
+      console.log(data);
+    }
+    await console.log(searchOffice);
   }
 
   const [sliderCities,setSliderCities]=useState([])
@@ -109,14 +122,14 @@ const Home = () => {
               </div>
               <div className='main-input-div'>
                 <div className="main-input-icon"> <MdLocationOn style={{color:"#888888",fontSize:"26px"}}/></div>
-                <input className='main-input' type="text" placeholder='Pick-Up Information' />
+                <input onChange={SearchHandler} value={searchInput} className='main-input' type="text" placeholder='Pick-Up Information' />
               </div>
 
               {
                 dropLoc?
                 <div className="different-drop main-input-div">
                 <div className="main-input-icon"> <MdLocationOn style={{color:"#888888",fontSize:"26px"}}/></div>
-                <input className='main-input' type="text" placeholder='Drop-Off Information' />
+                <input  className='main-input'  type="text" placeholder='Drop-Off Information' />
                 <button onClick={()=>{setDropLoc(false)}}><MdClose style={{color:'#cecece'}}/></button>
               </div>:
               <div className='dif-drop-btn' onClick={()=>{setDropLoc(true)}}>
@@ -167,7 +180,7 @@ const Home = () => {
 
                 {
                   loadPopular? popularCities.slice(0,4).map(x=>{
-                    return  <div key={x.id} style={{padding:"0 15px"}}  className="col-lg-4 col-md-6 col-xs-12">
+                    return <div key={x.id} style={{padding:"0 15px"}}  className="col-lg-4 col-md-6 col-xs-12"><Link to={`/office/${x.id}`}>
                     <div className="location">
                       <img src={x.city.imageName} alt="location" />
                       <span className='location-tag'>AIRPORT</span>
@@ -176,7 +189,7 @@ const Home = () => {
                           <p className="location-name ps-4">{x.name.toUpperCase()}</p>
                           <div className="rent-btn">RENT NOW <FaChevronRight/></div>
                       </div>
-                    </div>
+                    </div></Link> 
                   </div>
                   })
                   

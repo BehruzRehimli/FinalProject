@@ -55,5 +55,10 @@ namespace Yolcu360.API.Controllers
         {
             return _officeService.GetHomePopular();
         }
+        [HttpGet("Search/{input}")]
+        public ActionResult<List<OfficeSearchDto>> Search(string input)
+        {
+            return _officeService.Search(input);
+        }
     }
 }

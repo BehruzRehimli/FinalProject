@@ -70,7 +70,7 @@ namespace Yolcu360.Service.Implementations
 
         public OfficeGetDto Get(int id)
         {
-            Office offices = _officeRepository.GetAll(x => x.Id==id).Include(x => x.City).ThenInclude(x => x.Country).Include(x => x.Cars).First();
+            Office offices = _officeRepository.GetAll(x => x.Id==id).Include(x => x.City).ThenInclude(x => x.Country).Include(x => x.Cars).Include(x=>x.City).ThenInclude(x=>x.AboutCities).First();
             if (offices==null)
             {
                 throw new RestException(System.Net.HttpStatusCode.NotFound, ErrorMessages.NotFoundId(id, "Office"));
@@ -94,6 +94,12 @@ namespace Yolcu360.Service.Implementations
         {
             List<Office> offices = _officeRepository.GetAll(x =>x.City.HomePopularOrder>0).Include(x => x.City).ThenInclude(x => x.Country).Include(x => x.Cars).OrderBy(x=>x.City.HomePopularOrder).ToList();
             return _mapper.Map<List<OfficeGetAllDto>>(offices);
+        }
+
+        public List<OfficeSearchDto> Search(string input)
+        {
+            var offices = _officeRepository.GetAll(x => x.Name.Contains(input)).ToList();
+            return _mapper.Map<List<OfficeSearchDto>>(offices);
         }
     }
 }

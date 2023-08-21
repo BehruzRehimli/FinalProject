@@ -1,6 +1,6 @@
 import React, { useState,useCallback,useRef, useEffect,Component } from 'react'
 import "./Office.css"
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import WhyYolcu from '../../components/WhyYolcu/WhyYolcu'
 import Portniors from '../../components/Slider/Portniors/Portniors'
 import MobilApp from '../../components/MobilApp/MobilApp'
@@ -9,8 +9,14 @@ import { MdLocationOn,MdOutlineToday,MdClose } from 'react-icons/md'
 import { FaCalendarAlt } from 'react-icons/fa'
 import { RiCalendarTodoFill } from 'react-icons/ri'
 import { BiSolidChevronRight } from 'react-icons/bi'
+import axios from "axios"
 
 const Office = () => {
+  const { id }= useParams();
+
+  const [office,setOffice]=useState(new Object());
+  const [loadOffice,setLoadOffice]=useState(false);
+
   const [startDate, setStartDate] = useState(new Date());
   const [openStartDate,setOpenStartDate]=useState(false);
   const [rentalTime,setRentalTime] = useState(true);
@@ -44,6 +50,22 @@ const Office = () => {
       setOpenEndDate(false)
     }
   }
+
+  useEffect(()=>{
+    const getoffice= async ()=>{
+      try {
+        window.scrollTo(0, 0);
+        const response = await axios.get(`https://localhost:7079/api/Offices/${id}`);
+        setOffice(response.data);
+        setLoadOffice(true);
+
+      } catch (error) {
+        console.error("Hata:", error);
+      }
+    }
+
+    getoffice()
+  },[id]);
   useEffect(() => {
     document.addEventListener('click', compClick);
 
@@ -56,11 +78,11 @@ const Office = () => {
     <div style={{textAlign:"center",marginBottom:"50px"}}>
     <div className='top-office d-flex justify-content-center'>
       <div className="my-container">
-        <span className='office-name'>El Prat de Llobregat Barcelona–El Prat Airport Rent a Car</span>
+        <span className='office-name'> {office.name+ " Rent a Car"}</span>
         <div className='head-page'>
           <Link>Rent a Car</Link>
           <span>{">"}</span>
-          <span >Barcelona–El Prat Airport Rent a Car</span>
+          <span >{office.name+ " Rent a Car"}</span>
         </div>
       </div>
     </div>
@@ -126,7 +148,18 @@ const Office = () => {
 
       </div>
     </div>
+
     <div className="my-container" style={{margin:"0 auto"}}>
+      {
+        loadOffice?office.city.aboutCities.map(x=>{
+          return <div key={x.id}>
+            {x.title!==null?<h2  style={{textAlign:"left",fontWeight:"bolder"}}>{x.title}</h2>:null} <p style={{textAlign:"left"}}>{x.desc}</p>
+            <div style={{textAlign:'left',marginBottom:"30px"}}>
+            {x.imageName!==null?<img src={x.imageName} alt='picture' />:null}
+            </div>
+          </div>
+        }):null
+      }
     <WhyYolcu/>
     </div>
     <div className="partners" style={{marginTop:"50px"}}>

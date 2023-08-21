@@ -21,11 +21,20 @@ namespace Yolcu360.Service.Dtos.Office
         public string Name { get; set; }
         public string ImageName { get; set; }
         public OfficeGetCountry Country { get; set; }
+        public List<OfficeGetAboutCity> AboutCities { get; set; }
     }
     public class OfficeGetCountry
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
+    }
+    public class OfficeGetAboutCity
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Desc { get; set; }
+        public int Order { get; set; }
+        public string ImageName { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace Yolcu360.Service.Dtos.AboutCity
     {
         public EditAboutCityDtoValidator()
         {
-            RuleFor(x => x.Title).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.Title).MaximumLength(100);
             RuleFor(x => x.Desc).NotEmpty().MaximumLength(1500);
             RuleFor(x => x).Custom((x, context) =>
             {
