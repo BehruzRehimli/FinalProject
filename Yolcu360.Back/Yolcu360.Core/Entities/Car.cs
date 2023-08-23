@@ -9,6 +9,9 @@ namespace Yolcu360.Core.Entities
 {
     public class Car:BaseEntity
     {
+        public int ModelId { get; set; }
+        public int BrandId { get; set; }
+        public int OfficeId { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
         public decimal PriceFor3Days { get; set; }
@@ -22,6 +25,7 @@ namespace Yolcu360.Core.Entities
         public int MinDriverLisanseDay { get; set; }
         public Transmission Transmission { get; set; }
         public FuelType FuelType { get; set; }
+        public Model Model { get; set; }
         public Brand Brand { get; set; }
         public Type Type { get; set; }
         public Office Office { get; set; }

@@ -10,6 +10,7 @@ using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Dtos.City;
 using Yolcu360.Service.Dtos.Common;
 using Yolcu360.Service.Dtos.Country;
+using Yolcu360.Service.Dtos.Model;
 using Yolcu360.Service.Dtos.Office;
 using Yolcu360.Service.Dtos.Type;
 using Yolcu360.Service.Helpers;
@@ -23,6 +24,9 @@ namespace Yolcu360.Service.Profiles
             CreateMap<BrandCreateDto, Brand>();
             CreateMap<Brand, BrandGetDto>();
             CreateMap<Brand, BrandGetAllDto>();
+            CreateMap<ModelCreateDto, Model>();
+            CreateMap<Model, ModelGetDto>();
+            CreateMap<Model, ModelGetAllDto>();
             CreateMap<TypeCreateDto,Yolcu360.Core.Entities.Type>();
             CreateMap<Yolcu360.Core.Entities.Type, TypeGetDto>();
             CreateMap<Yolcu360.Core.Entities.Type, TypeGetAllDto>();
@@ -58,6 +62,7 @@ namespace Yolcu360.Service.Profiles
 
 
             CreateMap<Brand, CreateResultDto>();
+            CreateMap<Model, ModelGetDto>();
             CreateMap<Core.Entities.Type, CreateResultDto>();
             CreateMap<Country, CreateResultDto>();
             CreateMap<City,CreateResultDto>();

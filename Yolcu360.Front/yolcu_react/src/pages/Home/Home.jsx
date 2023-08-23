@@ -27,12 +27,14 @@ const Home = () => {
   const [loadSliderCity,setLoadSliderCity]=useState(false)
   const [searchInput,setSearchInput]=useState("")
   const [searchOffice,setSearchOffice]=useState([])
+  const [loadSearchData,setLoadSearchData]=useState(false)
+  const [choosenOfficeId,setChoosenOfficeId]=useState(0)
 
   const [endDate, setEndDate] = useState(new Date());
   const [openEndDate,setOpenEndDate]=useState(false);
   const endRef=useRef();
   const endDateTab=useRef();
-
+  const OfficeOption=useRef();
 
 
 
@@ -52,14 +54,30 @@ const Home = () => {
     setHiddenDiv(!hiddenDiv)
   }
   const SearchHandler=async (e)=>{
-    await setSearchInput(e.target.value);
-    if(searchInput.length>0)
-    {
-      const data=await axios.get(`https://localhost:7079/api/Offices/${searchInput}`)
-      console.log(data);
-    }
-    await console.log(searchOffice);
+    setSearchInput(e.target.value);
   }
+
+  useEffect((e)=>{
+      const searching=async ()=>{
+        if(searchInput.length>0)
+        {
+          const data=await axios.get(`https://localhost:7079/api/Offices/Search/${searchInput}`)
+          setSearchOffice(data.data)
+        }
+      }
+      if (searchInput.length>0) {
+        setLoadSearchData(true)
+      }
+      else{
+        setLoadSearchData(false)
+      }
+      if (choosenOfficeId>0) {
+        setLoadSearchData(false)
+      }
+      searching()
+  },[searchInput]);
+
+
 
   const [sliderCities,setSliderCities]=useState([])
 
@@ -71,6 +89,22 @@ const Home = () => {
       setOpenEndDate(false)
     }
   }
+  const ChooseOfficeHandler=(e)=>{
+    setChoosenOfficeId(e.currentTarget.id)
+  }
+  useEffect(()=>{
+    const getOffice=async ()=>{
+      if (choosenOfficeId>0) {
+        try {
+          const data=await axios.get(`https://localhost:7079/api/Offices/${choosenOfficeId}`)
+         setSearchInput(data.data.name);
+        } catch (error) {
+          
+        }
+      }
+    }
+    getOffice()
+  },[choosenOfficeId])
 
 
   useEffect(()=>{
@@ -123,6 +157,17 @@ const Home = () => {
               <div className='main-input-div'>
                 <div className="main-input-icon"> <MdLocationOn style={{color:"#888888",fontSize:"26px"}}/></div>
                 <input onChange={SearchHandler} value={searchInput} className='main-input' type="text" placeholder='Pick-Up Information' />
+                {
+                  loadSearchData?<div className='search-result'>
+                        {searchOffice.map(x=>{
+                          return <li onClick={ChooseOfficeHandler} id={x.id} className='search-li' key={x.id} ref={OfficeOption}>
+                            <MdLocationOn  style={{color:"#888888",opacity:"0.5",fontSize:"24px",marginLeft:"15px",marginRight:"15px"}}/>
+                            <p style={{color:"#888888",fontSize:"14px"}} >{x.name}</p>
+                          </li>
+                        })}
+                  </div>:null
+                }
+
               </div>
 
               {
@@ -165,10 +210,10 @@ const Home = () => {
               </div>
             </div>
             <div className="col-xl-2 col-lg-2 col-sm-12 col-md-12 col-xs-12" >
-              <div className="find-btn">
+              <Link to={choosenOfficeId>0?`/cars/${choosenOfficeId}`:'/'} className="find-btn">
                 <span>Find the Best Price</span>
                 <BiSolidChevronRight/>
-              </div>
+              </Link>
             </div>
           </div>
           </div>

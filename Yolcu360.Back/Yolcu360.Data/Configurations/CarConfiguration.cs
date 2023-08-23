@@ -21,7 +21,8 @@ namespace Yolcu360.Data.Configurations
             builder.Property(x => x.Price).HasColumnType("money");
             builder.Property(x => x.ImageName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.TotalMillage).HasColumnType("decimal(18,2)");
-            builder.HasOne(x=>x.Brand).WithMany(x=>x.Cars).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x=>x.Model).WithMany(x=>x.Cars).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x => x.Brand).WithMany(x => x.Cars).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(x => x.Type).WithMany(x => x.Cars).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(x => x.Office).WithMany(x => x.Cars).OnDelete(DeleteBehavior.NoAction);
         }
