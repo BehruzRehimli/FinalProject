@@ -6,7 +6,7 @@ import { PiArrowsDownUpBold } from "react-icons/pi"
 import { BsCheck, BsFillFuelPumpFill, BsFillCarFrontFill } from "react-icons/bs"
 import { BiInfoCircle } from "react-icons/bi"
 import { GiGearStick } from 'react-icons/gi'
-import {BiSolidStar,BiSolidStarHalf} from 'react-icons/bi'
+import { BiSolidStar, BiSolidStarHalf } from 'react-icons/bi'
 
 const Cars = () => {
     const { id } = useParams();
@@ -223,11 +223,11 @@ const Cars = () => {
                                     </div>
                                     <div className='car-rayting d-flex justify-content-beetween align-item-center p-2'>
                                         <div className='d-flex align-items-center ps-3'>
-                                            <BiSolidStar color='#ffbf35'/>
-                                            <BiSolidStar color='#ffbf35'/>
-                                            <BiSolidStar color='#ffbf35'/>
-                                            <BiSolidStar color='#ffbf35'/>
-                                            <BiSolidStarHalf color='#ffbf35'/>
+                                            <BiSolidStar color='#ffbf35' />
+                                            <BiSolidStar color='#ffbf35' />
+                                            <BiSolidStar color='#ffbf35' />
+                                            <BiSolidStar color='#ffbf35' />
+                                            <BiSolidStarHalf color='#ffbf35' />
                                             <span className='car-point'>
                                                 4.8
                                             </span>
@@ -235,7 +235,7 @@ const Cars = () => {
 
                                         </div>
                                         <div>
-                                            <p style={{textDecoration:"underline",marginLeft:"100px",fontSize:"14px",color:"#758493",marginTop:"10px",marginBottom:"0"}}>16 comments</p>
+                                            <p style={{ textDecoration: "underline", marginLeft: "100px", fontSize: "14px", color: "#758493", marginTop: "10px", marginBottom: "0" }}>16 comments</p>
                                         </div>
                                         <div></div>
                                     </div>
@@ -244,11 +244,11 @@ const Cars = () => {
                                     <div className="car-price">
                                         <div className='text-start'>
                                             <span>Total Amount (3 Days): </span>
-                                            <BiInfoCircle color='#008dd4' style={{fontSize:"20px"}} />
+                                            <BiInfoCircle color='#008dd4' style={{ fontSize: "20px" }} />
                                         </div>
                                         <div className='text-start d-flex justify-content-between align-items-center'>
-                                            <span style={{color:"#2ecc71"}}>Daily price : 41.77 $</span>
-                                            <span style={{color:"#4a4a4a",fontSize:"20px",fontWeight:"700",marginRight:'10px'}}>125.30 $</span>
+                                            <span style={{ color: "#2ecc71" }}>Daily price : 41.77 $</span>
+                                            <span style={{ color: "#4a4a4a", fontSize: "20px", fontWeight: "700", marginRight: '10px' }}>125.30 $</span>
                                         </div>
                                     </div>
                                     <div className='rent-btn'>

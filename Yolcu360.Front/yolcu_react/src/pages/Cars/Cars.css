@@ -159,7 +159,7 @@
     padding-top: 18px;
     padding-left: 18px;
 }
-.car-info .left .free-cancel .radius{
+.free-cancel .radius{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -168,7 +168,7 @@
     width: 22px;
     height: 22px;
 }
-.car-info .left .free-cancel span{
+.free-cancel span{
     margin-left: 3px;
     color: #39b54a;
     font-family: 'Helvetica', sans-serif;
@@ -220,7 +220,7 @@
     width: 100%;
     padding: 5px !important;
 }
-.car-bottom .car-point{
+.car-point{
     background-color: #03437f;
     margin-left: 10px;
     border-radius: 5px;
