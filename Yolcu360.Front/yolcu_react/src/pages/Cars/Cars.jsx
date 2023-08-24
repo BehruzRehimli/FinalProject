@@ -235,7 +235,7 @@ const Cars = () => {
 
                                         </div>
                                         <div>
-                                            <p style={{textDecoration:"underline",marginLeft:"100px",fontSize:"14px",color:"#758493",marginTop:"5px"}}>16 comments</p>
+                                            <p style={{textDecoration:"underline",marginLeft:"100px",fontSize:"14px",color:"#758493",marginTop:"10px",marginBottom:"0"}}>16 comments</p>
                                         </div>
                                         <div></div>
                                     </div>

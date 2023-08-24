@@ -1,0 +1,89 @@
+.go-back-btn{
+    position: absolute;
+    top: 50px;
+    left: 0;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #7e7e7e;
+    padding-left: 30px;
+    padding-right: 20px;
+    cursor: pointer;
+}
+.road{
+    display: flex;
+    justify-content: space-between;
+}
+.road .road-number{
+    display: inline-block;
+    width: 33px ;
+    height: 33px ;
+    line-height: 33px;
+    font-size: 22px;
+    background-color: #f5a623;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+}
+.road .road-number.passive{
+    background-color: #979797;
+}
+.road .wizard-dot{
+    width: 113px;
+}
+.wizard-dot .line{
+    display: inline-block;
+    border-bottom: 4px dashed rgb(255, 169, 0);
+    width: 100%;
+}
+.route-path span{
+    color: #9b9b9b;
+    font-size: 12px;
+    font-weight: 400;
+    font-family: "Helvetica",sans-serif;
+}
+.detail-sidebar{
+    position: sticky;
+    top:50px;
+}
+.detail-sidebar .price-date{
+    background: #ffffff;
+    border: 1px solid #dee3e8;
+    box-shadow: 0px 1px 2px 0px rgba(207, 207, 207, 0.9);
+}
+.price-date .header{
+    padding-top: 10px;
+    border-bottom: 1px solid #dee3e8;
+    overflow: auto;
+    padding-left: 20px;
+}
+.pick-up-info{
+    padding-left: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #dee3e8;
+
+}
+.drop-off-info{
+    padding-left: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #dee3e8;
+}
+.pick-up-info .left{
+    position: relative;
+}
+.drop-off-info .left{
+    position: relative;
+}

@@ -100,7 +100,10 @@
     width: 490px;
 }
 
-.left-top-info .left,.right{
+.left-top-info .left{
+    width: 50%;
+}
+.left-top-info .right{
     width: 50%;
 }
 .left-top-info .left .office-name{
@@ -145,7 +148,10 @@
     display: flex;
     justify-content: space-between;
 }
-.cars .car .car-info .left,.right{
+.cars .car .car-info .left{
+    width: 50%;
+}
+.cars .car .car-info .right{
     width: 50%;
 }
 .car-info .left .free-cancel{
@@ -212,6 +218,7 @@
     border-top: 1px solid #dee3e8;
     float: left;
     width: 100%;
+    padding: 5px !important;
 }
 .car-bottom .car-point{
     background-color: #03437f;
