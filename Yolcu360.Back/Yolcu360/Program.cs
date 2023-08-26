@@ -96,6 +96,9 @@ builder.Services.AddTransient<IAboutCityRepository, AboutCityRepository>();
 builder.Services.AddTransient<IAboutCityService, AboutCityService>();
 builder.Services.AddTransient<IModelRepository, ModelRepository>();
 builder.Services.AddTransient<IModelService, ModelService>();
+builder.Services.AddTransient<ICarRepository, CarRepository>();
+builder.Services.AddTransient<ICarService, CarService>();
+
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>

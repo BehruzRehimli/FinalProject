@@ -9,6 +9,6 @@ namespace Yolcu360.Service.Dtos.Brand
     public class BrandGetDto
     {
         public string Name { get; set; }
-        public int CarsCount { get; set; }
+        public int ModelsCount { get; set; }
     }
 }

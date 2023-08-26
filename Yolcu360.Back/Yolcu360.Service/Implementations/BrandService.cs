@@ -71,13 +71,13 @@ namespace Yolcu360.Service.Implementations
             {
                 throw new RestException(System.Net.HttpStatusCode.NotFound, ErrorMessages.NotFoundId(id, "brand"));
             }
-            Brand brand = _brandRepository.Get(x => x.Id == id,"Cars");
+            Brand brand = _brandRepository.Get(x => x.Id == id,"Models");
             return _mapper.Map<BrandGetDto>(brand);
         }
 
         public List<BrandGetAllDto> GetAll()
         {
-            List<Brand> brands=_brandRepository.GetAll(x=>true,"Cars").ToList();
+            List<Brand> brands=_brandRepository.GetAll(x=>true,"Models").ToList();
             return _mapper.Map<List<BrandGetAllDto>>(brands);
         }
     }

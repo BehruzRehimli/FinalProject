@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Yolcu360.Data;
 
@@ -11,9 +12,10 @@ using Yolcu360.Data;
 namespace Yolcu360.Data.Migrations
 {
     [DbContext(typeof(Yolcu360DbContext))]
-    partial class Yolcu360DbContextModelSnapshot : ModelSnapshot
+    [Migration("20230825034140_changeFilled")]
+    partial class changeFilled
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,6 +288,9 @@ namespace Yolcu360.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
                     b.Property<decimal?>("CancelationPrice")
                         .HasColumnType("money");
 
@@ -309,10 +314,10 @@ namespace Yolcu360.Data.Migrations
                     b.Property<int>("MinDriverLisanseYear")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MinYoungDriverAge")
+                    b.Property<int>("MinYoungDriverAge")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MinYoungDriverLisanseYear")
+                    b.Property<int>("MinYoungDriverLisanseYear")
                         .HasColumnType("int");
 
                     b.Property<int>("ModelId")
@@ -326,7 +331,10 @@ namespace Yolcu360.Data.Migrations
                     b.Property<int>("OfficeId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PriceDaily")
+                    b.Property<decimal>("Price")
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("PriceFor3Days")
                         .HasColumnType("money");
 
                     b.Property<decimal>("TotalMillage")
@@ -335,10 +343,12 @@ namespace Yolcu360.Data.Migrations
                     b.Property<int>("Transmission")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeId")
+                    b.Property<int?>("TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
 
                     b.HasIndex("ModelId");
 
@@ -594,6 +604,12 @@ namespace Yolcu360.Data.Migrations
 
             modelBuilder.Entity("Yolcu360.Core.Entities.Car", b =>
                 {
+                    b.HasOne("Yolcu360.Core.Entities.Brand", "Brand")
+                        .WithMany("Cars")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Yolcu360.Core.Entities.Model", "Model")
                         .WithMany("Cars")
                         .HasForeignKey("ModelId")
@@ -609,8 +625,9 @@ namespace Yolcu360.Data.Migrations
                     b.HasOne("Yolcu360.Core.Entities.Type", "Type")
                         .WithMany("Cars")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Brand");
 
                     b.Navigation("Model");
 
@@ -633,7 +650,7 @@ namespace Yolcu360.Data.Migrations
             modelBuilder.Entity("Yolcu360.Core.Entities.Model", b =>
                 {
                     b.HasOne("Yolcu360.Core.Entities.Brand", "Brand")
-                        .WithMany("Models")
+                        .WithMany()
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -671,7 +688,7 @@ namespace Yolcu360.Data.Migrations
 
             modelBuilder.Entity("Yolcu360.Core.Entities.Brand", b =>
                 {
-                    b.Navigation("Models");
+                    b.Navigation("Cars");
                 });
 
             modelBuilder.Entity("Yolcu360.Core.Entities.Car", b =>

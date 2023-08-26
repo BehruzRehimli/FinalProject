@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yolcu360.Core.Entities;
 
-namespace Yolcu360.Data.Enums
+namespace Yolcu360.Core.Repositories
 {
-    public enum FuelType
+    public interface ICarRepository:IRepository<Car>
     {
-        Diesel=1,
-        GasDiesel=2,
-        Electric=3,
-        Gas=4
     }
 }

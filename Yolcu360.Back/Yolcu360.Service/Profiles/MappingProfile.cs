@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Yolcu360.Core.Entities;
 using Yolcu360.Service.Dtos.AboutCity;
 using Yolcu360.Service.Dtos.Brand;
+using Yolcu360.Service.Dtos.Car;
 using Yolcu360.Service.Dtos.City;
 using Yolcu360.Service.Dtos.Common;
 using Yolcu360.Service.Dtos.Country;
@@ -59,10 +60,33 @@ namespace Yolcu360.Service.Profiles
             CreateMap<AboutCity, OfficeGetAboutCity>().
                 ForMember(x => x.ImageName, s => s.MapFrom(m=>m.ImageName!=null?BaseUrl.GetUrl("AboutCity") + m.ImageName:null));
             CreateMap<Office, OfficeSearchDto>();
+            CreateMap<AppUser, CarGetAllDtoUser>();
+            CreateMap<Review, CarGetAllDtoReview>();
+            CreateMap<Country, CarGetAllDtoCountry>();
+            CreateMap<City, CarGetAllDtoCity>();
+            CreateMap<Office, CarGetAllDtoOffice>();
+            CreateMap<Core.Entities.Type, CarGetAllDtoType>();
+            CreateMap<Brand, CarGetAllDtoBrand>();
+            CreateMap<Model, CarGetAllDtoModel>();
+            CreateMap<Car, CarGetAllDto>().
+                 ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("AboutCity") + m.ImageName : null));
+            CreateMap<CarCreateDto, Car>();
+            CreateMap<AppUser, CarGetDtoUser>();
+            CreateMap<Review, CarGetDtoReview>();
+            CreateMap<Country, CarGetDtoCountry>();
+            CreateMap<City, CarGetDtoCity>();
+            CreateMap<Office, CarGetDtoOffice>();
+            CreateMap<Core.Entities.Type, CarGetDtoType>();
+            CreateMap<Brand, CarGetDtoBrand>();
+            CreateMap<Model, CarGetDtoModel>();
+            CreateMap<Car, CarGetDto>().
+                 ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("AboutCity") + m.ImageName : null));
+
 
 
             CreateMap<Brand, CreateResultDto>();
-            CreateMap<Model, ModelGetDto>();
+            CreateMap<Car, CreateResultDto>();
+            CreateMap<Model, CreateResultDto>();
             CreateMap<Core.Entities.Type, CreateResultDto>();
             CreateMap<Country, CreateResultDto>();
             CreateMap<City,CreateResultDto>();
