@@ -28,6 +28,6 @@ namespace Yolcu360.Core.Entities
         public Model Model { get; set; }
         public Type Type { get; set; }
         public Office Office { get; set; }
-        public List<Review> Reviews { get; set; }
+        public List<Review> Reviews { get; set; }=new List<Review>();
     }
 }

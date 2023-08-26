@@ -137,5 +137,12 @@ namespace Yolcu360.Service.Implementations
             _carRepository.Delete(car);
             _carRepository.Commit();
         }
+
+        public List<CarGetAllDto> CarsList(int id)
+        {
+            List<Car> cars = _carRepository.GetAll(x => x.OfficeId==id).Include(x => x.Type).Include(x => x.Model).ThenInclude(x => x.Brand).Include(x => x.Office)
+                .ThenInclude(x => x.City).ThenInclude(x => x.Country).Include(x => x.Reviews).ThenInclude(x => x.User).ToList();
+            return _mapper.Map<List<CarGetAllDto>>(cars);
+        }
     }
 }

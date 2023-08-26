@@ -16,6 +16,6 @@ namespace Yolcu360.Service.Interfaces
         CarGetDto Get(int id);
         void Edit(int id, CarEditDto dto);
         void Delete(int id);
-
+        List<CarGetAllDto> CarsList(int id);
     }
 }

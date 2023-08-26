@@ -43,5 +43,10 @@ namespace Yolcu360.API.Controllers
             _carService.Delete(id);
             return NoContent();
         }
+        [HttpGet("CarsList/{id}")]
+        public ActionResult<List<CarGetAllDto>> CarsList(int id)
+        {
+            return _carService.CarsList(id);
+        }
     }
 }

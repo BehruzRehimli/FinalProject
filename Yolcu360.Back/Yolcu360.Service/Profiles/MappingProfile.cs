@@ -69,7 +69,7 @@ namespace Yolcu360.Service.Profiles
             CreateMap<Brand, CarGetAllDtoBrand>();
             CreateMap<Model, CarGetAllDtoModel>();
             CreateMap<Car, CarGetAllDto>().
-                 ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("AboutCity") + m.ImageName : null));
+                 ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("Car") + m.ImageName : null));
             CreateMap<CarCreateDto, Car>();
             CreateMap<AppUser, CarGetDtoUser>();
             CreateMap<Review, CarGetDtoReview>();
@@ -80,7 +80,7 @@ namespace Yolcu360.Service.Profiles
             CreateMap<Brand, CarGetDtoBrand>();
             CreateMap<Model, CarGetDtoModel>();
             CreateMap<Car, CarGetDto>().
-                 ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("AboutCity") + m.ImageName : null));
+                 ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("Car") + m.ImageName : null));
 
 
 
