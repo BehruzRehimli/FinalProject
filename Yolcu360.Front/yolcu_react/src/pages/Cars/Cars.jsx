@@ -7,6 +7,7 @@ import { BsCheck, BsFillFuelPumpFill, BsFillCarFrontFill } from "react-icons/bs"
 import { BiInfoCircle } from "react-icons/bi"
 import { GiGearStick } from 'react-icons/gi'
 import { BiSolidStar, BiSolidStarHalf } from 'react-icons/bi'
+import ReactSlider from 'react-slider'
 import axios from 'axios'
 
 const Cars = () => {
@@ -28,12 +29,48 @@ const Cars = () => {
         fuels: [],
     });
 
-    const [tab, setTab] = useState({
-        transmission: false,
-        fuel: false,
+    const [mainCars, setMainCars] = useState([])
+
+    const [tabs, setTabs] = useState({
+        transmission: true,
+        fuel: true,
+        brand: true,
+        model: true,
+        type: true,
+        sort: false,
+        price:true,
+        millage:true,
+        deposit:true,
+        maxPrice: 1500,
+        minPrice: 0,
+        maxMillage:3000,
+        minMillage:0,
+        maxDeposit:1500,
+        minDeposit:0
     })
 
-    var fuels = [{ id: 1, name: "Diesel", count: 0 }, { id: 2, name: "Gas-Diesel", count: 0 },{ id: 3, name: "Electric", count: 0 },{ id: 4, name: "Gas", count: 0 }]
+
+    const [filters, setFilters] = useState({
+        transmission: [],
+        fuel: [],
+        brand: [],
+        model: [],
+        type: [],
+        price:[],
+        millage:[],
+        deposit:[],
+        sort: 0
+    })
+
+    var trasIds = [...filters.transmission]
+    var fuelIds = [...filters.fuel]
+    var brandIds = [...filters.brand]
+    var modelIds = [...filters.model]
+    var typeIds = [...filters.type]
+
+
+
+    var fuels = [{ id: 1, name: "Diesel", count: 0 }, { id: 2, name: "Gas-Diesel", count: 0 }, { id: 3, name: "Electric", count: 0 }, { id: 4, name: "Gas", count: 0 }]
     const getFuels = () => {
         cars.cars.forEach(x => {
             if (x.fuelType === 1) {
@@ -44,7 +81,7 @@ const Cars = () => {
             }
             else if (x.fuelType === 3) {
                 fuels[2].count++
-            }            
+            }
             else if (x.fuelType === 4) {
                 fuels[3].count++
             }
@@ -117,6 +154,7 @@ const Cars = () => {
     }
 
     useEffect(() => {
+
         brand();
         getModel();
         getType();
@@ -127,7 +165,59 @@ const Cars = () => {
     useEffect(() => {
         const getCars = async () => {
             var datas = await axios.get(`https://localhost:7079/api/Cars/CarsList/${id}`)
+            var maxPrice = datas.data.reduce((max, car) => {
+                if (car.priceDaily > max) {
+                    return car.priceDaily;
+                }
+                return max;
+            }, 0);
+            maxPrice = Math.ceil(maxPrice)
+            setTabs(prev => { return { ...prev, maxPrice: maxPrice } })
+            var minPrice = datas.data.reduce((min, car) => {
+                if (car.priceDaily < min) {
+                  return car.priceDaily;
+                }
+                return min;
+              }, Infinity);
+              minPrice=Math.floor(minPrice)
+            setTabs(prev => { return { ...prev, minPrice: minPrice } })
+
+
+            var maxMillage = datas.data.reduce((max, car) => {
+                if (car.totalMillage > max) {
+                    return car.totalMillage;
+                }
+                return max;
+            }, 0);
+            setTabs(prev => { return { ...prev, maxMillage: maxMillage } })
+            var minMillage = datas.data.reduce((min, car) => {
+                if (car.totalMillage < min) {
+                  return car.totalMillage;
+                }
+                return min;
+              }, Infinity);
+            setTabs(prev => { return { ...prev, minMillage: minMillage } })
+
+            
+            var maxDeposit = datas.data.reduce((max, car) => {
+                if (car.depozitPrice > max) {
+                    return car.depozitPrice;
+                }
+                return max;
+            }, 0);
+            maxDeposit=Math.ceil(maxDeposit)
+            setTabs(prev => { return { ...prev, maxDeposit: maxDeposit } })
+            var minDeposit = datas.data.reduce((min, car) => {
+                if (car.depozitPrice < min) {
+                  return car.depozitPrice;
+                }
+                return min;
+              }, Infinity);
+              minDeposit=Math.floor(minDeposit)
+            setTabs(prev => { return { ...prev, minDeposit: minDeposit } })
+
             setCars(previous => { return { ...previous, cars: datas.data, loadCars: true } })
+            setMainCars([...datas.data])
         }
         const getOffice = async () => {
             var data = await axios.get(`https://localhost:7079/api/Offices/${id}`)
@@ -137,6 +227,117 @@ const Cars = () => {
         getOffice();
     }, []);
 
+
+    const inputTransHandler = (e) => {
+        var id = e.target.value
+        if (e.target.checked === true) {
+            trasIds.push(e.target.value)
+        }
+        else {
+            trasIds.pop(e.target.value)
+        }
+        setFilters(prev => { return { ...prev, transmission: trasIds } })
+    }
+
+    const inputFuelHandler = (e) => {
+        var id = e.target.value
+        if (e.target.checked === true) {
+            fuelIds.push(e.target.value)
+        }
+        else {
+            fuelIds.pop(e.target.value)
+        }
+        setFilters(prev => { return { ...prev, fuel: fuelIds } })
+    }
+
+    const inputBrandHandler = (e) => {
+        var id = e.target.value
+        if (e.target.checked === true) {
+            brandIds.push(e.target.value)
+        }
+        else {
+            brandIds.pop(e.target.value)
+        }
+        setFilters(prev => { return { ...prev, brand: brandIds } })
+    }
+
+
+    const inputModelHandler = (e) => {
+        var id = e.target.value
+        if (e.target.checked === true) {
+            modelIds.push(e.target.value)
+        }
+        else {
+            modelIds.pop(e.target.value)
+        }
+        setFilters(prev => { return { ...prev, model: modelIds } })
+    }
+
+    const inputTypeHandler = (e) => {
+        var id = e.target.value
+        if (e.target.checked === true) {
+            typeIds.push(e.target.value)
+        }
+        else {
+            typeIds.pop(e.target.value)
+        }
+        setFilters(prev => { return { ...prev, type: typeIds } })
+    }
+
+
+    useEffect(() => {
+        let newdatas = [...mainCars]
+
+        if (filters.sort === 0) {
+            newdatas = newdatas
+        }
+        else if (filters.sort === 1) {
+            newdatas = newdatas.sort((a, b) => Number(a.priceDaily) - Number(b.priceDaily))
+        }
+        else if (filters.sort === 2) {
+            newdatas = newdatas.sort((a, b) => Number(b.priceDaily) - Number(a.priceDaily))
+        }
+        else if (filters.sort === 3) {
+
+
+        }
+        else if (filters.sort === 4) {
+            var datas = newdatas.sort((a, b) => Number(b.reviews.count) - Number(a.reviews.count))
+        }
+
+
+
+        if (filters.transmission.length > 0) {
+            newdatas = newdatas.filter(x => filters.transmission.includes(x.transmission.toString()))
+        }
+        if (filters.fuel.length > 0) {
+            newdatas = newdatas.filter(x => filters.fuel.includes(x.fuelType.toString()))
+        }
+
+        if (filters.brand.length > 0) {
+            newdatas = newdatas.filter(x => filters.brand.includes(x.model.brand.id.toString()))
+        }
+
+        if (filters.model.length > 0) {
+            newdatas = newdatas.filter(x => filters.model.includes(x.model.id.toString()))
+        }
+
+        if (filters.type.length > 0) {
+            newdatas = newdatas.filter(x => filters.type.includes(x.type.id.toString()))
+        }
+        if(filters.price.length>0){
+            newdatas=newdatas.filter(x=>x.priceDaily>=filters.price[0] && x.priceDaily<=filters.price[1])
+        }
+        if(filters.millage.length>0){
+            newdatas=newdatas.filter(x=>x.totalMillage>=filters.millage[0] && x.totalMillage<=filters.millage[1])
+        }
+        if(filters.deposit.length>0){
+            newdatas=newdatas.filter(x=>x.depozitPrice>=filters.deposit[0] && x.depozitPrice<=filters.deposit[1])
+        }
+
+        setCars(prev => { return { ...prev, cars: newdatas } })
+
+    }, [filters])
 
 
     return (
@@ -161,19 +362,19 @@ const Cars = () => {
                     <div style={{ border: "1px solid #dee3e8" }}>
                         <p style={{ marginBottom: "0", fontSize: "13px", textAlign: 'left', padding: "10px 20px" }}>Filter</p>
                     </div>
-                    <div style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div onClick={() => setTabs(prev => { return { ...prev, transmission: !tabs.transmission } })} style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <p style={{ color: "#ffa900", marginBottom: "0", fontSize: "15px", fontWeight: "700", textAlign: 'left', padding: "10px 20px" }}>Transmission Type</p>
                         {
-                            tab.transmission ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
+                            !tabs.transmission ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
                         }
                     </div>
-                    <div className='transsmission-tab tab' >
+                    <div className='transsmission-tab tab' style={tabs.transmission ? null : { display: "none" }}>
                         <div className="row">
                             {
                                 cars.loadTrans ?
                                     cars.trans.map(x => (
                                         <div key={x.id} className="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" style={{ display: "flex", alignItems: "center" }}>
-                                            <input type="checkbox" value={1} id='automatic' name='transmission' />
+                                            <input onChange={inputTransHandler} type="checkbox" value={x.id} id='automatic' name='transmission' />
                                             <label htmlFor="automatic">{x.name} ({x.count})</label>
                                         </div>
                                     ))
@@ -182,19 +383,19 @@ const Cars = () => {
                             }
                         </div>
                     </div>
-                    <div style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div onClick={() => setTabs(prev => { return { ...prev, fuel: !tabs.fuel } })} style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <p style={{ color: "#ffa900", marginBottom: "0", fontSize: "15px", fontWeight: "700", textAlign: 'left', padding: "10px 20px" }}>Fuel Type</p>
                         {
-                            tab.fuel ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
+                            !tabs.fuel ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
                         }
                     </div>
-                    <div className='transsmission-tab tab' >
+                    <div className='transsmission-tab tab' style={tabs.fuel ? null : { display: "none" }}>
                         <div className="row g-3">
-                        {
+                            {
                                 cars.loadFuel ?
-                                    cars.fuels.filter(x=>x.count>0).map(x => (
+                                    cars.fuels.filter(x => x.count > 0).map(x => (
                                         <div key={x.id} className="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" style={{ display: "flex", alignItems: "center" }}>
-                                            <input type="checkbox" value={1} id='automatic' name='transmission' />
+                                            <input onChange={inputFuelHandler} type="checkbox" value={x.id} id='automatic' name='transmission' />
                                             <label htmlFor="automatic">{x.name} ({x.count})</label>
                                         </div>
                                     ))
@@ -203,19 +404,19 @@ const Cars = () => {
                             }
                         </div>
                     </div>
-                    <div style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div onClick={() => setTabs(prev => { return { ...prev, brand: !tabs.brand } })} style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <p style={{ color: "#ffa900", marginBottom: "0", fontSize: "15px", fontWeight: "700", textAlign: 'left', padding: "10px 20px" }}>Car Brand</p>
                         {
-                            tab.fuel ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
+                            !tabs.brand ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
                         }
                     </div>
-                    <div className='transsmission-tab tab' >
+                    <div className='transsmission-tab tab' style={tabs.brand ? null : { display: "none" }}>
                         <div className="row g-3">
                             {
                                 cars.loadBrand ?
                                     cars.brands.map(x => {
                                         return <div key={x.id} className="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" style={{ display: "flex", alignItems: "center" }}>
-                                            <input type="checkbox" value={1} id='BMW' />
+                                            <input onChange={inputBrandHandler} type="checkbox" value={x.id} id='BMW' />
                                             <label htmlFor="BMW">{x.name} ({x.count})</label>
                                         </div>
                                     }) : null
@@ -224,38 +425,38 @@ const Cars = () => {
 
                         </div>
                     </div>
-                    <div style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div onClick={() => setTabs(prev => { return { ...prev, model: !tabs.model } })} style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <p style={{ color: "#ffa900", marginBottom: "0", fontSize: "15px", fontWeight: "700", textAlign: 'left', padding: "10px 20px" }}>Car Model</p>
                         {
-                            tab.fuel ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
+                            !tabs.model ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
                         }
                     </div>
-                    <div className='transsmission-tab tab' >
+                    <div className='transsmission-tab tab' style={tabs.model ? null : { display: "none" }}>
                         <div className="row g-3">
                             {
                                 cars.loadModel ?
                                     cars.models.map(x => {
                                         return <div key={x.id} className="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" style={{ display: "flex", alignItems: "center" }}>
-                                            <input type="checkbox" value={1} id='BMW' />
+                                            <input onChange={inputModelHandler} type="checkbox" value={x.id} id='BMW' />
                                             <label htmlFor="BMW">{x.name} ({x.count})</label>
                                         </div>
                                     }) : null
                             }
                         </div>
                     </div>
-                    <div style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div onClick={() => setTabs(prev => { return { ...prev, type: !tabs.type } })} style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <p style={{ color: "#ffa900", marginBottom: "0", fontSize: "15px", fontWeight: "700", textAlign: 'left', padding: "10px 20px" }}>Car Type</p>
                         {
-                            tab.fuel ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
+                            !tabs.type ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
                         }
                     </div>
-                    <div className='transsmission-tab tab' >
+                    <div className='transsmission-tab tab' style={tabs.type ? null : { display: "none" }}>
                         <div className="row g-3">
                             {
                                 cars.loadType ?
                                     cars.types.map(x => {
                                         return <div key={x.id} className="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" style={{ display: "flex", alignItems: "center" }}>
-                                            <input type="checkbox" value={1} id='BMW' />
+                                            <input onChange={inputTypeHandler} type="checkbox" value={x.id} id='BMW' />
                                             <label htmlFor="BMW">{x.name} ({x.count})</label>
                                         </div>
                                     }) : null
@@ -264,6 +465,79 @@ const Cars = () => {
 
                         </div>
                     </div>
+                    <div onClick={() => setTabs(prev => { return { ...prev, price: !tabs.price } })} style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <p style={{ color: "#ffa900", marginBottom: "0", fontSize: "15px", fontWeight: "700", textAlign: 'left', padding: "10px 20px" }}>Price Range</p>
+                        {
+                            !tabs.price ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
+                        }
+                    </div>
+                    <div className='transsmission-tab tab' style={tabs.price ? null : { display: "none" }}>
+                        {
+                            cars.loadCars ? <ReactSlider
+                                className="horizontal-slider"
+                                thumbClassName="example-thumb"
+                                trackClassName="example-track"
+                                defaultValue={[tabs.minPrice, tabs.maxPrice]}
+                                max={tabs.maxPrice}
+                                min={tabs.minPrice}
+                                ariaLabel={['Lower thumb', 'Upper thumb']}
+                                ariaValuetext={state => `Thumb value ${state.valueNow}`}
+                                renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                onChange={(value, index) => setFilters(prev=>{return{...prev,price:value}})}
+                                pearling
+                                minDistance={10}
+                            /> : null
+                        }
+                    </div>
+                    <div onClick={() => setTabs(prev => { return { ...prev, millage: !tabs.millage } })} style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <p style={{ color: "#ffa900", marginBottom: "0", fontSize: "15px", fontWeight: "700", textAlign: 'left', padding: "10px 20px" }}>Millage Limit</p>
+                        {
+                            !tabs.millage ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
+                        }
+                    </div>
+                    <div className='transsmission-tab tab' style={tabs.millage ? null : { display: "none" }}>
+                        {
+                            cars.loadCars ? <ReactSlider
+                                className="horizontal-slider"
+                                thumbClassName="example-thumb"
+                                trackClassName="example-track"
+                                defaultValue={[tabs.minMillage, tabs.maxMillage]}
+                                max={tabs.maxMillage}
+                                min={tabs.minMillage}
+                                ariaLabel={['Lower thumb', 'Upper thumb']}
+                                ariaValuetext={state => `Thumb value ${state.valueNow}`}
+                                renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                onChange={(value, index) => setFilters(prev=>{return{...prev,millage:value}})}
+                                pearling
+                                minDistance={10}
+                            /> : null
+                        }
+                    </div>
+                    <div onClick={() => setTabs(prev => { return { ...prev, deposit: !tabs.deposit } })} style={{ border: "1px solid #dee3e8", borderTop: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <p style={{ color: "#ffa900", marginBottom: "0", fontSize: "15px", fontWeight: "700", textAlign: 'left', padding: "10px 20px" }}>Deposit Fee</p>
+                        {
+                            !tabs.deposit ? <FaChevronUp style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} /> : <FaChevronDown style={{ color: "#ffa900", fontSize: "22px", marginRight: '10px' }} />
+                        }
+                    </div>
+                    <div className='transsmission-tab tab' style={tabs.deposit ? null : { display: "none" }}>
+                        {
+                            cars.loadCars ? <ReactSlider
+                                className="horizontal-slider"
+                                thumbClassName="example-thumb"
+                                trackClassName="example-track"
+                                defaultValue={[tabs.minDeposit, tabs.maxDeposit]}
+                                max={tabs.maxDeposit}
+                                min={tabs.minDeposit}
+                                ariaLabel={['Lower thumb', 'Upper thumb']}
+                                ariaValuetext={state => `Thumb value ${state.valueNow}`}
+                                renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                onChange={(value, index) => setFilters(prev=>{return{...prev,deposit:value}})}
+                                pearling
+                                minDistance={10}
+                            /> : null
+                        }
+                    </div>
+
 
 
 
@@ -289,17 +563,39 @@ const Cars = () => {
                                 }
                             </div>
                         </div>
-                        <div className="right-top-info">
-                            <div style={{ padding: '6px 10px 6px 10px', width: "100%", height: "100%", display: "flex", justifyContent: "space-between" }}>
+                        <div onClick={() => { setTabs(prev => { return { ...prev, sort: !tabs.sort } }) }} className="right-top-info">
+                            <div style={{ padding: '6px 10px 6px 10px', width: "100%", height: "100%", display: "flex", justifyContent: "space-between", position: "relative" }}>
                                 <div className="left">
                                     <span>Sort:</span>
-                                    <span className='second'>Sort by Recommended</span>
+                                    <span className='second'>{
+                                        filters.sort === 0 ? "Sort by Recommended" : filters.sort === 1 ? "Lowest Price First" : filters.sort === 2 ? "Highest Price First" :
+                                            filters.sort === 3 ? "Highest Rating" : "Most Reviewed"
+                                    }</span>
 
                                 </div>
 
                                 <div className="right">
                                     <PiArrowsDownUpBold style={{ marginLeft: "10px", fontSize: "18px", fontWeight: "700", color: "#888888" }} />
                                 </div>
+                                {
+                                    tabs.sort ? <div className='sort-elements' >
+                                        <li onClick={() => { setFilters(prev => { return { ...prev, sort: 0 } }) }} className={filters.sort === 0 ? "sort-element selected" : "sort-element"}>
+                                            Sort by Recommended
+                                        </li>
+                                        <li onClick={() => { setFilters(prev => { return { ...prev, sort: 1 } }) }} className={filters.sort === 1 ? "sort-element selected" : "sort-element"}>
+                                            Lowest Price First
+                                        </li>
+                                        <li onClick={() => { setFilters(prev => { return { ...prev, sort: 2 } }) }} className={filters.sort === 2 ? "sort-element selected" : "sort-element"}>
+                                            Highest Price First
+                                        </li>
+                                        <li onClick={() => { setFilters(prev => { return { ...prev, sort: 3 } }) }} className={filters.sort === 3 ? "sort-element selected" : "sort-element"}>
+                                            Highest Rating
+                                        </li>
+                                        <li onClick={() => { setFilters(prev => { return { ...prev, sort: 4 } }) }} className={filters.sort === 4 ? "sort-element selected" : "sort-element"}>
+                                            Most Reviewed
+                                        </li>
+                                    </div> : null
+                                }
 
                             </div>
                         </div>
@@ -388,7 +684,7 @@ const Cars = () => {
                                         </div>
                                         <div className='text-start d-flex justify-content-between align-items-center'>
                                             <span style={{ color: "#2ecc71" }}>Daily price : {x.priceDaily} $</span>
-                                            <span style={{ color: "#4a4a4a", fontSize: "20px", fontWeight: "700", marginRight: '10px' }}>125.30 $</span>
+                                            <span style={{ color: "#4a4a4a", fontSize: "20px", fontWeight: "700", marginRight: '10px' }}>{(x.priceDaily*3).toFixed(2)} $</span>
                                         </div>
                                     </div>
                                     <div className='rent-btn'>
