@@ -16,7 +16,9 @@ import { FaUserNurse } from "react-icons/fa"
 import { AiOutlineInfoCircle } from "react-icons/ai"
 import { MdOutlineChildFriendly } from "react-icons/md"
 import axios from 'axios'
-
+import { Field, Form, Formik } from 'formik'
+import Text from '../../components/Form/Text'
+import Select from '../../components/Form/Select'
 
 const Detail = () => {
     const { id } = useParams();
@@ -312,12 +314,12 @@ const Detail = () => {
                                 </div>
                                 {
                                     car.loadCar ?
-                                        car.car.minYoungDriverAge>0?
-                                        <div className='post-box ms-3'>
-                                            <LiaFileContractSolid style={{ color: "#b7d1ea", fontSize: "60px" }} />
-                                            <p className='office-text-li text-center mt-4'>Min. Young Driver’s Age</p>
-                                            <p className='detail-element mt-3'>{car.car.minYoungDriverAge}</p>
-                                        </div>:null:null
+                                        car.car.minYoungDriverAge > 0 ?
+                                            <div className='post-box ms-3'>
+                                                <LiaFileContractSolid style={{ color: "#b7d1ea", fontSize: "60px" }} />
+                                                <p className='office-text-li text-center mt-4'>Min. Young Driver’s Age</p>
+                                                <p className='detail-element mt-3'>{car.car.minYoungDriverAge}</p>
+                                            </div> : null : null
                                 }
 
                                 <div className='post-box ms-3'>
@@ -331,12 +333,12 @@ const Detail = () => {
                                 </div>
                                 {
                                     car.loadCar ?
-                                    car.car.minYoungDriverLisanseYear>0?
-                                        <div className='post-box ms-3'>
-                                            <LiaFileContractSolid style={{ color: "#b7d1ea", fontSize: "60px" }} />
-                                            <p className='office-text-li text-center mt-4'>Min. Young Driver’s License</p>
-                                            <p className='detail-element mt-2'>{car.car.minYoungDriverLisanseYear}</p>
-                                        </div>:null:null
+                                        car.car.minYoungDriverLisanseYear > 0 ?
+                                            <div className='post-box ms-3'>
+                                                <LiaFileContractSolid style={{ color: "#b7d1ea", fontSize: "60px" }} />
+                                                <p className='office-text-li text-center mt-4'>Min. Young Driver’s License</p>
+                                                <p className='detail-element mt-2'>{car.car.minYoungDriverLisanseYear}</p>
+                                            </div> : null : null
                                 }
                             </div>
                             <li style={{ textAlign: "left", listStyleType: "revert", marginTop: "40px", color: "#758493", fontSize: "14px" }}>
@@ -458,6 +460,42 @@ const Detail = () => {
                             </div>
 
                         </div>
+                        <div className='send-comment mt-4 mb-5'>
+                            <p className='info-title text-center'>
+                                Send your review
+                            </p>
+                            <Formik initialValues={{
+                                carId: car.car.id,
+                                comment: '',
+                                cleannesPoint: 0,
+                                personelPoint: 0,
+                                speedPoint: 0
+                            }} onSubmit={values => {
+                                console.log(values);
+                            }}>
+                                {({ values }) => (
+                                    <Form>
+                                        <Text name="comment" spClass="info-title" label={"Write Your Comment"} /><br />
+                                        <Field type="hidden" name='carId' />
+                                        <div className="row">
+                                            <div className="col-lg-4 col-md-12 col-12">
+                                                <Select name="cleanPoint" label={"Select point for clear"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
+                                            </div>
+                                            <div className="col-lg-4 col-md-12 col-12">
+                                                <Select name="officePoint" label={"Select point for office"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
+
+                                            </div>
+                                            <div className="col-lg-4 col-md-12 col-12">
+                                                <Select name="speedPoint" label={"Select point for speed"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
+
+                                            </div>
+                                        </div>
+                                        <button type='submit' style={{ backgroundColor: "#ffa900",color:"#fff",fontWeight:"bolder", outline: "none" }} className='btn form-control mt-2'>Submit</button>
+                                    </Form>
+                                )}
+                            </Formik>
+                        </div>
+
                         <div className="reviews mt-4">
                             <p className="info-title text-center mt-4">Reviews</p>
                             <div className="all-reviews">
@@ -590,73 +628,73 @@ const Detail = () => {
                     <div className='col-lg-4'>
                         <div className="detail-sidebar">
                             {
-                                car.loadCar?
-                                <div className="price-date">
-                                <div className="header">
-                                    <div className="price">
-                                        <p style={{ color: "#9b9b9b", fontSize: "14px", textAlign: "start", marginBottom: "0" }}>3 Daily price:</p>
-                                        <p style={{ textAlign: "start", color: "#4a4a4a", fontWeight: "700", fontSize: "32px", marginBottom: "0" }}>{(car.car.priceDaily*3).toFixed(2)} $</p>
-                                        <p style={{ textAlign: "start", color: "#2ecc71", fontWeight: "400", fontSize: "14px", marginBottom: "10px" }}>Daily price:{car.car.priceDaily} $</p>
-                                    </div>
-                                </div>
-                                <div className="pick-up-info">
-                                    <div className="left" style={{ width: '50px', height: "50px" }}>
-                                        <TiArrowDownThick style={{ fontSize: '25px', color: "#008dd4", position: "absolute", top: "0", left: "-6px" }} />
-                                        <BiSolidCar style={{ fontSize: '30px', marginTop: "5px", color: "#888", opacity: "0.35", top: "0", position: "absolute", left: "3px" }} />
-                                    </div>
-                                    <div className="right d-flex justify-content-start">
-                                        <div style={{ width: "50px" }}>
-                                            <p style={{ maxWidth: "50px", textAlign: "start", fontSize: "12px", fontWeight: "700", color: "#008dd4" }}>Pick-Up Date</p>
+                                car.loadCar ?
+                                    <div className="price-date">
+                                        <div className="header">
+                                            <div className="price">
+                                                <p style={{ color: "#9b9b9b", fontSize: "14px", textAlign: "start", marginBottom: "0" }}>3 Daily price:</p>
+                                                <p style={{ textAlign: "start", color: "#4a4a4a", fontWeight: "700", fontSize: "32px", marginBottom: "0" }}>{(car.car.priceDaily * 3).toFixed(2)} $</p>
+                                                <p style={{ textAlign: "start", color: "#2ecc71", fontWeight: "400", fontSize: "14px", marginBottom: "10px" }}>Daily price:{car.car.priceDaily} $</p>
+                                            </div>
                                         </div>
-                                        <div className='ms-3'>
-                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
-                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontWeight: "700", fontSize: "14px" }}>25.08.2023 - 10:00</p>
+                                        <div className="pick-up-info">
+                                            <div className="left" style={{ width: '50px', height: "50px" }}>
+                                                <TiArrowDownThick style={{ fontSize: '25px', color: "#008dd4", position: "absolute", top: "0", left: "-6px" }} />
+                                                <BiSolidCar style={{ fontSize: '30px', marginTop: "5px", color: "#888", opacity: "0.35", top: "0", position: "absolute", left: "3px" }} />
+                                            </div>
+                                            <div className="right d-flex justify-content-start">
+                                                <div style={{ width: "50px" }}>
+                                                    <p style={{ maxWidth: "50px", textAlign: "start", fontSize: "12px", fontWeight: "700", color: "#008dd4" }}>Pick-Up Date</p>
+                                                </div>
+                                                <div className='ms-3'>
+                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
+                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontWeight: "700", fontSize: "14px" }}>25.08.2023 - 10:00</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="drop-off-info">
-                                    <div className="left" style={{ width: '50px', height: "50px" }}>
-                                        <TiArrowUpThick style={{ fontSize: '25px', color: "#ffa900", position: "absolute", top: "0", left: "-6px" }} />
-                                        <BiSolidCar style={{ fontSize: '30px', marginTop: "5px", color: "#888", opacity: "0.35", top: "0", position: "absolute", left: "3px" }} />
-                                    </div>
-                                    <div className="right d-flex justify-content-start">
-                                        <div style={{ width: "50px" }}>
-                                            <p style={{ maxWidth: "50px", textAlign: "start", fontSize: "12px", fontWeight: "700", color: "#ffa900" }}>Drop-Off Date</p>
+                                        <div className="drop-off-info">
+                                            <div className="left" style={{ width: '50px', height: "50px" }}>
+                                                <TiArrowUpThick style={{ fontSize: '25px', color: "#ffa900", position: "absolute", top: "0", left: "-6px" }} />
+                                                <BiSolidCar style={{ fontSize: '30px', marginTop: "5px", color: "#888", opacity: "0.35", top: "0", position: "absolute", left: "3px" }} />
+                                            </div>
+                                            <div className="right d-flex justify-content-start">
+                                                <div style={{ width: "50px" }}>
+                                                    <p style={{ maxWidth: "50px", textAlign: "start", fontSize: "12px", fontWeight: "700", color: "#ffa900" }}>Drop-Off Date</p>
+                                                </div>
+                                                <div className='ms-3'>
+                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
+                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#ffa900", fontWeight: "700", fontSize: "14px" }}>28.08.2023 - 10:00</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className='ms-3'>
-                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
-                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#ffa900", fontWeight: "700", fontSize: "14px" }}>28.08.2023 - 10:00</p>
+                                        <div style={{ backgroundColor: "#e8f5fa", padding: "13px 20px 13px 20px", border: "1px solid #b5ddef" }}>
+                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Your card will be charged:
+                                                <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>{(car.car.priceDaily * 3).toFixed(2)} $</span></p>
                                         </div>
-                                    </div>
-                                </div>
-                                <div style={{ backgroundColor: "#e8f5fa", padding: "13px 20px 13px 20px", border: "1px solid #b5ddef" }}>
-                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Your card will be charged:
-                                        <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>{(car.car.priceDaily*3).toFixed(2)} $</span></p>
-                                </div>
-                                <div style={{ padding: "13px 20px 13px 20px", border: "1px solid #b5ddef", borderTop: "none" }}>
-                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Amount due at pickup:
-                                        <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>0.00 $</span></p>
-                                </div>
-                                <div style={{ padding: "13px 20px 13px 20px", border: "1px solid #b5ddef", borderTop: "none" }}>
-                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Total Amount:
-                                        <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>{(car.car.priceDaily*3).toFixed(2)} $</span></p>
-                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                        <span style={{ color: "#2ecc71", fontSize: "12px", marginLeft: "30px", fontWeight: "500" }}>
-                                            Daily price :{car.car.priceDaily} $
-                                        </span>
-                                        <span style={{ fontSize: "12px", fontWeight: "500", color: "#9b9b9b" }}>
-                                            Price for 3 days
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="keep-go-btn">
-                                    <button>
-                                        Keep going!
-                                    </button>
-                                    <AiOutlineRight />
-                                </div>
+                                        <div style={{ padding: "13px 20px 13px 20px", border: "1px solid #b5ddef", borderTop: "none" }}>
+                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Amount due at pickup:
+                                                <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>0.00 $</span></p>
+                                        </div>
+                                        <div style={{ padding: "13px 20px 13px 20px", border: "1px solid #b5ddef", borderTop: "none" }}>
+                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Total Amount:
+                                                <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>{(car.car.priceDaily * 3).toFixed(2)} $</span></p>
+                                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                <span style={{ color: "#2ecc71", fontSize: "12px", marginLeft: "30px", fontWeight: "500" }}>
+                                                    Daily price :{car.car.priceDaily} $
+                                                </span>
+                                                <span style={{ fontSize: "12px", fontWeight: "500", color: "#9b9b9b" }}>
+                                                    Price for 3 days
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="keep-go-btn">
+                                            <button>
+                                                Keep going!
+                                            </button>
+                                            <AiOutlineRight />
+                                        </div>
 
-                            </div>:null
+                                    </div> : null
 
                             }
                             <div className="row mt-4">
