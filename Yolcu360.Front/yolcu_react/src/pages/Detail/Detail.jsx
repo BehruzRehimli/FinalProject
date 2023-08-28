@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Detail.css"
 import { IoArrowBackOutline } from "react-icons/io5"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { TiArrowDownThick, TiArrowUpThick } from "react-icons/ti"
 import { BiSolidCar } from "react-icons/bi"
 import { AiOutlineRight } from "react-icons/ai"
@@ -13,11 +13,13 @@ import { GiKeyCard, GiFlatTire } from "react-icons/gi"
 import { LiaFileContractSolid } from "react-icons/lia"
 import { IoMdTimer } from "react-icons/io"
 import { FaUserNurse } from "react-icons/fa"
-import {  AiOutlineInfoCircle } from "react-icons/ai"
-import {  MdOutlineChildFriendly } from "react-icons/md"
+import { AiOutlineInfoCircle } from "react-icons/ai"
+import { MdOutlineChildFriendly } from "react-icons/md"
+import axios from 'axios'
 
 
 const Detail = () => {
+    const { id } = useParams();
     const [extensions, setExtensions] = useState({
         extra1000: false,
         extra500: false,
@@ -26,6 +28,18 @@ const Detail = () => {
         driver: false,
         child: false
     })
+    const [car, setCar] = useState({
+        car: {},
+        loadCar: false
+    })
+
+    useEffect(() => {
+        const getCar = async () => {
+            var data = await axios.get(`https://localhost:7079/api/Cars/${id}`)
+            setCar(prev => { return { ...prev, car: data.data, loadCar: true } })
+        }
+        getCar();
+    }, [])
 
     const CheckExtra500Handler = (e) => {
         const data = e.target.checked
@@ -93,13 +107,19 @@ const Detail = () => {
                     <span className='ms-3 me-1'>/</span>
                     <Link to="/office/5">Barcelona Airport</Link>
                     <span className='ms-3 me-1'>/</span>
-                    <Link to="/detail">Fiat Egea</Link>
+                    {
+                        car.loadCar ? <Link to={`/detail/${id}`}>{car.car.name}</Link> : null
+                    }
                 </div>
                 <div className="row mt-3">
                     <div className="col-lg-8">
                         <div className='d-flex justify-content-between'>
                             <div className='text-start'>
-                                <p style={{ color: "#4a4a4a", fontWeight: "700", fontSize: "24px", marginBottom: "0" }}>Fiat Egea</p>
+                                {
+                                    car.loadCar ?
+                                        <p style={{ color: "#4a4a4a", fontWeight: "700", fontSize: "24px", marginBottom: "0" }}>{car.car.name}</p>
+                                        : null
+                                }
                                 <span style={{ textAlign: "start", color: "#9b9b9b" }}>or similar</span>
                             </div>
                             <div className='text-end d-flex align-items-center me-4'>
@@ -116,34 +136,43 @@ const Detail = () => {
 
                         </div>
                         <div className="free-cancel mt-4">
-                            <div className='d-flex'>
-                                <div className="radius">
-                                    <BsCheck style={{ color: "#39b54a", fontSize: "20px" }} />
-                                </div>
-                                <span>FREE CANCELLATION</span>
-                            </div>
-                        </div>
-                        <div>
-                            <img style={{ height: "150px", alignSelf: "center" }} src="https://static.yolcu360.com/thumbnails/87/26/8726242c937b041c8759b292e230535c.png" alt="car" />
-                            <div className="car-icons mt-4" style={{ width: "60%", margin: "0 auto" }}>
-                                <div style={{ marginTop: "18px", marginBottom: "18px", display: "flex", justifyContent: "space-between", paddingLeft: "15px", paddingRight: "50px" }}>
-                                    <div>
-                                        <TbManualGearbox style={{ color: '#00a8f4', fontSize: '25px', marginRight: "6px" }} />
-                                        <span style={{ color: '#9b9b9b', fontSize: "15px", fontWeight: "400" }}>Manual</span>
-                                    </div>
-                                    <div>
-                                        <BsFillFuelPumpFill style={{ color: '#00a8f4', fontSize: '21px', marginRight: "6px" }} />
-                                        <span style={{ color: '#9b9b9b', fontSize: "15px", fontWeight: "400" }}>Gas/Diesel</span>
-                                    </div>
-                                    <div>
-                                        <BsFillCarFrontFill style={{ color: '#00a8f4', fontSize: '25px', marginRight: "6px" }} />
-                                        <span style={{ color: '#9b9b9b', fontSize: "15px", fontWeight: "400" }}>Standart</span>
-                                    </div>
-                                </div>
+                            {
+                                car.loadCar ?
+                                    car.car.isFreeCancelation ?
+                                        <div className='d-flex'>
+                                            <div className="radius">
+                                                <BsCheck style={{ color: "#39b54a", fontSize: "20px" }} />
+                                            </div>
+                                            <span>FREE CANCELLATION</span>
+                                        </div> : null : null
 
-                            </div>
-
+                            }
                         </div>
+                        {
+                            car.loadCar ?
+                                <div>
+                                    <img style={{ height: "150px", alignSelf: "center" }} src={car.car.imageName} alt="car" />
+                                    <div className="car-icons mt-4" style={{ width: "60%", margin: "0 auto" }}>
+                                        <div style={{ marginTop: "18px", marginBottom: "18px", display: "flex", justifyContent: "space-between", paddingLeft: "15px", paddingRight: "50px" }}>
+                                            <div>
+                                                <TbManualGearbox style={{ color: '#00a8f4', fontSize: '25px', marginRight: "6px" }} />
+                                                <span style={{ color: '#9b9b9b', fontSize: "15px", fontWeight: "400" }}>{car.car.transmission === 1 ? "Automatic" : "Manual"}</span>
+                                            </div>
+                                            <div>
+                                                <BsFillFuelPumpFill style={{ color: '#00a8f4', fontSize: '21px', marginRight: "6px" }} />
+                                                <span style={{ color: '#9b9b9b', fontSize: "15px", fontWeight: "400" }}>{car.car.fuel === 1 ? "Diesel" : car.car.fuel === 2 ? 'Gas-Diesel' : car.car.fuel === 3 ? "Electric" : "Gas"}</span>
+                                            </div>
+                                            <div>
+                                                <BsFillCarFrontFill style={{ color: '#00a8f4', fontSize: '25px', marginRight: "6px" }} />
+                                                <span style={{ color: '#9b9b9b', fontSize: "15px", fontWeight: "400" }}>{car.car.type.name}</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div> : null
+
+                        }
                         <div className=' detail-help mt-5' >
                             <div>
                                 <AiOutlineInfoCircle style={{ color: "#2169aa", fontSize: "24px" }} />
@@ -153,101 +182,113 @@ const Detail = () => {
                                 <GiKeyCard style={{ color: "#2169aa", fontSize: "25px" }} />
                             </div>
                         </div>
-                        <div className="info-office mt-5">
-                            <p className='info-title'>Avis Office Information</p>
-                            <div className='info-box'>
-                                <div className="left">
-                                    <p className="office-text-title">
-                                        Address :
-                                    </p>
-                                    <p className="office-text-li">
-                                        Ankara Yüksek Hızlı Tren Garı, Altındağ, Çankaya, Ankara
-                                    </p>
-                                    <p className="office-text-li">
-                                        Ankara
-                                    </p>
-                                    <p className="office-text-title mt-5">
-                                        Phone :
-                                    </p>
-                                    <p className="office-text-li">
-                                        +(90) 5529576155
-                                    </p>
-                                </div>
-                                <div className="right">
-                                    <p className="office-text-title">
-                                        Opening Hours :
-                                    </p>
-                                    <div className="d-flex justify-content-between mt-2">
-                                        <p className="office-text-li">
-                                            Monday
-                                        </p>
-                                        <p className="office-text-li">
-                                            08:00 -19:00
-                                        </p>
+                        {
+                            car.loadCar ?
+                                <div className="info-office mt-5">
+                                    <p className='info-title'>Avis Office Information</p>
+                                    <div className='info-box'>
+                                        <div className="left">
+                                            <p className="office-text-title">
+                                                Address :
+                                            </p>
+                                            <p className="office-text-li">
+                                                {car.car.office.address}
+                                            </p>
+                                            <p className="office-text-li">
+                                                {car.car.office.city.name}
+                                            </p>
+                                            <p className="office-text-title mt-5">
+                                                Phone :
+                                            </p>
+                                            <p className="office-text-li">
+                                                {car.car.office.phone}
+                                            </p>
+                                        </div>
+                                        <div className="right">
+                                            <p className="office-text-title">
+                                                Opening Hours :
+                                            </p>
+                                            <div className="d-flex justify-content-between mt-2">
+                                                <p className="office-text-li">
+                                                    Monday
+                                                </p>
+                                                <p className="office-text-li">
+                                                    {car.car.office.openTimes}
+                                                </p>
+                                            </div>
+                                            <div className="d-flex justify-content-between mt-2">
+                                                <p className="office-text-li">
+                                                    Tuesday
+                                                </p>
+                                                <p className="office-text-li">
+                                                    {car.car.office.openTimes}
+                                                </p>
+                                            </div>
+                                            <div className="d-flex justify-content-between mt-2">
+                                                <p className="office-text-li">
+                                                    Wednesday
+                                                </p>
+                                                <p className="office-text-li">
+                                                    {car.car.office.openTimes}
+                                                </p>
+                                            </div>
+                                            <div className="d-flex justify-content-between mt-2">
+                                                <p className="office-text-li">
+                                                    Thursday
+                                                </p>
+                                                <p className="office-text-li">
+                                                    {car.car.office.openTimes}
+                                                </p>
+                                            </div>
+                                            <div className="d-flex justify-content-between mt-2">
+                                                <p className="office-text-li">
+                                                    Friday
+                                                </p>
+                                                <p className="office-text-li">
+                                                    {car.car.office.openTimes}
+                                                </p>
+                                            </div>
+                                            <div className="d-flex justify-content-between mt-2">
+                                                <p className="office-text-li">
+                                                    Saturday
+                                                </p>
+                                                <p className="office-text-li">
+                                                    {car.car.office.openTimes}
+                                                </p>
+                                            </div>
+                                            <div className="d-flex justify-content-between mt-2">
+                                                <p className="office-text-li">
+                                                    Sunday
+                                                </p>
+                                                <p className="office-text-li">
+                                                    {car.car.office.openTimes}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="d-flex justify-content-between mt-2">
-                                        <p className="office-text-li">
-                                            Tuesday
-                                        </p>
-                                        <p className="office-text-li">
-                                            08:00 -19:00
-                                        </p>
-                                    </div>
-                                    <div className="d-flex justify-content-between mt-2">
-                                        <p className="office-text-li">
-                                            Wednesday
-                                        </p>
-                                        <p className="office-text-li">
-                                            08:00 -19:00
-                                        </p>
-                                    </div>
-                                    <div className="d-flex justify-content-between mt-2">
-                                        <p className="office-text-li">
-                                            Thursday
-                                        </p>
-                                        <p className="office-text-li">
-                                            08:00 -19:00
-                                        </p>
-                                    </div>
-                                    <div className="d-flex justify-content-between mt-2">
-                                        <p className="office-text-li">
-                                            Friday
-                                        </p>
-                                        <p className="office-text-li">
-                                            08:00 -19:00
-                                        </p>
-                                    </div>
-                                    <div className="d-flex justify-content-between mt-2">
-                                        <p className="office-text-li">
-                                            Saturday
-                                        </p>
-                                        <p className="office-text-li">
-                                            08:00 -19:00
-                                        </p>
-                                    </div>
-                                    <div className="d-flex justify-content-between mt-2">
-                                        <p className="office-text-li">
-                                            Sunday
-                                        </p>
-                                        <p className="office-text-li">
-                                            08:00 -19:00
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                </div> : null
+
+                        }
                         <div className="info-office mt-3">
                             <p className='info-title'>Rental Conditions</p>
                             <div className="row">
                                 <div className='post-box ms-3'>
                                     <LiaFileContractSolid style={{ color: "#b7d1ea", fontSize: "60px" }} />
                                     <p className='office-text-li text-center mt-4'>Deposit</p>
-                                    <p className='detail-element mt-3'>97.24 $</p>
+                                    {
+                                        car.loadCar ?
+                                            <p className='detail-element mt-3'>{car.car.depozitPrice} $</p>
+                                            : null
+                                    }
                                 </div>
                                 <div className='post-box ms-3'>
                                     <IoMdTimer style={{ color: "#b7d1ea", fontSize: "60px" }} />
                                     <p className='office-text-li text-center mt-4'>Total Millage Limit</p>
-                                    <p className='detail-element mt-3'>1500 km</p>
+                                    {
+                                        car.loadCar ?
+                                            <p className='detail-element mt-3'>{car.car.totalMillage} km</p>
+                                            : null
+                                    }
                                 </div>
 
                             </div>
@@ -263,23 +304,40 @@ const Detail = () => {
                                 <div className='post-box ms-3'>
                                     <LiaFileContractSolid style={{ color: "#b7d1ea", fontSize: "60px" }} />
                                     <p className='office-text-li text-center mt-4'>Min. Driver’s Age</p>
-                                    <p className='detail-element mt-3'>21</p>
+                                    {
+                                        car.loadCar ?
+                                            <p className='detail-element mt-3'>{car.car.minDriverAge}</p>
+                                            : null
+                                    }
                                 </div>
-                                <div className='post-box ms-3'>
-                                    <LiaFileContractSolid style={{ color: "#b7d1ea", fontSize: "60px" }} />
-                                    <p className='office-text-li text-center mt-4'>Min. Young Driver’s Age</p>
-                                    <p className='detail-element mt-3'>21</p>
-                                </div>
+                                {
+                                    car.loadCar ?
+                                        car.car.minYoungDriverAge>0?
+                                        <div className='post-box ms-3'>
+                                            <LiaFileContractSolid style={{ color: "#b7d1ea", fontSize: "60px" }} />
+                                            <p className='office-text-li text-center mt-4'>Min. Young Driver’s Age</p>
+                                            <p className='detail-element mt-3'>{car.car.minYoungDriverAge}</p>
+                                        </div>:null:null
+                                }
+
                                 <div className='post-box ms-3'>
                                     <IoMdTimer style={{ color: "#b7d1ea", fontSize: "60px" }} />
                                     <p className='office-text-li text-center mt-4'>Min. Driver's License Year</p>
-                                    <p className='detail-element mt-1'>1 year</p>
+                                    {
+                                        car.loadCar ?
+                                            <p className='detail-element mt-2'>{car.car.minDriverLisanseYear}</p>
+                                            : null
+                                    }
                                 </div>
-                                <div className='post-box ms-3'>
-                                    <IoMdTimer style={{ color: "#b7d1ea", fontSize: "60px" }} />
-                                    <p className='office-text-li text-center mt-4'>Min. Young Driver's license</p>
-                                    <p className='detail-element mt-1'>1 year</p>
-                                </div>
+                                {
+                                    car.loadCar ?
+                                    car.car.minYoungDriverLisanseYear>0?
+                                        <div className='post-box ms-3'>
+                                            <LiaFileContractSolid style={{ color: "#b7d1ea", fontSize: "60px" }} />
+                                            <p className='office-text-li text-center mt-4'>Min. Young Driver’s License</p>
+                                            <p className='detail-element mt-2'>{car.car.minYoungDriverLisanseYear}</p>
+                                        </div>:null:null
+                                }
                             </div>
                             <li style={{ textAlign: "left", listStyleType: "revert", marginTop: "40px", color: "#758493", fontSize: "14px" }}>
                                 In order to receive the car, you must have <b style={{ color: "#00a8f4" }}>your ID, driver's license</b> and a <b style={{ color: "#00a8f4" }}>credit card with your name, surname and credit card number</b> on it.
@@ -531,12 +589,14 @@ const Detail = () => {
                     </div>
                     <div className='col-lg-4'>
                         <div className="detail-sidebar">
-                            <div className="price-date">
+                            {
+                                car.loadCar?
+                                <div className="price-date">
                                 <div className="header">
                                     <div className="price">
                                         <p style={{ color: "#9b9b9b", fontSize: "14px", textAlign: "start", marginBottom: "0" }}>3 Daily price:</p>
-                                        <p style={{ textAlign: "start", color: "#4a4a4a", fontWeight: "700", fontSize: "32px", marginBottom: "0" }}>145.05 $</p>
-                                        <p style={{ textAlign: "start", color: "#2ecc71", fontWeight: "400", fontSize: "14px", marginBottom: "10px" }}>Daily price:48.35 $</p>
+                                        <p style={{ textAlign: "start", color: "#4a4a4a", fontWeight: "700", fontSize: "32px", marginBottom: "0" }}>{(car.car.priceDaily*3).toFixed(2)} $</p>
+                                        <p style={{ textAlign: "start", color: "#2ecc71", fontWeight: "400", fontSize: "14px", marginBottom: "10px" }}>Daily price:{car.car.priceDaily} $</p>
                                     </div>
                                 </div>
                                 <div className="pick-up-info">
@@ -549,7 +609,7 @@ const Detail = () => {
                                             <p style={{ maxWidth: "50px", textAlign: "start", fontSize: "12px", fontWeight: "700", color: "#008dd4" }}>Pick-Up Date</p>
                                         </div>
                                         <div className='ms-3'>
-                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>Istanbul-Sabiha Gokcen</p>
+                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
                                             <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontWeight: "700", fontSize: "14px" }}>25.08.2023 - 10:00</p>
                                         </div>
                                     </div>
@@ -564,14 +624,14 @@ const Detail = () => {
                                             <p style={{ maxWidth: "50px", textAlign: "start", fontSize: "12px", fontWeight: "700", color: "#ffa900" }}>Drop-Off Date</p>
                                         </div>
                                         <div className='ms-3'>
-                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>Istanbul-Sabiha Gokcen</p>
+                                            <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
                                             <p style={{ marginBottom: "0", textAlign: "start", color: "#ffa900", fontWeight: "700", fontSize: "14px" }}>28.08.2023 - 10:00</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div style={{ backgroundColor: "#e8f5fa", padding: "13px 20px 13px 20px", border: "1px solid #b5ddef" }}>
                                     <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Your card will be charged:
-                                        <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>149.11 $</span></p>
+                                        <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>{(car.car.priceDaily*3).toFixed(2)} $</span></p>
                                 </div>
                                 <div style={{ padding: "13px 20px 13px 20px", border: "1px solid #b5ddef", borderTop: "none" }}>
                                     <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Amount due at pickup:
@@ -579,10 +639,10 @@ const Detail = () => {
                                 </div>
                                 <div style={{ padding: "13px 20px 13px 20px", border: "1px solid #b5ddef", borderTop: "none" }}>
                                     <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Total Amount:
-                                        <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>149.11 $</span></p>
+                                        <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>{(car.car.priceDaily*3).toFixed(2)} $</span></p>
                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                         <span style={{ color: "#2ecc71", fontSize: "12px", marginLeft: "30px", fontWeight: "500" }}>
-                                            Daily price :49,70 $
+                                            Daily price :{car.car.priceDaily} $
                                         </span>
                                         <span style={{ fontSize: "12px", fontWeight: "500", color: "#9b9b9b" }}>
                                             Price for 3 days
@@ -596,7 +656,9 @@ const Detail = () => {
                                     <AiOutlineRight />
                                 </div>
 
-                            </div>
+                            </div>:null
+
+                            }
                             <div className="row mt-4">
                                 <div className="col-3 ">
                                     <img style={{ width: "88px" }} src="	https://staticf.yolcu360.com/static/image/money-back@2x.png" alt="" />

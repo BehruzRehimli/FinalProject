@@ -14,6 +14,9 @@ const Cars = () => {
     const { id } = useParams();
     const [cars, setCars] = useState({
         cars: [],
+        displayedCars: [],
+        visibleCarsCount: 0,
+        firstScrollLoad: false,
         loadCars: false,
         office: {},
         loadOffice: false,
@@ -29,6 +32,8 @@ const Cars = () => {
         fuels: [],
     });
 
+    var countvisiblecars = 0
+
     const [mainCars, setMainCars] = useState([])
 
     const [tabs, setTabs] = useState({
@@ -38,15 +43,15 @@ const Cars = () => {
         model: true,
         type: true,
         sort: false,
-        price:true,
-        millage:true,
-        deposit:true,
+        price: true,
+        millage: true,
+        deposit: true,
         maxPrice: 1500,
         minPrice: 0,
-        maxMillage:3000,
-        minMillage:0,
-        maxDeposit:1500,
-        minDeposit:0
+        maxMillage: 3000,
+        minMillage: 0,
+        maxDeposit: 1500,
+        minDeposit: 0
     })
 
 
@@ -56,9 +61,9 @@ const Cars = () => {
         brand: [],
         model: [],
         type: [],
-        price:[],
-        millage:[],
-        deposit:[],
+        price: [],
+        millage: [],
+        deposit: [],
         sort: 0
     })
 
@@ -160,7 +165,30 @@ const Cars = () => {
         getType();
         getTrans();
         getFuels();
+        countvisiblecars=7;
+        setCars(prev=>{return{...prev,displayedCars:[...prev.cars.slice(0,countvisiblecars)]}})
+
     }, [cars.cars])
+
+    const handleScroll = () => {
+        // Eşik değerine yaklaşıldığında yeni ürünleri yükleme
+        if (
+            window.innerHeight + window.scrollY >=
+            document.body.offsetHeight - 100 // Eşik değeri
+        ) {
+            loadMoreProducts();
+        }
+    };
+    const loadMoreProducts = () => {
+
+        // Yeni ürünleri görünen ürün sayısına ekleyerek state'i güncelleme
+        countvisiblecars = countvisiblecars + 7
+        setCars(prev => { return { ...prev, visibleCarsCount: cars.visibleCarsCount + 7 } });
+        setCars(prev => { return { ...prev, displayedCars: [...prev.cars.slice(0, countvisiblecars)] } })
+
+    };
+
+
 
     useEffect(() => {
         const getCars = async () => {
@@ -175,11 +203,11 @@ const Cars = () => {
             setTabs(prev => { return { ...prev, maxPrice: maxPrice } })
             var minPrice = datas.data.reduce((min, car) => {
                 if (car.priceDaily < min) {
-                  return car.priceDaily;
+                    return car.priceDaily;
                 }
                 return min;
-              }, Infinity);
-              minPrice=Math.floor(minPrice)
+            }, Infinity);
+            minPrice = Math.floor(minPrice)
             setTabs(prev => { return { ...prev, minPrice: minPrice } })
 
 
@@ -192,31 +220,32 @@ const Cars = () => {
             setTabs(prev => { return { ...prev, maxMillage: maxMillage } })
             var minMillage = datas.data.reduce((min, car) => {
                 if (car.totalMillage < min) {
-                  return car.totalMillage;
+                    return car.totalMillage;
                 }
                 return min;
-              }, Infinity);
+            }, Infinity);
             setTabs(prev => { return { ...prev, minMillage: minMillage } })
 
-            
+
             var maxDeposit = datas.data.reduce((max, car) => {
                 if (car.depozitPrice > max) {
                     return car.depozitPrice;
                 }
                 return max;
             }, 0);
-            maxDeposit=Math.ceil(maxDeposit)
+            maxDeposit = Math.ceil(maxDeposit)
             setTabs(prev => { return { ...prev, maxDeposit: maxDeposit } })
             var minDeposit = datas.data.reduce((min, car) => {
                 if (car.depozitPrice < min) {
-                  return car.depozitPrice;
+                    return car.depozitPrice;
                 }
                 return min;
-              }, Infinity);
-              minDeposit=Math.floor(minDeposit)
+            }, Infinity);
+            minDeposit = Math.floor(minDeposit)
             setTabs(prev => { return { ...prev, minDeposit: minDeposit } })
 
-            setCars(previous => { return { ...previous, cars: datas.data, loadCars: true } })
+            setCars(previous => { return { ...previous, cars: [...datas.data], loadCars: true, visibleCarsCount: 7, displayedCars: [...datas.data.slice(0, 7)] } })
+            countvisiblecars = 7
             setMainCars([...datas.data])
         }
         const getOffice = async () => {
@@ -225,6 +254,10 @@ const Cars = () => {
         }
         getCars();
         getOffice();
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
 
@@ -325,19 +358,21 @@ const Cars = () => {
         if (filters.type.length > 0) {
             newdatas = newdatas.filter(x => filters.type.includes(x.type.id.toString()))
         }
-        if(filters.price.length>0){
-            newdatas=newdatas.filter(x=>x.priceDaily>=filters.price[0] && x.priceDaily<=filters.price[1])
+        if (filters.price.length > 0) {
+            newdatas = newdatas.filter(x => x.priceDaily >= filters.price[0] && x.priceDaily <= filters.price[1])
         }
-        if(filters.millage.length>0){
-            newdatas=newdatas.filter(x=>x.totalMillage>=filters.millage[0] && x.totalMillage<=filters.millage[1])
+        if (filters.millage.length > 0) {
+            newdatas = newdatas.filter(x => x.totalMillage >= filters.millage[0] && x.totalMillage <= filters.millage[1])
         }
-        if(filters.deposit.length>0){
-            newdatas=newdatas.filter(x=>x.depozitPrice>=filters.deposit[0] && x.depozitPrice<=filters.deposit[1])
+        if (filters.deposit.length > 0) {
+            newdatas = newdatas.filter(x => x.depozitPrice >= filters.deposit[0] && x.depozitPrice <= filters.deposit[1])
         }
 
         setCars(prev => { return { ...prev, cars: newdatas } })
 
     }, [filters])
+
+
 
 
     return (
@@ -483,7 +518,7 @@ const Cars = () => {
                                 ariaLabel={['Lower thumb', 'Upper thumb']}
                                 ariaValuetext={state => `Thumb value ${state.valueNow}`}
                                 renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-                                onChange={(value, index) => setFilters(prev=>{return{...prev,price:value}})}
+                                onChange={(value, index) => setFilters(prev => { return { ...prev, price: value } })}
                                 pearling
                                 minDistance={10}
                             /> : null
@@ -507,7 +542,7 @@ const Cars = () => {
                                 ariaLabel={['Lower thumb', 'Upper thumb']}
                                 ariaValuetext={state => `Thumb value ${state.valueNow}`}
                                 renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-                                onChange={(value, index) => setFilters(prev=>{return{...prev,millage:value}})}
+                                onChange={(value, index) => setFilters(prev => { return { ...prev, millage: value } })}
                                 pearling
                                 minDistance={10}
                             /> : null
@@ -531,7 +566,7 @@ const Cars = () => {
                                 ariaLabel={['Lower thumb', 'Upper thumb']}
                                 ariaValuetext={state => `Thumb value ${state.valueNow}`}
                                 renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-                                onChange={(value, index) => setFilters(prev=>{return{...prev,deposit:value}})}
+                                onChange={(value, index) => setFilters(prev => { return { ...prev, deposit: value } })}
                                 pearling
                                 minDistance={10}
                             /> : null
@@ -601,7 +636,7 @@ const Cars = () => {
                         </div>
                     </div>
                     <div className="cars mt-2">
-                        {cars.loadCars ? cars.cars.map(x => (<div className="car" key={x.id}>
+                        {cars.loadCars ? cars.displayedCars.map(x => (<div className="car" key={x.id}>
                             <div className="car-title">
                                 <p className='car-name'>{x.name}</p>
                                 <p style={{ color: '#9b9b9b', fontSize: "12px", textAlign: "left", marginBottom: "0" }}>or similar</p>
@@ -618,9 +653,11 @@ const Cars = () => {
                                             </div>
                                         </div> : null
                                     }
-                                    <div className="car-img">
-                                        <img src={x.imageName} alt="car" />
-                                    </div>
+                                    <Link to={`/detail/${x.id}`}>
+                                        <div className="car-img">
+                                            <img src={x.imageName} alt="car" />
+                                        </div>
+                                    </Link>
                                 </div>
                                 <div className="right">
                                     <ul>
@@ -684,12 +721,14 @@ const Cars = () => {
                                         </div>
                                         <div className='text-start d-flex justify-content-between align-items-center'>
                                             <span style={{ color: "#2ecc71" }}>Daily price : {x.priceDaily} $</span>
-                                            <span style={{ color: "#4a4a4a", fontSize: "20px", fontWeight: "700", marginRight: '10px' }}>{(x.priceDaily*3).toFixed(2)} $</span>
+                                            <span style={{ color: "#4a4a4a", fontSize: "20px", fontWeight: "700", marginRight: '10px' }}>{(x.priceDaily * 3).toFixed(2)} $</span>
                                         </div>
                                     </div>
+                                    <Link to={`/detail/${x.id}`}>
                                     <div className='rent-btn'>
                                         Rent now!
                                     </div>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
