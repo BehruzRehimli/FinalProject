@@ -335,7 +335,7 @@ const Cars = () => {
 
         }
         else if (filters.sort === 4) {
-            var datas = newdatas.sort((a, b) => Number(b.reviews.count) - Number(a.reviews.count))
+            var datas = newdatas.sort((a, b) => Number(b.reviews.length) - Number(a.reviews.length))
         }
 
 
