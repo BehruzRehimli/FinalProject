@@ -460,29 +460,32 @@ const Detail = () => {
                             </div>
 
                         </div>
+
                         <div className='send-comment mt-4 mb-5'>
                             <p className='info-title text-center'>
                                 Send your review
                             </p>
                             <Formik initialValues={{
-                                carId: car.car.id,
                                 comment: '',
-                                cleannesPoint: 0,
                                 personelPoint: 0,
-                                speedPoint: 0
-                            }} onSubmit={values => {
+                                speedPoint: 0,
+                                cleannesPoint: 0,
+                                carId: id,
+                            }} onSubmit={async (values) => {
                                 console.log(values);
+                                const data= await axios.post('https://localhost:7079/api/Reviews',values)
+                                console.log(data);
                             }}>
                                 {({ values }) => (
                                     <Form>
                                         <Text name="comment" spClass="info-title" label={"Write Your Comment"} /><br />
-                                        <Field type="hidden" name='carId' />
+                                        <Field type="hidden" value={id} name='carId' />
                                         <div className="row">
                                             <div className="col-lg-4 col-md-12 col-12">
-                                                <Select name="cleanPoint" label={"Select point for clear"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
+                                                <Select name="cleannesPoint" label={"Select point for clear"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
                                             </div>
                                             <div className="col-lg-4 col-md-12 col-12">
-                                                <Select name="officePoint" label={"Select point for office"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
+                                                <Select name="personelPoint" label={"Select point for office"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
 
                                             </div>
                                             <div className="col-lg-4 col-md-12 col-12">
@@ -490,12 +493,11 @@ const Detail = () => {
 
                                             </div>
                                         </div>
-                                        <button type='submit' style={{ backgroundColor: "#ffa900",color:"#fff",fontWeight:"bolder", outline: "none" }} className='btn form-control mt-2'>Submit</button>
+                                        <button type='submit' style={{ backgroundColor: "#ffa900", color: "#fff", fontWeight: "bolder", outline: "none" }} className='btn form-control mt-2'>Submit</button>
                                     </Form>
                                 )}
                             </Formik>
                         </div>
-
                         <div className="reviews mt-4">
                             <p className="info-title text-center mt-4">Reviews</p>
                             <div className="all-reviews">

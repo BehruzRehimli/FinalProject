@@ -13,6 +13,7 @@ using Yolcu360.Service.Dtos.Common;
 using Yolcu360.Service.Dtos.Country;
 using Yolcu360.Service.Dtos.Model;
 using Yolcu360.Service.Dtos.Office;
+using Yolcu360.Service.Dtos.Review;
 using Yolcu360.Service.Dtos.Type;
 using Yolcu360.Service.Helpers;
 
@@ -81,12 +82,14 @@ namespace Yolcu360.Service.Profiles
             CreateMap<Model, CarGetDtoModel>();
             CreateMap<Car, CarGetDto>().
                  ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("Car") + m.ImageName : null));
+            CreateMap<ReviewCreateDto, Review>();
 
 
 
             CreateMap<Brand, CreateResultDto>();
             CreateMap<Car, CreateResultDto>();
             CreateMap<Model, CreateResultDto>();
+            CreateMap<Review, CreateResultDto>();
             CreateMap<Core.Entities.Type, CreateResultDto>();
             CreateMap<Country, CreateResultDto>();
             CreateMap<City,CreateResultDto>();

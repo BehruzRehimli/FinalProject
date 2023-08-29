@@ -13,7 +13,7 @@ namespace Yolcu360.Service.Dtos.Review
         public int PersonelPoint { get; set; }
         public int SpeedPoint { get; set; }
         public int CleannesPoint { get; set; }
-        public int CardId { get; set; }
+        public int CarId { get; set; }
     }
     public class ReviewCreateDtoValidator : AbstractValidator<ReviewCreateDto>
     {
@@ -23,7 +23,7 @@ namespace Yolcu360.Service.Dtos.Review
             RuleFor(x=>x.PersonelPoint).LessThanOrEqualTo(5).GreaterThan(0);
             RuleFor(x => x.SpeedPoint).LessThanOrEqualTo(5).GreaterThan(0);
             RuleFor(x=>x.CleannesPoint).LessThanOrEqualTo(5).GreaterThan(0);
-            RuleFor(x => x.CardId).GreaterThan(0);
+            RuleFor(x => x.CarId).GreaterThan(0);
         }
     }
 }
