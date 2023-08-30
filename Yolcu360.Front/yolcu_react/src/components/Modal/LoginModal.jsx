@@ -6,11 +6,12 @@ import { RiUser3Fill } from 'react-icons/ri'
 import axios from 'axios';
 import { useEffect } from 'react';
 import jwt_decode from "jwt-decode";
-
+import { useDispatch } from 'react-redux';
+import { setUsername,logedYes,setToken } from '../../control/loginSlice';
 
 function LoginModal(props) {
     const [show, setShow] = useState(false);
-
+    const dispatch=useDispatch();
 
 
     useEffect(() => {
@@ -48,6 +49,10 @@ function LoginModal(props) {
                                 const data = await axios.post('https://localhost:7079/api/Accounts/Login', values)
                                 localStorage.setItem("YolcuToken", data.data.token)
                                 const decoded = jwt_decode(data.data.token);
+                                let user=decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
+                                dispatch(setUsername(user))
+                                dispatch(logedYes())
+                                dispatch(setToken(data.data.token))
                                 props.setUser(prev => { return { ...prev, token: data.data.token, isLoged: true,username: decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]} })
                                 handleClose();
                             }}>

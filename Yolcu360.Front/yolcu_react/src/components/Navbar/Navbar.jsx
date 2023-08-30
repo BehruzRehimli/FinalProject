@@ -6,8 +6,14 @@ import { RiUser3Fill } from 'react-icons/ri'
 import { IoIosArrowDown } from 'react-icons/io'
 import LoginModal from '../Modal/LoginModal'
 import RegisterModal from '../Modal/RegisterModal'
+import { useSelector,useDispatch } from 'react-redux'
+import { setToken,setUsername,logedYes,logedNo } from '../../control/loginSlice'
+import jwt_decode from "jwt-decode"
 
 const Navbar = (props) => {
+
+  const dispatch=useDispatch();
+  const{username,isLogin,token}=useSelector(store=>store.login)
 
   const [login, setLogin] = useState(false)
 
@@ -18,9 +24,20 @@ const Navbar = (props) => {
   })
 
   const LogOutHanler=()=>{
-    localStorage.setItem("YolcuToken",'')
     setUser(prev=>{return{...prev,token:null,isLoged:false}})
   }
+
+  useEffect(()=>{
+    var token=localStorage.getItem("YolcuToken");
+    if (token && token.length>0) {
+      dispatch(logedYes())
+      dispatch(setToken(token))
+      const decoded = jwt_decode(token);
+      let user=decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
+      dispatch(setUsername(user))
+    }
+  },[])
+
   return (
     <nav className='my-navbar'>
       <div className='last-search my-nav-element'><BsSearchHeart style={{ color: "#2169aa", fontSize: "18px", fontWeight: 600 }} /></div>
@@ -29,10 +46,15 @@ const Navbar = (props) => {
       <div onClick={(e) => { setLogin(!login) }} className={login ? ' my-nav-element menu-element active' : ' my-nav-element menu-element'}><RiUser3Fill style={{ color: "#2169aa", fontSize: "20px", fontWeight: 600 }} /><span>Login</span>
         <div className="valyuta-tab login text-start " style={login ? { display: 'Block',width:'auto' } : { display: 'none',width:"auto" }}>
           {
-            user.isLoged ?
+            isLogin ?
               <>
-                <button className='text-start bg-transparent border-0' style={{ color: "#03437f" }}>{user.username}</button>
-                <button onClick={LogOutHanler} className="text-start last" style={{ color: "#ffa900" }}>Log Out</button>
+                <button className='text-start bg-transparent border-0' style={{ color: "#03437f" }}>{username}</button>
+                <button onClick={()=>{
+                  dispatch(logedNo())
+                  dispatch(setToken(null))
+                  dispatch(setUsername(null))
+                  localStorage.setItem("YolcuToken",'')
+                }} className="text-start last" style={{ color: "#ffa900" }}>Log Out</button>
               </> :
               <>
                 <LoginModal user={user} setUser={setUser} />
