@@ -6,6 +6,7 @@ import { RiMailCheckLine } from "react-icons/ri"
 import Success from '../../images/7efs.gif'
 import Fail from '../../images/fail1.gif'
 import { GiBackwardTime } from "react-icons/gi"
+import axios from "axios"
 
 function RegisterModal() {
     const [show, setShow] = useState(false);
@@ -30,6 +31,8 @@ function RegisterModal() {
             style={{ width: "70%" }}
         />
     );
+
+    const [registerToken, setRegisterToken] = useState("")
 
     return (
         <>
@@ -62,8 +65,8 @@ function RegisterModal() {
                                             confirmPassword: ""
                                         }} onSubmit={async (values) => {
                                             setPage(2)
-                                            // const data= await axios.post('https://localhost:7079/api/Reviews',values)
-                                            // console.log(data);
+                                            const data = await axios.post('https://localhost:7079/api/Accounts/Register', values)
+                                            setRegisterToken(data.data.token)
                                         }}>
                                             {({ values }) => (
                                                 <Form>
@@ -78,14 +81,14 @@ function RegisterModal() {
                                                     </div>
                                                     <div className='d-flex'>
 
-                                                        <Field type="mail" className="login-input" name='username' placeholder="Email" />
+                                                        <Field type="mail" className="login-input" name='email' placeholder="Email" />
                                                     </div>
                                                     <div>
                                                         <Field type="password" className="login-input" name='password' placeholder="Password" />
 
                                                     </div>
                                                     <div>
-                                                        <Field type="password" className="login-input" name='password' placeholder="Confirm Password" />
+                                                        <Field type="password" className="login-input" name='confirmPassword' placeholder="Confirm Password" />
 
                                                     </div>
                                                     <button type='submit' className='btn login-btn register-btn form-control '>Register</button>
@@ -112,9 +115,13 @@ function RegisterModal() {
                                             <Formik initialValues={{
                                                 confirmCode: '',
                                             }} onSubmit={async (values) => {
-                                                setPage(4)
-                                                // const data= await axios.post('https://localhost:7079/api/Reviews',values)
-                                                // console.log(data);
+                                                var headerToken = `Bearer ${registerToken}`
+                                                try {
+                                                    const data = await axios.post('https://localhost:7079/api/Accounts/MailConfirm', values, { headers: { "Authorization": headerToken } })
+                                                    setPage(3)
+                                                } catch (error) {
+                                                    setPage(4)
+                                                }
                                             }}>
                                                 {({ values }) => (
                                                     <Form>
@@ -154,7 +161,11 @@ function RegisterModal() {
                                         </div>
                                         <p className='text-center fs-5 fw-bold mb-4' style={{ color: "#ffa900", marginTop: "10px" }}>Wrong Confirm Code!!!</p>
                                         <div className='text-center mb-3'>
-                                            <button onClick={() => { setPage(2) }} className='back-register-btn'><GiBackwardTime style={{ fontSize: "25px", marginRight: "10px" }} />Back Confirm</button>
+                                            <button onClick={async () => {
+                                                setPage(2)
+                                                var headerToken = `Bearer ${registerToken}`
+                                                const data = await axios.post('https://localhost:7079/api/Accounts/SendAgain',{confirmCode:"5678"},{ headers: { "Authorization": headerToken } })
+                                            }} className='back-register-btn'><GiBackwardTime style={{ fontSize: "25px", marginRight: "10px" }} />Back Confirm</button>
                                         </div>
                                     </Modal.Body> : null
 

@@ -42,17 +42,37 @@ namespace Yolcu360.API.Controllers
             await _userManager.CreateAsync(user, dto.Password);
             await _userManager.AddToRoleAsync(user, "Member");
 
-            int key=new Random().Next(1,9999);
-            user.MailConfirmCode= key;
+            int code=new Random().Next(1,9999);
+            user.MailConfirmCode= code;
             await _userManager.UpdateAsync(user);
             await _mailService.SendEmailAsync(new MailRequest()
             {
                 ToEmail = user.Email,
                 Subject = "Mail Configuration!!!",
-                Body = $"<h3>Salam</h3><h4>Sizin təsdiq kodunuz</h4><h1>{key}</h1>"
+                Body = $"<h3>Salam</h3><h4>Sizin təsdiq kodunuz</h4><h1>{code}</h1>"
             });
 
-            return Ok();
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            claims.Add(new Claim("Fullname", user.Fullname));
+            var roles = (_userManager.GetRolesAsync(user).Result).Select(x => new Claim(ClaimTypes.Role, x)).ToList();
+            claims.AddRange(roles);
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:Secret").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+            var token = new JwtSecurityToken(
+                signingCredentials: creds,
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(3),
+                issuer: _configuration.GetSection("JWT:Issuer").Value,
+                audience: _configuration.GetSection("JWT:Audience").Value
+                );
+            var tokestr = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok(new { token = tokestr });
         }
         [Authorize(Roles = "Member")]
         [HttpPost("MailConfirm")]
@@ -69,6 +89,25 @@ namespace Yolcu360.API.Controllers
             await _userManager.ConfirmEmailAsync(user, token);
             return NoContent();
         }
+        [Authorize(Roles = "Member")]
+        [HttpPost("SendAgain")]
+        public async Task<IActionResult> SendAgain(MailConfirmDto dto)
+        {
+            AppUser user = await _userManager.FindByNameAsync(User?.Identity?.Name);
+            if (user == null)
+                return NotFound();
+            int code = new Random().Next(1, 9999);
+            user.MailConfirmCode = code;
+            await _userManager.UpdateAsync(user);
+            await _mailService.SendEmailAsync(new MailRequest()
+            {
+                ToEmail = user.Email,
+                Subject = "Mail Configuration!!!",
+                Body = $"<h3>Salam</h3><h4>Sizin təsdiq kodunuz</h4><h1>{code}</h1>"
+            });
+            return NoContent();
+        }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
