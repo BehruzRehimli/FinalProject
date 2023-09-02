@@ -79,7 +79,7 @@ namespace Yolcu360.Service.Implementations
 
         public List<CountryGetAllDto> GetAll()
         {
-            var countries=_countryRepository.GetAll(x=>true).ToList();
+            var countries=_countryRepository.GetAll(x=>true,"Cities").ToList();
             return _mapper.Map<List<CountryGetAllDto>>(countries);
         }
     }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./Detail.css"
 import { IoArrowBackOutline } from "react-icons/io5"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams,useNavigate } from "react-router-dom"
 import { TiArrowDownThick, TiArrowUpThick } from "react-icons/ti"
 import { BiSolidCar } from "react-icons/bi"
 import { AiOutlineRight } from "react-icons/ai"
@@ -19,9 +19,11 @@ import axios from 'axios'
 import { Field, Form, Formik } from 'formik'
 import Text from '../../components/Form/Text'
 import Select from '../../components/Form/Select'
+import { useSelector } from 'react-redux'
 
 const Detail = () => {
     const { id } = useParams();
+    const navigate =useNavigate();
     const [extensions, setExtensions] = useState({
         extra1000: false,
         extra500: false,
@@ -35,13 +37,31 @@ const Detail = () => {
         loadCar: false
     })
 
+    const [userComment, setUserCommnet] = useState(false)
+    const { username, isLogin, token } = useSelector(store => store.login)
+
+    var data = null;
     useEffect(() => {
         const getCar = async () => {
-            var data = await axios.get(`https://localhost:7079/api/Cars/${id}`)
+            data = await axios.get(`https://localhost:7079/api/Cars/${id}`)
             setCar(prev => { return { ...prev, car: data.data, loadCar: true } })
+            var review = data.data.reviews.find(x => x.user.username = username)
+            if (review) {
+                setUserCommnet(true)
+            }
         }
         getCar();
+
+
     }, [])
+
+    // useEffect(()=>{
+    //     var review = car.reviews.find(x => x.user.username = username)
+    //     if (review) {
+    //         setUserCommnet(true)
+    //     }
+    // },[username,car.car])
+
 
     const CheckExtra500Handler = (e) => {
         const data = e.target.checked
@@ -76,7 +96,7 @@ const Detail = () => {
     return (
         <div>
             <div className="top-detail">
-                <div className="go-back-btn">
+                <div onClick={()=>{navigate(-1)}} className="go-back-btn">
                     <span style={{ marginRight: "10px", paddingRight: "10px", borderRight: "1px solid #9b9b9b" }}>Back</span>
                     <IoArrowBackOutline style={{ fontSize: "20px" }} />
                 </div>
@@ -299,7 +319,7 @@ const Detail = () => {
                             </li>
 
                             <div className='rental-condit'>
-                                <a href="">Click for the rental contract of the company Avis.</a>
+                                <a href="#">Click for the rental contract of the company Avis.</a>
                             </div>
                             <p className='info-title mt-3'>Driver Requirements</p>
                             <div className="row g-3 pe-3">
@@ -460,44 +480,53 @@ const Detail = () => {
                             </div>
 
                         </div>
+                        {
+                            isLogin ?
+                                !userComment ?
+                                    <div className='send-comment mt-4 mb-5'>
+                                        <p className='info-title text-center'>
+                                            Send your review
+                                        </p>
+                                        <Formik initialValues={{
+                                            comment: '',
+                                            personelPoint: 0,
+                                            speedPoint: 0,
+                                            cleannesPoint: 0,
+                                            carId: id,
+                                        }} onSubmit={async (values) => {
+                                            const data = await axios.post('https://localhost:7079/api/Reviews', values, { headers: { "Authorization": `Bearer ${token}` } })
+                                            setUserCommnet(true)
+                                        }}>
+                                            {({ values }) => (
+                                                <Form>
+                                                    <Text name="comment" spClass="info-title" label={"Write Your Comment"} /><br />
+                                                    <Field type="hidden" value={id} name='carId' />
+                                                    <div className="row">
+                                                        <div className="col-lg-4 col-md-12 col-12">
+                                                            <Select name="cleannesPoint" label={"Select point for clear"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
+                                                        </div>
+                                                        <div className="col-lg-4 col-md-12 col-12">
+                                                            <Select name="personelPoint" label={"Select point for office"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
 
-                        <div className='send-comment mt-4 mb-5'>
-                            <p className='info-title text-center'>
-                                Send your review
-                            </p>
-                            <Formik initialValues={{
-                                comment: '',
-                                personelPoint: 0,
-                                speedPoint: 0,
-                                cleannesPoint: 0,
-                                carId: id,
-                            }} onSubmit={async (values) => {
-                                console.log(values);
-                                const data= await axios.post('https://localhost:7079/api/Reviews',values)
-                                console.log(data);
-                            }}>
-                                {({ values }) => (
-                                    <Form>
-                                        <Text name="comment" spClass="info-title" label={"Write Your Comment"} /><br />
-                                        <Field type="hidden" value={id} name='carId' />
-                                        <div className="row">
-                                            <div className="col-lg-4 col-md-12 col-12">
-                                                <Select name="cleannesPoint" label={"Select point for clear"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
-                                            </div>
-                                            <div className="col-lg-4 col-md-12 col-12">
-                                                <Select name="personelPoint" label={"Select point for office"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
+                                                        </div>
+                                                        <div className="col-lg-4 col-md-12 col-12">
+                                                            <Select name="speedPoint" label={"Select point for speed"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
 
-                                            </div>
-                                            <div className="col-lg-4 col-md-12 col-12">
-                                                <Select name="speedPoint" label={"Select point for speed"} spClass="info-title" options={[1, 2, 3, 4, 5]} />
+                                                        </div>
+                                                    </div>
+                                                    <button type='submit' style={{ backgroundColor: "#ffa900", color: "#fff", fontWeight: "bolder", outline: "none" }} className='btn form-control mt-2'>Submit</button>
+                                                </Form>
+                                            )}
+                                        </Formik>
+                                    </div> :
+                                    <div className='rental-condit' >
+                                        <a href="#" style={{ textDecoration: "none" }}>You already share your review about this car.</a>
+                                    </div> :
+                                <div className='rental-condit'>
+                                    <a href="#" style={{ textDecoration: "none" }}>If you want to share your reviews about this car, first you should login.</a>
+                                </div>
 
-                                            </div>
-                                        </div>
-                                        <button type='submit' style={{ backgroundColor: "#ffa900", color: "#fff", fontWeight: "bolder", outline: "none" }} className='btn form-control mt-2'>Submit</button>
-                                    </Form>
-                                )}
-                            </Formik>
-                        </div>
+                        }
                         <div className="reviews mt-4">
                             <p className="info-title text-center mt-4">Reviews</p>
                             <div className="all-reviews">

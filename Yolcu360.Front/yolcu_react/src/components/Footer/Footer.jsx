@@ -16,7 +16,7 @@ const Footer = () => {
   },[]);
   return (
     <footer >
-      <div className="my-container">
+      <div className="my-container" style={{margin:"0 auto"}}>
         <div className="top-footer">
           <div className="row">
             <div className="col-lg-3 col-md-6 col-xs-12">

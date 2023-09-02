@@ -142,6 +142,45 @@ namespace Yolcu360.API.Controllers
 
             return Ok(new { token=tokestr });
         }
+        [HttpPost("AdminLogin")]
+        public async Task<IActionResult> AdminLogin(LoginDto dto)
+        {
+            AppUser user = await _userManager.FindByNameAsync(dto.Username);
+            if (user == null)
+            {
+                throw new RestException(System.Net.HttpStatusCode.BadRequest, "", "Username or Password is incorrect!");
+            }
+            if (!await _userManager.CheckPasswordAsync(user, dto.Password))
+            {
+                throw new RestException(System.Net.HttpStatusCode.BadRequest, "", "Username or Password is incorrect!");
+            }
+            if (!_userManager.IsInRoleAsync(user,"Admin").Result && !_userManager.IsInRoleAsync(user,"SuperAdmin").Result)
+            {
+                throw new RestException(System.Net.HttpStatusCode.BadRequest, "", "You are not admin!");
+            }
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            claims.Add(new Claim("Fullname", user.Fullname));
+            var roles = (_userManager.GetRolesAsync(user).Result).Select(x => new Claim(ClaimTypes.Role, x)).ToList();
+            claims.AddRange(roles);
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:Secret").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+            var token = new JwtSecurityToken(
+                signingCredentials: creds,
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(3),
+                issuer: _configuration.GetSection("JWT:Issuer").Value,
+                audience: _configuration.GetSection("JWT:Audience").Value
+                );
+            var tokestr = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok(new { token = tokestr });
+        }
+
 
     }
 }

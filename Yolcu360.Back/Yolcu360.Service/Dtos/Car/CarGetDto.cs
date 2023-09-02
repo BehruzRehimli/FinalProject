@@ -81,5 +81,6 @@ namespace Yolcu360.Service.Dtos.Car
     public class CarGetDtoUser
     {
         public string Fullname { get; set; }
+        public string Username { get; set; }
     }
 }

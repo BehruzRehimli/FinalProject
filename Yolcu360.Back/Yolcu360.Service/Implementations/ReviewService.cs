@@ -25,7 +25,7 @@ namespace Yolcu360.Service.Implementations
             _mapper = mapper;
             _carRepository = carRepository;
         }
-        public CreateResultDto Create(ReviewCreateDto dto)
+        public CreateResultDto Create(ReviewCreateDto dto, AppUser user)
         {
             if (!_carRepository.IsExsist(x=>x.Id==dto.CarId))
             {
@@ -33,6 +33,7 @@ namespace Yolcu360.Service.Implementations
             }
             Review review = _mapper.Map<Review>(dto);
             review.CreateDate=DateTime.UtcNow;
+            review.User= user;
             _reviewRepository.Add(review);
             _reviewRepository.Commit();
             return _mapper.Map<CreateResultDto>(review);
