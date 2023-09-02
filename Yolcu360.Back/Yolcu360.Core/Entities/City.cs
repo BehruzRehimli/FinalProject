@@ -13,8 +13,8 @@ namespace Yolcu360.Core.Entities
         public string ImageName { get; set; }
         public List<Office> Offices { get; set; }
         public Country Country { get; set; }
-        public int HomeSliderOrder { get; set; }
-        public int HomePopularOrder { get; set; }
+        public int? HomeSliderOrder { get; set; }
+        public int? HomePopularOrder { get; set; }
         public List<AboutCity> AboutCities { get; set; }
     }
 }

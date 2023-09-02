@@ -13,8 +13,8 @@ namespace Yolcu360.Service.Dtos.City
     {
         public string Name { get; set; }
         public int CountryId { get; set; }
-        public int HomeSliderOrder { get; set; }
-        public int HomePopularOrder { get; set; }
+        public int? HomeSliderOrder { get; set; }
+        public int? HomePopularOrder { get; set; }
         public IFormFile ImageFile { get; set; }
 
     }

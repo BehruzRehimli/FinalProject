@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Formik, Form, Field } from 'formik'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-const CityCreate = () => {
+const CityEdit = () => {
+    const {id}=useParams()
+
     const navigate = useNavigate()
     const [countries, setCountries] = useState()
     const { adminToken } = useSelector(store => store.login)
@@ -31,6 +33,8 @@ const CityCreate = () => {
                 navigate("/admin/login")
             }
         }
+
+
         navigate("/admin/city")
 
     }
@@ -120,4 +124,4 @@ const CityCreate = () => {
     )
 }
 
-export default CityCreate
+export default CityEdit
