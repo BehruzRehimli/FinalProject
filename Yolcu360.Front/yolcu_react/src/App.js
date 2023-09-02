@@ -19,6 +19,13 @@ import BrandCreate from './pages/Admin/Brand/BrandCreate';
 import BrandEdit from './pages/Admin/Brand/BrandEdit';
 import City from './pages/Admin/City/City';
 import CityCreate from './pages/Admin/City/CityCreate';
+import CityEdit from './pages/Admin/City/CityEdit';
+import OfficeAdmin from "./pages/Admin/Office/Office"
+import OfficeCreate from './pages/Admin/Office/OfficeCreate';
+import OfficeEdit from './pages/Admin/Office/OfficeEdit';
+import Model from './pages/Admin/Model/Model';
+import ModelCreate from './pages/Admin/Model/ModelCreate';
+import ModelEdit from './pages/Admin/Model/ModelEdit';
 
 
 function App() {
@@ -46,6 +53,13 @@ function App() {
             <Route path='/admin/brand/edit/:id' element={<BrandEdit/>}/>
             <Route path='/admin/city' element={<City/>}/>
             <Route path='/admin/city/create' element={<CityCreate/>}/>
+            <Route path='/admin/city/edit/:id' element={<CityEdit/>}/>
+            <Route path='/admin/office' element={<OfficeAdmin/>}/>
+            <Route path='/admin/office/create' element={<OfficeCreate/>}/>
+            <Route path='/admin/office/edit/:id' element={<OfficeEdit/>}/>
+            <Route path='/admin/model' element={<Model/>}/>
+            <Route path='/admin/model/edit/:id' element={<ModelEdit/>}/>
+            <Route path='/admin/model/create' element={<ModelCreate/>}/>
 
           </Route>
           <Route path='/admin/login' element={<Login/>}/>

@@ -5,28 +5,33 @@ import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const CityEdit = () => {
-    const {id}=useParams()
+    const { id } = useParams()
 
     const navigate = useNavigate()
     const [countries, setCountries] = useState()
     const { adminToken } = useSelector(store => store.login)
     const [image, setImage] = useState()
+    const [country, setCountry] = useState("")
+    const [loader, setLoader] = useState(false)
 
-    const [postValues,setPostValues]=useState({
-        name:"",
+    const [postValues, setPostValues] = useState({
+        name: "",
         homeSliderOrder: null,
         homePopularOrder: null,
         imageFile: null,
         countryId: 0
     })
-    const BtnHandler=async(e)=>{
+    const BtnHandler = async (e) => {
+        console.log(country.imageName);
         e.preventDefault()
         var headerToken = `Bearer ${adminToken}`
         try {
-            var data= await axios.post("https://localhost:7079/api/cities",postValues,{headers:{
-                "Authorization": headerToken,
-                "Content-Type":'multipart/form-data'
-            }})
+            var data = await axios.put(`https://localhost:7079/api/cities/${id}`, postValues, {
+                headers: {
+                    "Authorization": headerToken,
+                    "Content-Type": 'multipart/form-data'
+                }
+            })
         } catch (error) {
             console.log(error);
             if (error.response.status === 401) {
@@ -40,8 +45,8 @@ const CityEdit = () => {
     }
 
 
-    const InputHandler=(e)=>{
-        setPostValues(prev=>{return {...prev,[e.target.name]:e.target.value}})
+    const InputHandler = (e) => {
+        setPostValues(prev => { return { ...prev, [e.target.name]: e.target.value } })
     }
 
 
@@ -51,7 +56,6 @@ const CityEdit = () => {
             try {
                 var datas = await axios.get("https://localhost:7079/api/Countries", { headers: { "Authorization": headerToken } })
             } catch (error) {
-                console.log(error);
                 if (error.response.status === 401) {
                     navigate("/admin/login")
                 }
@@ -59,61 +63,100 @@ const CityEdit = () => {
 
             setCountries(datas.data)
         }
+        const getCountry = async () => {
+            var headerToker = "Bearer " + adminToken
+            try {
+                var data = await axios.get(`https://localhost:7079/api/Cities/${id}`, { headers: { "Authorization": headerToker } })
+
+            } catch (error) {
+                if (error.response.status === 401) {
+                    navigate("/admin/login")
+                }
+
+            }
+            setCountry(data.data);
+            setPostValues({
+                name: data.data.name,
+                homeSliderOrder: data.data.homeSliderOrder,
+                homePopularOrder: data.data.homePopularOrder,
+                imageFile: null,
+                countryId: data.data.country.id,
+            })
+            setLoader(true)
+        }
+        getCountry();
+
         getCountries()
     }, [])
 
     return (
         <div className='admin-container'>
-            <h2 className='crud-header-entity mb-4'>Create City</h2>
+            <h2 className='crud-header-entity mb-4'>Edit City</h2>
             <Formik>
-                <Formik initialValues={{
-                    name: '',
-                    homeSliderOrder: "",
-                    homePopularOrder: "",
+                <Formik enableReinitialize initialValues={{
+                    name: "",
+                    homeSliderOrder: null,
+                    homePopularOrder: null,
                     imageFile: null,
                     countryId: 0
                 }} onSubmit={async (values) => {
+
                 }}>
                     {({ values, setFieldValue }) => (
                         <Form>
 
                             <div className='d-flex'>
-                                <input onChange={InputHandler} type="text" className="login-input" name='name' placeholder="City Name..." />
+                                <input onChange={InputHandler} defaultValue={country.name} type="text" className="login-input" name='name' placeholder="City Name..." />
                             </div>
                             <div className='d-flex'>
-                                <input onChange={InputHandler} type="number" className="login-input" name='homeSliderOrder' placeholder="Home Slider Order..." />
+                                <input onChange={InputHandler} defaultValue={country.homeSliderOrder===0?null:country.homeSliderOrder} type="number" className="login-input" name='homeSliderOrder' placeholder="Home Slider Order..." />
                             </div>
                             <div className='d-flex'>
-                                <input onChange={InputHandler} type="number" className="login-input" name='homePopularOrder' placeholder="Popular City Order..." />
+                                <input onChange={InputHandler} defaultValue={country.homePopularOrder===0?null:country.homePopularOrder} type="number" className="login-input" name='homePopularOrder' placeholder="Popular City Order..." />
                             </div>
+                            {
+                                loader?
+                                country.imageName.lenght>0?
+                                <div className='mt-3 text-start'>
+                                    <label style={{ marginTop: "20px", display: "block", textAlign: "left", fontSize: "16px", fontWeight: "500", color: "#ffa900" }} htmlFor="image">Older Image...</label>
+                                    <img src={country.imageName} alt="img" />
+                                </div>:null:null
+                            }
+
                             <div className='text-start'>
                                 <label style={{ marginTop: "20px", textAlign: "left", fontSize: "16px", fontWeight: "500", color: "#ffa900" }} htmlFor="image">Add Image...</label>
-                                <input  onChange={(e) => {
+                                <input onChange={(e) => {
                                     setFieldValue("imageFile", e.target.files[0])
                                     setImage(URL.createObjectURL(e.target.files[0]))
-                                    setPostValues(prev=>{return {...prev,[e.target.name]:e.target.files[0]}})
+                                    setPostValues(prev => { return { ...prev, [e.target.name]: e.target.files[0] } })
                                 }} style={{ marginTop: "0" }} type="file" id='image' className="login-input" name='imageFile' placeholder="Add Image..." />
                             </div>
                             <div className='mt-3 text-start'>
                                 {
                                     image &&
                                     <img src={image} alt="img" />
+
                                 }
+
                             </div>
-                            <div>
-                                <select name="countryId" id="" className='login-input' onChange={(e) => {
-                                    setFieldValue("countryId", e.target.value)
-                                    setPostValues(prev=>{ return{...prev,[e.target.name]:e.target.value}})
-                                }}  >
-                                    {
-                                        countries ?
-                                            countries.map(x => (
-                                                <option value={x.id} key={x.id}>{x.name}</option>
-                                            )) : null
-                                    }
-                                </select>
-                            </div>
-                            <button onClick={BtnHandler} type='submit' className='btn login-btn register-btn form-control fs-5'>Create</button>
+                            {
+                                loader ?
+                                    <div>
+                                        <select defaultValue={country.country.id} name="countryId" id="" className='login-input' onChange={(e) => {
+                                            setFieldValue("countryId", e.target.value)
+                                            setPostValues(prev => { return { ...prev, [e.target.name]: e.target.value } })
+                                        }}  >
+                                            {
+                                                countries ?
+                                                    countries.map(x => (
+                                                        <option value={x.id} key={x.id}>{x.name}</option>
+                                                    )) : null
+                                            }
+                                        </select>
+                                    </div> : null
+
+                            }
+                            <button onClick={BtnHandler} type='submit' className='btn login-btn register-btn form-control fs-5'>Edit</button>
                         </Form>
                     )}
                 </Formik>

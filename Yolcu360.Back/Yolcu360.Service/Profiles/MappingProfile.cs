@@ -83,6 +83,8 @@ namespace Yolcu360.Service.Profiles
             CreateMap<Car, CarGetDto>().
                  ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("Car") + m.ImageName : null));
             CreateMap<ReviewCreateDto, Review>();
+            CreateMap<Brand, ModelGetDtoBrand>();
+            CreateMap<Brand, ModelGetAllDtoBrand>();
 
 
 

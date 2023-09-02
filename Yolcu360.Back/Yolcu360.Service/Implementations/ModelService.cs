@@ -63,6 +63,7 @@ namespace Yolcu360.Service.Implementations
                 throw new RestException(System.Net.HttpStatusCode.BadRequest, "Name", ErrorMessages.NameTaken(dto.Name));
             }
             model.Name = dto.Name;
+            model.BrandId=dto.BrandId;
             _modelRepository.Commit();
         }
 
@@ -72,13 +73,13 @@ namespace Yolcu360.Service.Implementations
             {
                 throw new RestException(System.Net.HttpStatusCode.NotFound, ErrorMessages.NotFoundId(id, "brand"));
             }
-            Model model = _modelRepository.Get(x => x.Id == id, "Cars");
+            Model model = _modelRepository.Get(x => x.Id == id, "Cars","Brand");
             return _mapper.Map<ModelGetDto>(model);
         }
 
         public List<ModelGetAllDto> GetAll()
         {
-            List<Model> models = _modelRepository.GetAll(x => true, "Cars").ToList();
+            List<Model> models = _modelRepository.GetAll(x => true, "Cars","Brand").ToList();
             return _mapper.Map<List<ModelGetAllDto>>(models);
         }
     }

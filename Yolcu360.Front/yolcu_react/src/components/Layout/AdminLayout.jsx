@@ -140,9 +140,9 @@ const AdminLayout = () => {
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/country"} aria-expanded="false"><i className="fa fa-user-circle-o"></i><span className="hide-menu">Country</span></Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/type"} aria-expanded="false"><i className="fa fa-table"></i><span className="hide-menu"></span>Type</Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/brand"} aria-expanded="false"><i className="fa fa-smile-o"></i><span className="hide-menu"></span>Brand</Link></li>
-                                <li> <a className="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i className="fa fa-globe"></i><span className="hide-menu"></span>Map</a></li>
-                                <li> <a className="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i className="fa fa-bookmark-o"></i><span className="hide-menu"></span>Blank</a></li>
-                                <li> <a className="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i className="fa fa-question-circle"></i><span className="hide-menu"></span>404</a></li>
+                                <li> <Link className="waves-effect waves-dark" to={"/admin/city"} aria-expanded="false"><i className="fa fa-globe"></i><span className="hide-menu"></span>City</Link></li>
+                                <li> <Link className="waves-effect waves-dark" to={"/admin/office"} aria-expanded="false"><i className="fa fa-bookmark-o"></i><span className="hide-menu"></span>Office</Link></li>
+                                <li> <Link className="waves-effect waves-dark" to={"/admin/model"} aria-expanded="false"><i className="fa fa-question-circle"></i><span className="hide-menu"></span>Model</Link></li>
                                 <div className="text-center m-t-30">
                                     <a href="https://wrappixel.com/templates/elegant-admin/" className="btn waves-effect waves-light btn-success hidden-md-down"> Upgrade to Pro</a>
                                 </div>

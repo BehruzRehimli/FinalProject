@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using Yolcu360.Core.Repositories;
 using Yolcu360.Service.Dtos.Common;
 using Yolcu360.Service.Dtos.Office;
@@ -17,7 +19,7 @@ namespace Yolcu360.API.Controllers
         {
             _officeService = officeService;
         }
-
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet("")]
         public ActionResult<List<OfficeGetAllDto>> Get()
         {
@@ -28,17 +30,20 @@ namespace Yolcu360.API.Controllers
         {
             return _officeService.Get(id);
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost("")]
         public ActionResult<CreateResultDto> Create(OfficeCreateDto dto)
         {
             return _officeService.Create(dto);
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut("{id}")]
         public ActionResult Edit(int id,OfficeEditDto dto)
         {
             _officeService.Edit(id, dto);
             return NoContent();
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

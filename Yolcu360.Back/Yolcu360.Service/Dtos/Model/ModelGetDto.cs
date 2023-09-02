@@ -11,5 +11,11 @@ namespace Yolcu360.Service.Dtos.Model
         public string Name { get; set; }
         public int CarsCount { get; set; }
 
+        public ModelGetDtoBrand Brand { get; set; }
+    }
+    public class ModelGetDtoBrand
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

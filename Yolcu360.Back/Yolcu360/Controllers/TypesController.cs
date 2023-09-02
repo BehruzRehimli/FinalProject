@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Dtos.Common;
 using Yolcu360.Service.Dtos.Type;
@@ -17,27 +19,32 @@ namespace Yolcu360.API.Controllers
         {
             _typeService = typeService;
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet("{id}")]
         public ActionResult<TypeGetDto> Get(int id)
         {
             return _typeService.Get(id);
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet("")]
         public ActionResult<List<TypeGetAllDto>> Get()
         {
             return _typeService.GetAll();
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost("")]
         public ActionResult<CreateResultDto> Create(TypeCreateDto dto)
         {
             return _typeService.Create(dto);
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut("{id}")]
         public ActionResult Edit(int id, TypeEditDto dto)
         {
             _typeService.Edit(id, dto);
             return NoContent();
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
