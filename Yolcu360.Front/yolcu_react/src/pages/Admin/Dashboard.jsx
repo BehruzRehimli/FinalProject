@@ -3,8 +3,39 @@ import User1 from "../../images/images/users/1.jpg"
 import User2 from "../../images/images/users/2.jpg"
 import User3 from "../../images/images/users/3.jpg"
 import User4 from "../../images/images/users/4.jpg"
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
+import { useEffect } from 'react'
+
 
 const Dashboard = () => {
+
+    const navigate = useNavigate();
+
+    const { adminToken } = useSelector(store => store.login)
+
+
+
+
+    useEffect(() => {
+        const getCountries = async () => {
+            var token = "Bearer " + adminToken
+            try {
+                var datas = await axios.get(`https://localhost:7079/api/types`, { headers: { "Authorization": token } })
+            } catch (error) {
+                if (error.response.status == 401) {
+                    navigate("/admin/login")
+                }
+                else {
+                    navigate("/error")
+                }
+            }
+        }
+        getCountries();
+    }, [])
+
+
     return (
         <>
             {/* <!-- ============================================================== -->
@@ -99,7 +130,7 @@ const Dashboard = () => {
                                     <div className="sl-right">
                                         <div><a href="#">Tiger Sroff</a> <span className="sl-date">5 minutes ago</span></div>
                                         <div className="desc">Approve meeting with tiger
-                                            <br /><a  className="btn m-t-10 m-r-5 btn-rounded btn-outline-success">Apporve</a> <a  className="btn m-t-10 btn-rounded btn-outline-danger">Refuse</a> </div>
+                                            <br /><a className="btn m-t-10 m-r-5 btn-rounded btn-outline-success">Apporve</a> <a className="btn m-t-10 btn-rounded btn-outline-danger">Refuse</a> </div>
                                     </div>
                                 </div>
                             </div>

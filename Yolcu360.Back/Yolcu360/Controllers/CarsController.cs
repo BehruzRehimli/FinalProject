@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using Yolcu360.Service.Dtos.Car;
 using Yolcu360.Service.Dtos.Common;
+using Yolcu360.Service.Implementations;
 using Yolcu360.Service.Interfaces;
 
 namespace Yolcu360.API.Controllers
@@ -48,5 +51,13 @@ namespace Yolcu360.API.Controllers
         {
             return _carService.CarsList(id);
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpGet("GetAdmin/{page}")]
+        public ActionResult<object> GetAdmin(int page)
+        {
+
+            return _carService.GetAdmin(page);
+        }
+
     }
 }

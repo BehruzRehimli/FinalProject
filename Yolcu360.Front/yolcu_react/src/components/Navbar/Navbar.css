@@ -175,3 +175,19 @@
     background-color: #0e568c;
     padding: 7px 5px;
 }
+.pagination{
+    padding: 5px 10px !important;
+    background-color: white;
+    border: 1px solid #ffa900;
+    color: #ffa900;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 5px;
+    display: inline-block !important;
+    margin-right: 5px;
+    text-align: center;
+}
+.pagination.active{
+    background-color: #ffa900;
+    color: white;
+}

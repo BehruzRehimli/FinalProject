@@ -37,6 +37,11 @@ const CityEdit = () => {
             if (error.response.status === 401) {
                 navigate("/admin/login")
             }
+            else {
+                navigate("/error")
+
+            }
+
         }
 
 
@@ -59,6 +64,11 @@ const CityEdit = () => {
                 if (error.response.status === 401) {
                     navigate("/admin/login")
                 }
+                else {
+                    navigate("/error")
+
+                }
+
             }
 
             setCountries(datas.data)
@@ -71,6 +81,10 @@ const CityEdit = () => {
             } catch (error) {
                 if (error.response.status === 401) {
                     navigate("/admin/login")
+                }
+                else {
+                    navigate("/error")
+
                 }
 
             }
@@ -142,7 +156,7 @@ const CityEdit = () => {
                             {
                                 loader ?
                                     <div>
-                                        <select defaultValue={country.country.id} name="countryId" id="" className='login-input' onChange={(e) => {
+                                        <select value={country.country.id} name="countryId" id="" className='login-input' onChange={(e) => {
                                             setFieldValue("countryId", e.target.value)
                                             setPostValues(prev => { return { ...prev, [e.target.name]: e.target.value } })
                                         }}  >

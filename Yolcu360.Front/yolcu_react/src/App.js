@@ -26,6 +26,11 @@ import OfficeEdit from './pages/Admin/Office/OfficeEdit';
 import Model from './pages/Admin/Model/Model';
 import ModelCreate from './pages/Admin/Model/ModelCreate';
 import ModelEdit from './pages/Admin/Model/ModelEdit';
+import Car from './pages/Admin/Car/Car';
+import CarCreate from './pages/Admin/Car/CarCreate';
+import CarEdit from './pages/Admin/Car/CarEdit';
+import Error from './pages/Error/Error';
+
 
 
 function App() {
@@ -38,6 +43,7 @@ function App() {
             <Route path='/office/:id' element={<Office/>}/>
             <Route path="/cars/:id" element={<Cars/>}/>
             <Route path='/detail/:id' element={<Detail/>}/>
+            <Route path='/error' element={<Error/>}/>
 
           </Route>
           <Route path='/admin' element={<AdminLayout/>}>
@@ -60,6 +66,9 @@ function App() {
             <Route path='/admin/model' element={<Model/>}/>
             <Route path='/admin/model/edit/:id' element={<ModelEdit/>}/>
             <Route path='/admin/model/create' element={<ModelCreate/>}/>
+            <Route path='/admin/car' element={<Car/>}/>
+            <Route path='/admin/car/create' element={<CarCreate/>}/>
+            <Route path='/admin/car/edit/:id' element={<CarEdit/>}/>
 
           </Route>
           <Route path='/admin/login' element={<Login/>}/>

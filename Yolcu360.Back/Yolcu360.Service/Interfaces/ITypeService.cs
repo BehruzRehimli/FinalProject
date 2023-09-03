@@ -15,5 +15,7 @@ namespace Yolcu360.Service.Interfaces
         void Edit(int id, TypeEditDto dto);
         TypeGetDto Get(int id);
         List<TypeGetAllDto> GetAll();
+        object GetAdmin(int page);
+
     }
 }

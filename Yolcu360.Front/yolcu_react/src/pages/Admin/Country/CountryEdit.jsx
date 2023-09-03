@@ -16,17 +16,29 @@ const CountryEdit = () => {
 
     useEffect(() => {
         const getCountry = async () => {
-            var headerToker = "Bearer " + adminToken
-            var data = await axios.get(`https://localhost:7079/api/Countries/${id}`, { headers: { "Authorization": headerToker } })
-            setCountry(data.data.name);
-            setLoader(true)
+            var headerToker = "Bearer " + adminToken;
+            try {
+                var data = await axios.get(`https://localhost:7079/api/Countries/${id}`, { headers: { "Authorization": headerToker } })
+                setCountry(data.data.name);
+                setLoader(true)
+
+            } catch (error) {
+                if (error.response.status === 401) {
+                    navigate("/admin/login")
+                }
+                else {
+                    navigate("/error")
+
+                }
+
+            }
         }
         getCountry();
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(country);
-    },[loader])
+    }, [loader])
 
 
     return (
@@ -49,6 +61,11 @@ const CountryEdit = () => {
                                     if (error.response.status === 401) {
                                         navigate("/admin/login")
                                     }
+                                    else {
+                                        navigate("/error")
+                    
+                                    }
+                    
                                 }
                             }}>
                                 {({ values }) => (
@@ -56,7 +73,7 @@ const CountryEdit = () => {
 
                                         <div className='d-flex'>
 
-                                            <Field type="text" className="login-input"   name='name' placeholder="Country Name..." />
+                                            <Field type="text" className="login-input" name='name' placeholder="Country Name..." />
                                         </div>
                                         <button type='submit' className='btn login-btn register-btn form-control '>Edit</button>
                                     </Form>

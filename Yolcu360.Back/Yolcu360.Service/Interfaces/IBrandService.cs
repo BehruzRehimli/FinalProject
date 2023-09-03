@@ -15,5 +15,6 @@ namespace Yolcu360.Service.Interfaces
         void Delete(int id);
         List<BrandGetAllDto> GetAll();
         void Edit(int id,BrandEditDto dto);
+        object GetAdmin(int page);
     }
 }

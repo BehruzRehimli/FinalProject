@@ -9,6 +9,7 @@ using Yolcu360.Core.Repositories;
 using Yolcu360.Data.Repositories;
 using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Dtos.Common;
+using Yolcu360.Service.Dtos.Country;
 using Yolcu360.Service.Dtos.Model;
 using Yolcu360.Service.Exceptions;
 using Yolcu360.Service.Helpers;
@@ -75,6 +76,14 @@ namespace Yolcu360.Service.Implementations
             }
             Model model = _modelRepository.Get(x => x.Id == id, "Cars","Brand");
             return _mapper.Map<ModelGetDto>(model);
+        }
+
+        public object GetAdmin(int page)
+        {
+            var models = _modelRepository.GetAll(x => true, "Cars", "Brand");
+            var maxPage = Math.Ceiling((decimal)models.ToList().Count / 10);
+            var datas = models.Skip((page - 1) * 10).Take(10).ToList();
+            return new { data = _mapper.Map<List<ModelGetAllDto>>(datas), pageCount = maxPage };
         }
 
         public List<ModelGetAllDto> GetAll()

@@ -30,6 +30,11 @@ const CityCreate = () => {
             if (error.response.status === 401) {
                 navigate("/admin/login")
             }
+            else {
+                navigate("/error")
+
+            }
+
         }
         navigate("/admin/city")
 
@@ -51,6 +56,11 @@ const CityCreate = () => {
                 if (error.response.status === 401) {
                     navigate("/admin/login")
                 }
+                else {
+                    navigate("/error")
+
+                }
+
             }
 
             setCountries(datas.data)

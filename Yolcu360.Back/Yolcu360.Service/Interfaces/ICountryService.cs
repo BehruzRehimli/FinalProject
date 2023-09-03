@@ -15,5 +15,7 @@ namespace Yolcu360.Service.Interfaces
         void Edit(int id, CountryEditDto dto);
         CountryGetDto Get(int id);
         List<CountryGetAllDto> GetAll();
+        object GetAdmin(int page);
+
     }
 }

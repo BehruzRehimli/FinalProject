@@ -18,22 +18,45 @@ const City = () => {
         countries: []
     })
 
+    const [page, setPage] = useState(1)
+    const [maxPage, setMaxPage] = useState();
+    const pagesArray = []
+    for (let i = 1; i <= maxPage; i++) {
+        pagesArray.push(i);
+    }
+    const PageClickHandler = (e) => {
+        setPage(e.target.innerHTML)
+        var btns = document.querySelectorAll('.pagination')
+        btns.forEach(btn => {
+            btn.classList.remove("active")
+        });
+        e.target.classList.add("active")
+    }
+
+
+    
 
     useEffect(() => {
         const getCountries = async () => {
             var token = "Bearer " + adminToken
             try {
-                var datas = await axios.get("https://localhost:7079/api/Cities", { headers: { "Authorization": token } })
-                setCountries(prev => { return { ...prev, countries: datas.data, isLoad: true } })
+                var datas = await axios.get(`https://localhost:7079/api/Cities/GetAdmin/${page}`, { headers: { "Authorization": token } })
+                setCountries(prev => { return { ...prev, countries: datas.data.data, isLoad: true } })
+                setMaxPage(datas.data.pageCount)
             } catch (error) {
                 console.log(error);
                 if (error.response.status === 401) {
                     navigate("/admin/login")
                 }
+                else {
+                    navigate("/error")
+
+                }
+
             }
         }
         getCountries();
-    }, [])
+    }, [page])
 
     let order = 1;
 
@@ -57,9 +80,9 @@ const City = () => {
                     <tbody>
                         {
                             countries.isLoad ?
-                                countries.countries.map(x => (
+                                countries.countries.map((x,index) => (
                                     <tr key={x.id}>
-                                        <td className="text-center">{order++}</td>
+                                        <td className="text-center">{index + ((page - 1) * 10) + 1}</td>
                                         <td className="txt-oflo">{x.name}</td>
                                         <td className="txt-oflo">{x.country.name}</td>
                                         <td className="txt-oflo">{x.officesCount}</td>
@@ -77,6 +100,11 @@ const City = () => {
                                                     if (error.response.status === 401) {
                                                         navigate("/admin/login")
                                                     }
+                                                    else {
+                                                        navigate("/error")
+                                    
+                                                    }
+                                    
                                                 }
 
                                             }} className='btn btn-danger ms-3'> <MdDeleteForever className='me-2 fs-5' />Delete</button>
@@ -87,6 +115,15 @@ const City = () => {
                         }
                     </tbody>
                 </table>
+                <div className='text-start'>
+                    {
+                        pagesArray.length > 0 ?
+                            pagesArray.map(x => (
+                                <p id={`page-btn-${x}`} onClick={PageClickHandler} className={page === x ? 'pagination active' : 'pagination'} key={x}>{x}</p>
+                            )) : null
+                    }
+                </div>
+
             </div>
 
 

@@ -22,6 +22,11 @@ const ModelCreate = () => {
                 if (error.response.status === 401) {
                     navigate("/admin/login")
                 }
+                else {
+                    navigate("/error")
+
+                }
+
             }
 
             setEntity(datas.data)
@@ -47,6 +52,11 @@ const ModelCreate = () => {
             if (error.response.status === 401) {
                 navigate("/admin/login")
             }
+            else {
+                navigate("/error")
+
+            }
+
         }
         navigate("/admin/model")
 

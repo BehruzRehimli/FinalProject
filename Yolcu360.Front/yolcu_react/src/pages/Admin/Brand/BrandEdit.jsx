@@ -16,10 +16,22 @@ const BrandEdit = () => {
 
     useEffect(() => {
         const getCountry = async () => {
-            var headerToker = "Bearer " + adminToken
-            var data = await axios.get(`https://localhost:7079/api/Brands/${id}`, { headers: { "Authorization": headerToker } })
-            setCountry(data.data.name);
-            setLoader(true)
+            var headerToker = "Bearer " + adminToken;
+            try {
+                var data = await axios.get(`https://localhost:7079/api/Brands/${id}`, { headers: { "Authorization": headerToker } })
+                setCountry(data.data.name);
+                setLoader(true)
+            } catch (error) {
+                if (error.response.status === 401) {
+                    navigate("/admin/login")
+                }
+                else {
+                    navigate("/error")
+
+                }
+
+            }
+
         }
         getCountry();
     }, [])
@@ -45,6 +57,11 @@ const BrandEdit = () => {
                                     if (error.response.status === 401) {
                                         navigate("/admin/login")
                                     }
+                                    else {
+                                        navigate("/error")
+                    
+                                    }
+                    
                                 }
                             }}>
                                 {({ values }) => (

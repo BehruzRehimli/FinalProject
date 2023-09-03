@@ -19,6 +19,8 @@ namespace Yolcu360.Service.Interfaces
         List<OfficeGetAllDto> GetForFooter();
         List<OfficeGetAllDto> GetHomePopular();
         List<OfficeSearchDto> Search(string input);
+        object GetAdmin(int page);
+
 
     }
 }

@@ -7,7 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Yolcu360.Core.Entities;
 using Yolcu360.Core.Repositories;
+using Yolcu360.Data.Repositories;
 using Yolcu360.Service.Dtos.Common;
+using Yolcu360.Service.Dtos.Model;
 using Yolcu360.Service.Dtos.Office;
 using Yolcu360.Service.Exceptions;
 using Yolcu360.Service.Helpers;
@@ -76,6 +78,14 @@ namespace Yolcu360.Service.Implementations
                 throw new RestException(System.Net.HttpStatusCode.NotFound, ErrorMessages.NotFoundId(id, "Office"));
             }
             return _mapper.Map<OfficeGetDto>(offices);
+        }
+
+        public object GetAdmin(int page)
+        {
+            var offices = _officeRepository.GetAll(x => true, "Cars", "City");
+            var maxPage = Math.Ceiling((decimal)offices.ToList().Count / 10);
+            var datas = offices.Skip((page - 1) * 10).Take(10).Include(x => x.City).ThenInclude(x => x.Country).Include(x => x.Cars).ToList();
+            return new { data = _mapper.Map<List<OfficeGetAllDto>>(datas), pageCount = maxPage };
         }
 
         public List<OfficeGetAllDto> GetAll()

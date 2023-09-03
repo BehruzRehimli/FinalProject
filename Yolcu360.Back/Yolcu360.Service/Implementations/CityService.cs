@@ -8,6 +8,7 @@ using Yolcu360.Core.Entities;
 using Yolcu360.Core.Repositories;
 using Yolcu360.Service.Dtos.City;
 using Yolcu360.Service.Dtos.Common;
+using Yolcu360.Service.Dtos.Country;
 using Yolcu360.Service.Exceptions;
 using Yolcu360.Service.Helpers;
 using Yolcu360.Service.Interfaces;
@@ -114,6 +115,14 @@ namespace Yolcu360.Service.Implementations
         {
             List<City> cities = _cityRepository.GetAll(x => x.HomeSliderOrder>0, "Offices", "Country").OrderBy(x=>x.HomeSliderOrder).ToList();
             return _mapper.Map<List<CityGetAllDto>>(cities);
+        }
+
+        public object GetAdmin(int page)
+        {
+            var cities = _cityRepository.GetAll(x => true, "Offices", "Country");
+            var maxPage = Math.Ceiling((decimal)cities.ToList().Count / 10);
+            var datas = cities.Skip((page - 1) * 10).Take(10).ToList();
+            return new { data = _mapper.Map<List<CityGetAllDto>>(datas), pageCount = maxPage };
         }
     }
 }

@@ -143,9 +143,8 @@ const AdminLayout = () => {
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/city"} aria-expanded="false"><i className="fa fa-globe"></i><span className="hide-menu"></span>City</Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/office"} aria-expanded="false"><i className="fa fa-bookmark-o"></i><span className="hide-menu"></span>Office</Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/model"} aria-expanded="false"><i className="fa fa-question-circle"></i><span className="hide-menu"></span>Model</Link></li>
-                                <div className="text-center m-t-30">
-                                    <a href="https://wrappixel.com/templates/elegant-admin/" className="btn waves-effect waves-light btn-success hidden-md-down"> Upgrade to Pro</a>
-                                </div>
+                                <li> <Link className="waves-effect waves-dark" to={"/admin/car"} aria-expanded="false"><i className="fa fa-table"></i><span className="hide-menu"></span>Car</Link></li>
+
                             </ul>
                         </nav>
                         {/* <!-- End Sidebar navigation --> */}

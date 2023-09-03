@@ -23,6 +23,11 @@ const CountryCreate = () => {
                         if (error.response.status===401) {
                             navigate("/admin/login")
                         }
+                        else {
+                            navigate("/error")
+        
+                        }
+        
                     }
                     if (result.status===200) {
                         navigate("/admin/country")

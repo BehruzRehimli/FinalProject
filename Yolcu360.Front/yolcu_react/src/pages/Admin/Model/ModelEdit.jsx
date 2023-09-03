@@ -31,6 +31,11 @@ const ModelEdit = () => {
             if (error.response.status === 401) {
                 navigate("/admin/login")
             }
+            else {
+                navigate("/error")
+
+            }
+
         }
 
 
@@ -49,31 +54,40 @@ const ModelEdit = () => {
             var headerToken = `Bearer ${adminToken}`
             try {
                 var datas = await axios.get("https://localhost:7079/api/Brands", { headers: { "Authorization": headerToken } })
+                setCountries(datas.data)
             } catch (error) {
                 if (error.response.status === 401) {
                     navigate("/admin/login")
                 }
+                else {
+                    navigate("/error")
+
+                }
+
             }
 
-            setCountries(datas.data)
         }
         const getCountry = async () => {
             var headerToker = "Bearer " + adminToken
             try {
                 var data = await axios.get(`https://localhost:7079/api/Models/${id}`, { headers: { "Authorization": headerToker } })
-
+                setCountry(data.data);
+                setPostValues({
+                    name: data.data.name,
+                    brandId: data.data.brand.id,
+                })
+                setLoader(true)
             } catch (error) {
                 if (error.response.status === 401) {
                     navigate("/admin/login")
                 }
+                else {
+                    navigate("/error")
+
+                }
 
             }
-            setCountry(data.data);
-            setPostValues({
-                name: data.data.name,
-                brandId: data.data.brand.id,
-            })
-            setLoader(true)
+
         }
         getCountry();
 
@@ -101,7 +115,7 @@ const ModelEdit = () => {
                                 loader ?
                                     country.brand.id > 0 ?
                                         <div>
-                                            <select defaultValue={country.brand.id} name="brandId" className='login-input' onChange={(e) => {
+                                            <select value={country.brand.id} name="brandId" className='login-input' onChange={(e) => {
                                                 setFieldValue("brandId", e.target.value)
                                                 setPostValues(prev => { return { ...prev, [e.target.name]: e.target.value } })
                                             }}  >

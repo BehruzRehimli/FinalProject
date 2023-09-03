@@ -30,14 +30,19 @@ const Login = () => {
                                     username: '',
                                     password: "",
                                 }} onSubmit={async (values) => {
-                                    const data = await axios.post('https://localhost:7079/api/Accounts/AdminLogin', values)
-                                    localStorage.setItem("YolcuAdmin", data.data.token)
-                                    const decoded = jwt_decode(data.data.token);
-                                    let user=decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
-                                    dispatch(setUsername(user))
-                                    dispatch(setAdminToken(data.data.token))
-                                    dispatch(adminLogedYes())
-                                    navigate("/admin")
+                                    try {
+                                        const data = await axios.post('https://localhost:7079/api/Accounts/AdminLogin', values)
+                                        localStorage.setItem("YolcuAdmin", data.data.token)
+                                        const decoded = jwt_decode(data.data.token);
+                                        let user=decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
+                                        dispatch(setUsername(user))
+                                        dispatch(setAdminToken(data.data.token))
+                                        dispatch(adminLogedYes())
+                                        navigate("/admin")
+    
+                                    } catch (error) {
+                                        navigate("/error")
+                                    }
                                 }}>
                                     {({ values }) => (
                                         <Form>

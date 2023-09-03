@@ -9,6 +9,7 @@ using Yolcu360.Core.Repositories;
 using Yolcu360.Data.Repositories;
 using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Dtos.Common;
+using Yolcu360.Service.Dtos.Model;
 using Yolcu360.Service.Dtos.Type;
 using Yolcu360.Service.Exceptions;
 using Yolcu360.Service.Helpers;
@@ -74,6 +75,14 @@ namespace Yolcu360.Service.Implementations
             }
             Core.Entities.Type type =   _typeRepository.Get(x => x.Id == id, "Cars");
             return _mapper.Map<TypeGetDto>(type);
+        }
+
+        public object GetAdmin(int page)
+        {
+            var types = _typeRepository.GetAll(x => true, "Cars");
+            var maxPage = Math.Ceiling((decimal)types.ToList().Count / 10);
+            var datas = types.Skip((page - 1) * 10).Take(10).ToList();
+            return new { data = _mapper.Map<List<TypeGetAllDto>>(datas), pageCount = maxPage };
         }
 
         public List<TypeGetAllDto> GetAll()

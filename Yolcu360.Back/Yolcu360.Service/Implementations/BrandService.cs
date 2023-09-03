@@ -7,8 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Yolcu360.Core.Entities;
 using Yolcu360.Core.Repositories;
+using Yolcu360.Data.Repositories;
 using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Dtos.Common;
+using Yolcu360.Service.Dtos.Country;
 using Yolcu360.Service.Exceptions;
 using Yolcu360.Service.Helpers;
 using Yolcu360.Service.Interfaces;
@@ -73,6 +75,15 @@ namespace Yolcu360.Service.Implementations
             }
             Brand brand = _brandRepository.Get(x => x.Id == id,"Models");
             return _mapper.Map<BrandGetDto>(brand);
+        }
+
+        public object GetAdmin(int page)
+        {
+            var brands = _brandRepository.GetAll(x => true, "Models");
+            var maxPage = Math.Ceiling((decimal)brands.ToList().Count / 10);
+            var datas = brands.Skip((page - 1) * 10).Take(10).ToList();
+            return new { data = _mapper.Map<List<BrandGetAllDto>>(datas), pageCount = maxPage };
+
         }
 
         public List<BrandGetAllDto> GetAll()

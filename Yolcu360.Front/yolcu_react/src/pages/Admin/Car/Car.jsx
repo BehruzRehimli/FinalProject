@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { FiEdit } from "react-icons/fi"
 import { MdDeleteForever } from "react-icons/md"
 
-const Office = () => {
+const Car = () => {
     const navigate = useNavigate();
 
     const { adminToken } = useSelector(store => store.login)
@@ -17,7 +17,7 @@ const Office = () => {
         countries: []
     })
 
-        
+    
     const [page, setPage] = useState(1)
     const [maxPage, setMaxPage] = useState();
     const pagesArray = []
@@ -33,11 +33,12 @@ const Office = () => {
         e.target.classList.add("active")
     }
 
+
     useEffect(() => {
         const getCountries = async () => {
             var token = "Bearer " + adminToken
             try {
-                var datas = await axios.get(`https://localhost:7079/api/Offices/GetAdmin/${page}`, { headers: { "Authorization": token } })
+                var datas = await axios.get(`https://localhost:7079/api/cars/GetAdmin/${page}`, { headers: { "Authorization": token } })
                 setCountries(prev => { return { ...prev, countries: datas.data.data, isLoad: true } })
                 setMaxPage(datas.data.pageCount)
             } catch (error) {
@@ -53,12 +54,13 @@ const Office = () => {
         }
         getCountries();
     }, [page])
+    let order = 1;
 
     return (
         <div className="admin-container">
-            <h2 className='text-start  crud-header-entity pb-3' >Office</h2>
+            <h2 className='text-start  crud-header-entity pb-3' >Car</h2>
             <div className='text-end me-3'>
-                <Link className='btn btn-primary' to={"/admin/office/create"}>Create Office</Link>
+                <Link className='btn btn-primary' to={"/admin/car/create"}>Create Car</Link>
             </div>
             <div className="table-responsive mt-4">
                 <table className="table table-hover">
@@ -66,8 +68,9 @@ const Office = () => {
                         <tr>
                             <th className="text-center ">#</th>
                             <th>Name</th>
-                            <th>City Name</th>
-                            <th>Cars Count</th>
+                            <th>Model Name</th>
+                            <th>Office Count</th>
+                            <th>Image</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -78,15 +81,19 @@ const Office = () => {
                                     <tr key={x.id}>
                                         <td className="text-center">{index + ((page - 1) * 10) + 1}</td>
                                         <td className="txt-oflo">{x.name}</td>
-                                        <td className="txt-oflo">{x.city.name}</td>
-                                        <td className="txt-oflo">{x.carsCount}</td>
+                                        <td className="txt-oflo">{x.model.name}</td>
+                                        <td className="txt-oflo">{x.office.name}</td>
+                                        <td className="txt-oflo">
+                                            <img width={"150px"} src={x.imageName} alt="Car" />
+                                        </td>
+
                                         <td><span className="text-success">
-                                            <Link to={`/admin/office/edit/${x.id}`} className='btn btn-warning'> <FiEdit className='me-2' />Edit</Link>
+                                            <Link to={`/admin/car/edit/${x.id}`} className='btn btn-warning'> <FiEdit className='me-2' />Edit</Link>
                                             <button onClick={async () => {
                                                 var token = "Bearer " + adminToken
                                                 try {
-                                                    var datas = await axios.delete(`https://localhost:7079/api/Offices/${x.id}`, { headers: { "Authorization": token } })
-                                                    var datas = await axios.get("https://localhost:7079/api/Offices", { headers: { "Authorization": token } })
+                                                    var datas = await axios.delete(`https://localhost:7079/api/Cars/${x.id}`, { headers: { "Authorization": token } })
+                                                    var datas = await axios.get("https://localhost:7079/api/Cars", { headers: { "Authorization": token } })
                                                     setCountries(prev => { return { ...prev, countries: datas.data, isLoad: true } })
 
                                                 } catch (error) {
@@ -124,7 +131,6 @@ const Office = () => {
 
         </div>
     )
-
 }
 
-export default Office
+export default Car

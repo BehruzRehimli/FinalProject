@@ -12,31 +12,52 @@ const Brand = () => {
     const navigate = useNavigate();
 
     const { adminToken } = useSelector(store => store.login)
-  
+
     const [countries, setCountries] = useState({
-      isLoad: false,
-      countries: []
+        isLoad: false,
+        countries: []
     })
-  
-  
+
+    const [page, setPage] = useState(1)
+    const [maxPage, setMaxPage] = useState();
+    const pagesArray = []
+    for (let i = 1; i <= maxPage; i++) {
+        pagesArray.push(i);
+    }
+    const PageClickHandler = (e) => {
+        setPage(e.target.innerHTML)
+        var btns = document.querySelectorAll('.pagination')
+        btns.forEach(btn => {
+            btn.classList.remove("active")
+        });
+        e.target.classList.add("active")
+    }
+
+
+
     useEffect(() => {
-      const getCountries = async () => {
-        var token = "Bearer " + adminToken
-        try {
-          var datas = await axios.get("https://localhost:7079/api/Brands", { headers: { "Authorization": token } })
-          setCountries(prev => { return { ...prev, countries: datas.data, isLoad: true } })
-        } catch (error) {
-          console.log(error);
-          if (error.response.status === 401) {
-            navigate("/admin/login")
-          }
+        const getCountries = async () => {
+            var token = "Bearer " + adminToken
+            try {
+                var datas = await axios.get(`https://localhost:7079/api/Brands/GetAdmin/${page}`, { headers: { "Authorization": token } })
+                setCountries(prev => { return { ...prev, countries: datas.data.data, isLoad: true } })
+                setMaxPage(datas.data.pageCount)
+
+            } catch (error) {
+                console.log(error);
+                if (error.response.status === 401) {
+                    navigate("/admin/login")
+                }
+                else {
+                    navigate("/error")
+
+                }
+            }
         }
-      }
-      getCountries();
-    }, [])
-  
-    let order = 1;
-  
+        getCountries();
+    }, [page])
+
+
     return (
         <div className="admin-container">
             <h2 className='text-start  crud-header-entity pb-3' >Brand</h2>
@@ -56,9 +77,9 @@ const Brand = () => {
                     <tbody>
                         {
                             countries.isLoad ?
-                                countries.countries.map(x => (
+                                countries.countries.map((x, index) => (
                                     <tr key={x.id}>
-                                        <td className="text-center">{order++}</td>
+                                        <td className="text-center">{index + ((page - 1) * 10) + 1}</td>
                                         <td className="txt-oflo">{x.name}</td>
                                         <td className="txt-oflo">{x.modelsCount}</td>
                                         <td><span className="text-success">
@@ -75,6 +96,11 @@ const Brand = () => {
                                                     if (error.response.status === 401) {
                                                         navigate("/admin/login")
                                                     }
+                                                    else {
+                                                        navigate("/error")
+                                    
+                                                    }
+                                    
                                                 }
 
                                             }} className='btn btn-danger ms-3'> <MdDeleteForever className='me-2 fs-5' />Delete</button>
@@ -85,6 +111,15 @@ const Brand = () => {
                         }
                     </tbody>
                 </table>
+                <div className='text-start'>
+                    {
+                        pagesArray.length > 0 ?
+                            pagesArray.map(x => (
+                                <p id={`page-btn-${x}`} onClick={PageClickHandler} className={page === x ? 'pagination active' : 'pagination'} key={x}>{x}</p>
+                            )) : null
+                    }
+                </div>
+
             </div>
 
 

@@ -52,6 +52,13 @@ namespace Yolcu360.API.Controllers
             _modelService.Delete(id);
             return NoContent();
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpGet("GetAdmin/{page}")]
+        public ActionResult<object> GetAdmin(int page)
+        {
+
+            return _modelService.GetAdmin(page);
+        }
 
     }
 }

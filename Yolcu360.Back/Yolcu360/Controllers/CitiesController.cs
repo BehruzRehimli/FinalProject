@@ -57,6 +57,13 @@ namespace Yolcu360.API.Controllers
         {
             return _cityService.GetSliderCity();
         }
+        [Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpGet("GetAdmin/{page}")]
+        public ActionResult<object> GetAdmin(int page)
+        {
+
+            return _cityService.GetAdmin(page);
+        }
 
     }
 }

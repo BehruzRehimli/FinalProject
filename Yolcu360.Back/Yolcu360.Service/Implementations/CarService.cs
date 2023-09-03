@@ -10,6 +10,7 @@ using Yolcu360.Core.Repositories;
 using Yolcu360.Data.Enums;
 using Yolcu360.Service.Dtos.Car;
 using Yolcu360.Service.Dtos.Common;
+using Yolcu360.Service.Dtos.Model;
 using Yolcu360.Service.Exceptions;
 using Yolcu360.Service.Helpers;
 using Yolcu360.Service.Interfaces;
@@ -143,6 +144,16 @@ namespace Yolcu360.Service.Implementations
             List<Car> cars = _carRepository.GetAll(x => x.OfficeId==id).Include(x => x.Type).Include(x => x.Model).ThenInclude(x => x.Brand).Include(x => x.Office)
                 .ThenInclude(x => x.City).ThenInclude(x => x.Country).Include(x => x.Reviews).ThenInclude(x => x.User).ToList();
             return _mapper.Map<List<CarGetAllDto>>(cars);
+        }
+
+        public object GetAdmin(int page)
+        {
+            var cars = _carRepository.GetAll(x => true);
+            var maxPage = Math.Ceiling((decimal)cars.ToList().Count / 10);
+            var datas = cars.Skip((page - 1) * 10).Take(10).Include(x => x.Type).Include(x => x.Model).ThenInclude(x => x.Brand).Include(x => x.Office)
+                .ThenInclude(x => x.City).ThenInclude(x => x.Country).Include(x => x.Reviews).ThenInclude(x => x.User).ToList();
+            return new { data = _mapper.Map<List<CarGetAllDto>>(datas), pageCount = maxPage };
+
         }
     }
 }

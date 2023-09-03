@@ -25,6 +25,13 @@ namespace Yolcu360.API.Controllers
             return _countryService.GetAll();
         }
         [Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpGet("GetAdmin/{page}")]
+        public ActionResult<object> GetAdmin(int page)
+        {
+
+            return _countryService.GetAdmin(page);
+        }
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet("{id}")]
         public ActionResult<CountryGetDto> Get(int id)
         {
@@ -50,5 +57,8 @@ namespace Yolcu360.API.Controllers
             _countryService.Delete(id);
             return NoContent();
         }
+
+
+
     }
 }

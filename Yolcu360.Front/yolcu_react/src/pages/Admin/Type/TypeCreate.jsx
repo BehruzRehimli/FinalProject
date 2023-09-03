@@ -1,14 +1,14 @@
 import React from 'react'
-import { Formik,Form,Field } from 'formik'
-import {  useSelector } from 'react-redux/es/hooks/useSelector'
+import { Formik, Form, Field } from 'formik'
+import { useSelector } from 'react-redux/es/hooks/useSelector'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 
 const TypeCreate = () => {
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
-    const {adminToken}=useSelector(store=>store.login)
+    const { adminToken } = useSelector(store => store.login)
     return (
         <div className='admin-container'>
             <h2 className='crud-header-entity mb-4'>Create Type</h2>
@@ -18,14 +18,19 @@ const TypeCreate = () => {
                 }} onSubmit={async (values) => {
                     var headerToken = `Bearer ${adminToken}`
                     try {
-                        var result=await axios.post("https://localhost:7079/api/types",values,{headers:{"Authorization": headerToken}})
+                        var result = await axios.post("https://localhost:7079/api/types", values, { headers: { "Authorization": headerToken } })
                     } catch (error) {
                         console.log(result);
-                        if (error.response.status===401) {
+                        if (error.response.status === 401) {
                             navigate("/admin/login")
                         }
+                        else {
+                            navigate("/error")
+        
+                        }
+        
                     }
-                    if (result.status===200) {
+                    if (result.status === 200) {
                         navigate("/admin/type")
                     }
                 }}>

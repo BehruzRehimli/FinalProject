@@ -82,5 +82,13 @@ namespace Yolcu360.Service.Implementations
             var countries=_countryRepository.GetAll(x=>true,"Cities").ToList();
             return _mapper.Map<List<CountryGetAllDto>>(countries);
         }
+
+        public object GetAdmin(int page)
+        {
+            var countries = _countryRepository.GetAll(x => true, "Cities");
+            var maxPage=Math.Ceiling((decimal)countries.ToList().Count/10);
+            var datas = countries.Skip((page - 1) * 10).Take(10).ToList();
+            return new { data= _mapper.Map<List<CountryGetAllDto>>(datas), pageCount=maxPage };
+        }
     }
 }
