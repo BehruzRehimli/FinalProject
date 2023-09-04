@@ -39,6 +39,15 @@ const Detail = () => {
 
     const [userComment, setUserCommnet] = useState(false)
     const { username, isLogin, token } = useSelector(store => store.login)
+    const {pickUpDate,dropOffDate} =useSelector(store=>{
+        return {
+            pickUpDate:store.rent.pickUpDate,
+            dropOffDate:store.rent.dropOffDate
+        }
+    })
+
+
+        var day=Math.ceil((dropOffDate-pickUpDate)/86400000)
 
     var data = null;
     useEffect(() => {
@@ -52,7 +61,6 @@ const Detail = () => {
         }
         getCar();
 
-
     }, [])
 
     // useEffect(()=>{
@@ -61,7 +69,7 @@ const Detail = () => {
     //         setUserCommnet(true)
     //     }
     // },[username,car.car])
-
+    var options = { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' };
 
     const CheckExtra500Handler = (e) => {
         const data = e.target.checked
@@ -663,8 +671,8 @@ const Detail = () => {
                                     <div className="price-date">
                                         <div className="header">
                                             <div className="price">
-                                                <p style={{ color: "#9b9b9b", fontSize: "14px", textAlign: "start", marginBottom: "0" }}>3 Daily price:</p>
-                                                <p style={{ textAlign: "start", color: "#4a4a4a", fontWeight: "700", fontSize: "32px", marginBottom: "0" }}>{(car.car.priceDaily * 3).toFixed(2)} $</p>
+                                                <p style={{ color: "#9b9b9b", fontSize: "14px", textAlign: "start", marginBottom: "0" }}>{day} Daily price:</p>
+                                                <p style={{ textAlign: "start", color: "#4a4a4a", fontWeight: "700", fontSize: "32px", marginBottom: "0" }}>{(car.car.priceDaily * day).toFixed(2)} $</p>
                                                 <p style={{ textAlign: "start", color: "#2ecc71", fontWeight: "400", fontSize: "14px", marginBottom: "10px" }}>Daily price:{car.car.priceDaily} $</p>
                                             </div>
                                         </div>
@@ -679,7 +687,7 @@ const Detail = () => {
                                                 </div>
                                                 <div className='ms-3'>
                                                     <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
-                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontWeight: "700", fontSize: "14px" }}>25.08.2023 - 10:00</p>
+                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontWeight: "700", fontSize: "14px" }}>{pickUpDate.toLocaleDateString('tr-TR',options)}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -694,7 +702,7 @@ const Detail = () => {
                                                 </div>
                                                 <div className='ms-3'>
                                                     <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
-                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#ffa900", fontWeight: "700", fontSize: "14px" }}>28.08.2023 - 10:00</p>
+                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#ffa900", fontWeight: "700", fontSize: "14px" }}>{dropOffDate.toLocaleDateString('tr-TR',options)}</p>
                                                 </div>
                                             </div>
                                         </div>
