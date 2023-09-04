@@ -6,6 +6,9 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { FiEdit } from "react-icons/fi"
 import { MdDeleteForever } from "react-icons/md"
+import { BiSolidChevronLeft } from "react-icons/bi";
+import { BiSolidChevronRight } from "react-icons/bi";
+
 
 const Brand = () => {
 
@@ -31,6 +34,31 @@ const Brand = () => {
             btn.classList.remove("active")
         });
         e.target.classList.add("active")
+    }
+
+
+    const NextPageHandler = (e) => {
+        if (page < maxPage) {
+            const newPage = page + 1;
+            setPage(newPage);
+            var btns = document.querySelectorAll('.pagination')
+            btns.forEach(btn => {
+                btn.classList.remove("active")
+            });
+        }
+
+    }
+    const PrevPageHandler = function () {
+        if (page > 1) {
+            const newPage = page - 1;
+            setPage(newPage);
+            var btns = document.querySelectorAll('.pagination')
+            btns.forEach(btn => {
+                btn.classList.remove("active")
+            });
+        }
+
+
     }
 
 
@@ -98,9 +126,9 @@ const Brand = () => {
                                                     }
                                                     else {
                                                         navigate("/error")
-                                    
+
                                                     }
-                                    
+
                                                 }
 
                                             }} className='btn btn-danger ms-3'> <MdDeleteForever className='me-2 fs-5' />Delete</button>
@@ -112,12 +140,22 @@ const Brand = () => {
                     </tbody>
                 </table>
                 <div className='text-start'>
+                    <p onClick={PrevPageHandler} className='pagination' ><BiSolidChevronLeft /></p>
+
                     {
                         pagesArray.length > 0 ?
-                            pagesArray.map(x => (
-                                <p id={`page-btn-${x}`} onClick={PageClickHandler} className={page === x ? 'pagination active' : 'pagination'} key={x}>{x}</p>
-                            )) : null
+                            <>
+
+                                {pagesArray.map(x => (
+                                    <p id={`page-btn-${x}`} onClick={PageClickHandler} className={page === x ? 'pagination active' : 'pagination'} key={x}>{x}</p>
+                                ))}
+
+                            </> : null
+
                     }
+
+                    <p onClick={NextPageHandler} className='pagination' ><BiSolidChevronRight /></p>
+
                 </div>
 
             </div>
