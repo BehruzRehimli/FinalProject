@@ -96,7 +96,7 @@
     align-items: center;
     background: #f1f1f1;
 }
-.keep-go-btn button{
+.keep-go-btn a{
     width: 100%;
     height: 50px;
     background: #39b54a;

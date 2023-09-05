@@ -23,6 +23,7 @@ namespace Yolcu360.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<AboutCity> AboutCities { get; set; }
+        public DbSet<Rent> Rents { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BrandConfiguration).Assembly);

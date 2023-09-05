@@ -29,5 +29,6 @@ namespace Yolcu360.Core.Entities
         public Type Type { get; set; }
         public Office Office { get; set; }
         public List<Review> Reviews { get; set; }=new List<Review>();
+        public List<Rent> Rents { get; set; }
     }
 }

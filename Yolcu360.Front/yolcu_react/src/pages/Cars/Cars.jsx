@@ -9,6 +9,7 @@ import { GiGearStick } from 'react-icons/gi'
 import { BiSolidStar, BiSolidStarHalf } from 'react-icons/bi'
 import ReactSlider from 'react-slider'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const Cars = () => {
     const { id } = useParams();
@@ -165,8 +166,8 @@ const Cars = () => {
         getType();
         getTrans();
         getFuels();
-        countvisiblecars=7;
-        setCars(prev=>{return{...prev,displayedCars:[...prev.cars.slice(0,countvisiblecars)]}})
+        countvisiblecars = 7;
+        setCars(prev => { return { ...prev, displayedCars: [...prev.cars.slice(0, countvisiblecars)] } })
 
     }, [cars.cars])
 
@@ -371,6 +372,18 @@ const Cars = () => {
         setCars(prev => { return { ...prev, cars: newdatas } })
 
     }, [filters])
+
+
+    const { pickUpDate, dropOffDate } = useSelector(store => {
+        return {
+            pickUpDate: new Date(store.rent.pickUpDate),
+            dropOffDate: new Date(store.rent.dropOffDate)
+        }
+    })
+
+
+    var day = Math.ceil((dropOffDate - pickUpDate) / 86400000)
+
 
 
 
@@ -653,7 +666,7 @@ const Cars = () => {
                                             </div>
                                         </div> : null
                                     }
-                                    <Link to={`/detail/${x.id}`}>
+                                    <Link to={`/detail/${x.id}/car`}>
                                         <div className="car-img">
                                             <img src={x.imageName} alt="car" />
                                         </div>
@@ -716,18 +729,18 @@ const Cars = () => {
                                 <div>
                                     <div className="car-price">
                                         <div className='text-start'>
-                                            <span>Total Amount (3 Days): </span>
+                                            <span>Total Amount ({day} Days): </span>
                                             <BiInfoCircle color='#008dd4' style={{ fontSize: "20px" }} />
                                         </div>
                                         <div className='text-start d-flex justify-content-between align-items-center'>
                                             <span style={{ color: "#2ecc71" }}>Daily price : {x.priceDaily} $</span>
-                                            <span style={{ color: "#4a4a4a", fontSize: "20px", fontWeight: "700", marginRight: '10px' }}>{(x.priceDaily * 3).toFixed(2)} $</span>
+                                            <span style={{ color: "#4a4a4a", fontSize: "20px", fontWeight: "700", marginRight: '10px' }}>{(x.priceDaily * day).toFixed(2)} $</span>
                                         </div>
                                     </div>
-                                    <Link to={`/detail/${x.id}`}>
-                                    <div className='rent-btn'>
-                                        Rent now!
-                                    </div>
+                                    <Link to={`/detail/${x.id}/car`}>
+                                        <div className='rent-btn'>
+                                            Rent now!
+                                        </div>
                                     </Link>
                                 </div>
                             </div>

@@ -11,6 +11,9 @@ import '@natscale/react-calendar/dist/main.css';
 import axios from "axios"
 import WhyYolcu from '../../components/WhyYolcu/WhyYolcu'
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {setPickUpDate,setDropOffDate,setPickUpLoc,setDropOffLoc} from "../../control/rentSlice"
+
 
 
 
@@ -36,17 +39,21 @@ const Home = () => {
   const endDateTab=useRef();
   const OfficeOption=useRef();
 
+  const dispatch=useDispatch();
+
 
 
   const StartDateHandler = useCallback(
     (val) => {
       setStartDate(val);
+      dispatch(setPickUpDate((new Date(val[0])).toISOString()))
     },
     [setStartDate],
   );
   const EndDateHandler = useCallback(
     (val) => {
       setEndDate(val);
+      dispatch(setDropOffDate((new Date(val[0])).toISOString()))
     },
     [setEndDate],
   );
@@ -90,8 +97,11 @@ const Home = () => {
     }
   }
   const ChooseOfficeHandler=(e)=>{
-    setChoosenOfficeId(e.currentTarget.id)
+    setChoosenOfficeId(e.currentTarget.id);
+    dispatch(setPickUpLoc(e.currentTarget.id))
   }
+
+
   useEffect(()=>{
     const getOffice=async ()=>{
       if (choosenOfficeId>0) {
