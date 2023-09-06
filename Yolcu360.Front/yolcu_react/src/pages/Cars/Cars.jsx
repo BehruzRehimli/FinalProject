@@ -655,7 +655,7 @@ const Cars = () => {
                                 <p style={{ color: '#9b9b9b', fontSize: "12px", textAlign: "left", marginBottom: "0" }}>or similar</p>
                             </div>
                             <div className="car-info">
-                                <div className="left">
+                                <div className="left ">
                                     {
                                         x.isFreeCancelation ? <div className="free-cancel">
                                             <div className='d-flex'>
@@ -672,7 +672,7 @@ const Cars = () => {
                                         </div>
                                     </Link>
                                 </div>
-                                <div className="right">
+                                <div className="right ">
                                     <ul>
                                         <li style={{ textAlign: "left", fontSize: "20px" }}>
                                             <BiInfoCircle color='#008dd4' />
@@ -715,7 +715,12 @@ const Cars = () => {
                                             <BiSolidStar color='#ffbf35' />
                                             <BiSolidStarHalf color='#ffbf35' />
                                             <span className='car-point'>
-                                                4.8
+                                                {
+                                                    
+                                                    x.reviews.length>0?
+                                                    (x.reviews.reduce((total, review) => total + review.mainPoint, 0) / x.reviews.length).toFixed(1):
+                                                    "5.0"
+                                                }
                                             </span>
 
 

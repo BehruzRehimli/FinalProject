@@ -180,7 +180,26 @@ namespace Yolcu360.API.Controllers
 
             return Ok(new { token = tokestr });
         }
-
+        [Authorize(Roles = "Member")]
+        [HttpPost("ChangePassword")]
+        public async Task<ActionResult> ChangePassword(ChangePasswordDto dto)
+        {
+            AppUser user = await _userManager.FindByNameAsync(User?.Identity?.Name);
+            if (!await _userManager.CheckPasswordAsync(user,dto.Current))
+            {
+                return BadRequest();
+            }
+            if (dto.NewPassword==dto.AgainPassword)
+            {
+                await _userManager.ChangePasswordAsync(user, dto.Current, dto.NewPassword);
+                await _userManager.UpdateAsync(user);
+            }
+            else
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
 
     }
 }

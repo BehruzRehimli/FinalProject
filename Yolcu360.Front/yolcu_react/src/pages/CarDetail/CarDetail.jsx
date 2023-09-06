@@ -6,7 +6,7 @@ import { GiKeyCard, GiFlatTire } from "react-icons/gi"
 import { LiaFileContractSolid } from "react-icons/lia"
 import { IoMdTimer } from "react-icons/io"
 import { FaUserNurse } from "react-icons/fa"
-import { AiOutlineInfoCircle } from "react-icons/ai"
+import { AiOutlineInfoCircle, AiOutlineStar } from "react-icons/ai"
 import { MdOutlineChildFriendly } from "react-icons/md"
 import { Field, Form, Formik } from 'formik'
 import Text from '../../components/Form/Text'
@@ -50,7 +50,7 @@ const CarDetail = (props) => {
 
     var day = Math.ceil((new Date(dropOffDate) - new Date(pickUpDate)) / 86400000)
 
-
+    const [point,setPoint]=useState(5)
 
     const CheckExtra500Handler = (e) => {
         const data = e.target.checked;
@@ -95,7 +95,6 @@ const CarDetail = (props) => {
 
 
 
-
     useEffect(() => {
         const getCar = async () => {
             try {
@@ -111,6 +110,9 @@ const CarDetail = (props) => {
         }
         getCar();
     }, [userComment])
+
+    
+
     return (
         <div className="col-lg-8">
             <div className='d-flex justify-content-between'>
@@ -129,8 +131,11 @@ const CarDetail = (props) => {
                     <BiSolidStar color='#ffbf35' className='ms-1' />
                     <BiSolidStarHalf color='#ffbf35' className='ms-1' />
                     <span className='car-point'>
-                        4.8
-                    </span>
+                        {
+                            car.loadCar ?
+                                car.car.reviews.length > 0 ?
+                                    (car.car.reviews.reduce((total, review) => total + review.mainPoint, 0) / car.car.reviews.length).toFixed(1) : "5.0" : null
+                        }                    </span>
 
                 </div>
 
@@ -515,16 +520,29 @@ const CarDetail = (props) => {
                 <div className="all-reviews">
                     <div className="top-all-reviews">
                         <div className="left">
-                            <BiSolidStar color='#ffbf35' className='ms-3' />
-                            <BiSolidStar color='#ffbf35' className='ms-2' />
-                            <BiSolidStar color='#ffbf35' className='ms-2' />
-                            <BiSolidStar color='#ffbf35' className='ms-2' />
-                            <BiSolidStarHalf color='#ffbf35' className='ms-2' />
+                            {
+                                car.car.reviews &&
+
+                                [1, 2, 3, 4, 5].map((y) => (
+                                    (point ) > y ?
+                                        <BiSolidStar className='ms-2' color='#ffa900' /> :
+                                        (point ) == y ?
+                                            <BiSolidStar className='ms-2' color='#ffa900' /> :
+                                            (point ) < y && (point ) > y - 1 ?
+                                                <BiSolidStarHalf className='ms-2' color='#ffa900' /> :
+                                                <AiOutlineStar className='ms-2' color='#ffa900' />
+
+                                ))
+                            }
                             <span className='car-point ms-3'>
-                                4.8
+                                {
+                                    car.loadCar ?
+                                        car.car.reviews.length > 0 ?
+                                            (car.car.reviews.reduce((total, review) => total + review.mainPoint, 0) / car.car.reviews.length).toFixed(1) : "5.0" : null
+                                }
                             </span>
                             <span style={{ fontSize: "12px", color: "#979797", textDecoration: "underline", marginLeft: "20px", fontWeight: "700" }}>
-                                {car.car.reviews ? car.car.reviews.length:0} comments
+                                {car.car.reviews ? car.car.reviews.length : 0} comments
                             </span>
                         </div>
                         <div className='right'>
@@ -556,32 +574,39 @@ const CarDetail = (props) => {
                     <div className='users-comments'>
                         {
                             car.loadCar ?
-                            car.car.reviews.map((x,index)=>(
-                                
-                                <div className="user-comment" key={index}>
-                                    
-                                    <div>
-                                        <div className='d-flex align-items-center'>
-                                            <div className="user-name-div">
-                                                {x.user.fullname.slice(0,3)}...
-                                            </div>
-                                            <div>
-                                                <BiSolidStar className='ms-2' color='#ffa900' />
-                                                <BiSolidStar className='ms-1' color='#ffa900' />
-                                                <BiSolidStar className='ms-1' color='#ffa900' />
-                                                <BiSolidStar className='ms-1' color='#ffa900' />
-                                                <BiSolidStar className='ms-1' color='#ffa900' />
-                                                <span style={{ marginLeft: "15px", fontWeight: "600", color: "#384959" }}>{((x.cleannesPoint+x.personelPoint+x.speedPoint)/3).toFixed(1)}</span>
+                                car.car.reviews.map((x, index) => (
 
+                                    <div className="user-comment" key={index}>
+
+                                        <div>
+                                            <div className='d-flex align-items-center'>
+                                                <div className="user-name-div">
+                                                    {x.user.fullname.slice(0, 3)}...
+                                                </div>
+                                                <div>
+                                                    {
+                                                        [1, 2, 3, 4, 5].map((y) => (
+                                                            ((x.cleannesPoint + x.personelPoint + x.speedPoint) / 3) > y ?
+                                                                <BiSolidStar className='ms-1' color='#ffa900' /> :
+                                                                ((x.cleannesPoint + x.personelPoint + x.speedPoint) / 3) == y ?
+                                                                    <BiSolidStar className='ms-1' color='#ffa900' /> :
+                                                                    ((x.cleannesPoint + x.personelPoint + x.speedPoint) / 3) < y && ((x.cleannesPoint + x.personelPoint + x.speedPoint) / 3) > y - 1 ?
+                                                                        <BiSolidStarHalf className='ms-1' color='#ffa900' /> :
+                                                                        <AiOutlineStar className='ms-1' color='#ffa900' />
+
+                                                        ))
+                                                    }
+                                                    <span style={{ marginLeft: "15px", fontWeight: "600", color: "#384959" }}>{((x.cleannesPoint + x.personelPoint + x.speedPoint) / 3).toFixed(1)}</span>
+
+                                                </div>
                                             </div>
+                                            <span className='review-time'>{(new Date() - new Date(x.createDate)) > 86400000 ? Math.floor((new Date() - new Date(x.createDate)) / 86400000).toFixed(0) + " days ago" : (new Date() - new Date(x.createDate)) > 3600000 ? Math.floor((new Date() - new Date(x.createDate)) / 3600000).toFixed(0) + " hours ago" : (new Date() - new Date(x.createDate)) > 60000 ? Math.floor((new Date() - new Date(x.createDate)) / 60000).toFixed(0) + " minutes ago" : (new Date() - new Date(x.createDate)) > 1000 ? Math.floor((new Date() - new Date(x.createDate)) / 1000).toFixed(0) + " seconds ago" : "now"}</span>
                                         </div>
-                                        <span className='review-time'>{(new Date()- new Date(x.createDate))>86400000?Math.floor((new Date()- new Date(x.createDate))/86400000).toFixed(0)+" days ago":(new Date()- new Date(x.createDate))>3600000?Math.floor((new Date()- new Date(x.createDate))/3600000).toFixed(0)+" hours ago":(new Date()- new Date(x.createDate))>60000?Math.floor((new Date()- new Date(x.createDate))/60000).toFixed(0)+" minutes ago":Math.floor((new Date()- new Date(x.createDate))/1000).toFixed(0)+" seconds ago"}</span>
+                                        <p className='user-comment-text'>{x.comment}</p>
                                     </div>
-                                    <p className='user-comment-text'>{x.comment}</p>
-                                </div>
-                            ))    
-                            
-                            : null
+                                ))
+
+                                : null
 
                         }
                     </div>

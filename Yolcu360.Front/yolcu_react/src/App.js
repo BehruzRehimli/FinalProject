@@ -32,6 +32,7 @@ import CarEdit from './pages/Admin/Car/CarEdit';
 import Error from './pages/Error/Error';
 import CarDetail from './pages/CarDetail/CarDetail';
 import RentInfo from './pages/RentInfo/RentInfo';
+import Profile from './pages/Profile/Profile';
 
 
 
@@ -49,6 +50,7 @@ function App() {
               <Route path='/detail/:id/rentinfo' element={<RentInfo/>}/>
 
             </Route>
+            <Route path="/profile/:username" element={<Profile/>}/>
             <Route path='/error' element={<Error/>}/>
 
           </Route>

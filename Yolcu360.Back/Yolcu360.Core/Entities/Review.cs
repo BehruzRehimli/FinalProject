@@ -16,7 +16,7 @@ namespace Yolcu360.Core.Entities
         public int PersonelPoint { get; set; }
         public int SpeedPoint { get; set; }
         [NotMapped]
-        public decimal MainPoint { get => (CleannesPoint + PersonelPoint + SpeedPoint) / 3; }
+        public decimal MainPoint { get => ((decimal)CleannesPoint + (decimal)PersonelPoint + (decimal)SpeedPoint) / 3; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public AppUser User { get; set; }
         public Car Car { get; set; }
