@@ -19,6 +19,8 @@ namespace Yolcu360.Core.Entities
         public decimal ExtPrice { get; set; }
         public DateTime PickUpDate { get; set; }
         public DateTime DropOffDate { get; set; }
+        public int? DropOfficeId { get; set; }
+        public DateTime CreateDate { get; set; }
         public Car Car { get; set; }
         public AppUser User { get; set; }
     }

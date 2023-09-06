@@ -1,29 +1,62 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./RentInfo.css"
 import { Formik, Form, Field } from 'formik'
 import { useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios'
+import Success from '../../images/7efs.gif'
+
 
 
 const RentInfo = () => {
-    const {extentions}=useSelector(store=>store.rent)
+    const {id}=useParams();
+    const navigate =useNavigate()
+    const [send,setSend]=useState(false)
 
-    useEffect(()=>{
-        console.log(extentions);
-    },[])
+
+    const {exPrice,sumPrice,pickUpDate,dropOffDate}=useSelector(store=>store.rent)
+    const {username}=useSelector(store=>store.login)
+
+
+    var localImg = (
+        <img
+            //src="https://s3.amazonaws.com/codecademy-content/courses/React/react_photo-goose.jpg"
+            src={Success}
+            alt="Canvas Logo"
+            style={{ width: "80%" }}
+        />
+    );
 
     return (
         <div className='col-lg-8'>
-            <Formik>
+            {
+                send?
+                <div>{localImg}
+                <p style={{fontSize:"24px",fontWeight:"600"}}>Well Done!!!</p>
+                <p>You can come in our office and take this car. </p>
+                </div>:
+                <Formik>
                 <Formik initialValues={{
                     fullname: '',
                     phone:"",
-                    mail:"",
+                    email:"",
                     birthday:"",
                     pasport:"",
-                    address:""
-
+                    address:"",
+                    carPrice:(Number)(sumPrice),
+                    extPrice:exPrice,
+                    pickUpDate: new Date(pickUpDate),
+                    dropOffDate: new Date(dropOffDate),
+                    dropOfficeId:null,
+                    carId:id,
+                    username:username,
                 }} onSubmit={async (values) => {
-
+                    try {
+                        var res=axios.post("https://localhost:7079/api/Rents",values)
+                        setSend(true)
+                    } catch (error) {
+                        navigate("/error")
+                    }
                 }}>
                     {({ values }) => (
                         <Form>
@@ -39,7 +72,7 @@ const RentInfo = () => {
                                 </div>
                                 <div className='mt-4 text-start' style={{width:"48%"}}>
                                     <label className='text-start rent-info-label' htmlFor="email">E-mail</label>
-                                    <Field type="email" id={"email"} className="driver-info w-100" name='mail' />
+                                    <Field type="email" id={"email"} className="driver-info w-100" name='email' />
                                 </div>
                             </div>
                             <div className='d-flex justify-content-between'>
@@ -49,7 +82,7 @@ const RentInfo = () => {
                                 </div>
                                 <div className='mt-4 text-start' style={{width:"48%"}}>
                                     <label className='text-start rent-info-label' htmlFor="pasport">Passport Number</label>
-                                    <Field type="email" id={"pasport"} className="driver-info w-100" name='pasport' />
+                                    <Field type="text" id={"pasport"} className="driver-info w-100" name='pasport' />
                                 </div>
                             </div>
                             <div className='mt-4 text-start'>
@@ -63,6 +96,8 @@ const RentInfo = () => {
                 </Formik>
 
             </Formik>
+
+            }
         </div>
     )
 }

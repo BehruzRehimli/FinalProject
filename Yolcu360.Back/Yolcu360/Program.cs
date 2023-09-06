@@ -98,6 +98,8 @@ builder.Services.AddTransient<IModelRepository, ModelRepository>();
 builder.Services.AddTransient<IModelService, ModelService>();
 builder.Services.AddTransient<ICarRepository, CarRepository>();
 builder.Services.AddTransient<ICarService, CarService>();
+builder.Services.AddTransient<IRentRepository, RentRepository>();
+builder.Services.AddTransient<IRentService, RentService>();
 
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));

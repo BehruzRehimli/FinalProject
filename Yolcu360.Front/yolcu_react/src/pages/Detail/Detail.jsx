@@ -41,7 +41,7 @@ const Detail = () => {
         const getCar = async () => {
             data = await axios.get(`https://localhost:7079/api/Cars/${id}`)
             setCar(prev => { return { ...prev, car: data.data, loadCar: true } })
-            dispatch(setSumPrice((data.data.priceDaily * day).toFixed(2)))
+            dispatch(setSumPrice(data.data.priceDaily * day))
             dispatch(setDay(day))
         }
         getCar();
@@ -152,7 +152,7 @@ const Detail = () => {
                                         </div>
                                         <div style={{ padding: "13px 20px 13px 20px", border: "1px solid #b5ddef", borderTop: "none" }}>
                                             <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "space-between" }}>Total Amount:
-                                                <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>{sumPrice} $</span></p>
+                                                <span style={{ color: "#4a4a4a", fontSize: "18px", marginLeft: "20px" }}>{sumPrice.toFixed(2)} $</span></p>
                                             <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                 <span style={{ color: "#2ecc71", fontSize: "12px", marginLeft: "30px", fontWeight: "500" }}>
                                                     Daily price :{car.car.priceDaily} $

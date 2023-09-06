@@ -13,6 +13,7 @@ using Yolcu360.Service.Dtos.Common;
 using Yolcu360.Service.Dtos.Country;
 using Yolcu360.Service.Dtos.Model;
 using Yolcu360.Service.Dtos.Office;
+using Yolcu360.Service.Dtos.Rent;
 using Yolcu360.Service.Dtos.Review;
 using Yolcu360.Service.Dtos.Type;
 using Yolcu360.Service.Helpers;
@@ -85,6 +86,8 @@ namespace Yolcu360.Service.Profiles
             CreateMap<ReviewCreateDto, Review>();
             CreateMap<Brand, ModelGetDtoBrand>();
             CreateMap<Brand, ModelGetAllDtoBrand>();
+            CreateMap<RentCreateDto, Rent>();
+            CreateMap<Rent, CreateResultDto>();
 
 
 

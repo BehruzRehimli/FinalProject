@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Yolcu360.Data;
 
@@ -11,9 +12,10 @@ using Yolcu360.Data;
 namespace Yolcu360.Data.Migrations
 {
     [DbContext(typeof(Yolcu360DbContext))]
-    partial class Yolcu360DbContextModelSnapshot : ModelSnapshot
+    [Migration("20230905154811_addRentDropOffice")]
+    partial class addRentDropOffice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -484,9 +486,6 @@ namespace Yolcu360.Data.Migrations
 
                     b.Property<decimal>("CarPrice")
                         .HasColumnType("money");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DropOffDate")
                         .HasColumnType("datetime2");

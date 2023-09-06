@@ -12,7 +12,7 @@ namespace Yolcu360.Service.Helpers
         {
             return $"Name- {name} is already taken!";
         }
-        public static string NotFoundId(int id,string entityName)
+        public static string NotFoundId(int? id,string entityName)
         {
             return $"There is no {entityName} with {id} id!";
         }

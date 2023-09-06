@@ -77,7 +77,8 @@ namespace Yolcu360.Service.Dtos.Car
         public int CleannesPoint { get; set; }
         public int PersonelPoint { get; set; }
         public int SpeedPoint { get; set; }
-        public int MainPoint { get; set; }
+        public decimal MainPoint { get; set; }
+        public DateTime CreateDate { get; set; }
         public CarGetAllDtoUser User { get; set; }
     }
     public class CarGetAllDtoUser

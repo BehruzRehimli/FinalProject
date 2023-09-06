@@ -24,7 +24,7 @@ namespace Yolcu360.Service.Dtos.Car
         public CarGetDtoModel Model { get; set; }
         public CarGetDtoType Type { get; set; }
         public CarGetDtoOffice Office { get; set; }
-        public List<CarGetDtoReview> Reviews { get; set; }
+        public List<CarGetDtoReview> Reviews { get; set; } = new List<CarGetDtoReview>();
 
 
     }
@@ -75,7 +75,8 @@ namespace Yolcu360.Service.Dtos.Car
         public int CleannesPoint { get; set; }
         public int PersonelPoint { get; set; }
         public int SpeedPoint { get; set; }
-        public int MainPoint { get; set; }
+        public decimal MainPoint { get; set; }
+        public DateTime CreateDate { get; set; }
         public CarGetDtoUser User { get; set; }
     }
     public class CarGetDtoUser

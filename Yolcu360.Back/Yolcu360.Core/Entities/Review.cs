@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,9 @@ namespace Yolcu360.Core.Entities
         public int CleannesPoint { get; set; }
         public int PersonelPoint { get; set; }
         public int SpeedPoint { get; set; }
-        public int MainPoint { get => (CleannesPoint + PersonelPoint + SpeedPoint) / 3; }
-        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+        [NotMapped]
+        public decimal MainPoint { get => (CleannesPoint + PersonelPoint + SpeedPoint) / 3; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public AppUser User { get; set; }
         public Car Car { get; set; }
 

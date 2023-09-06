@@ -32,7 +32,7 @@ namespace Yolcu360.Service.Implementations
                 throw new RestException(System.Net.HttpStatusCode.BadRequest, "CarId", ErrorMessages.NotFoundId(dto.CarId, "car"));
             }
             Review review = _mapper.Map<Review>(dto);
-            review.CreateDate=DateTime.UtcNow;
+            review.CreateDate=DateTime.Now;
             review.User= user;
             _reviewRepository.Add(review);
             _reviewRepository.Commit();

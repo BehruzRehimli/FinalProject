@@ -11,10 +11,10 @@ import { MdOutlineChildFriendly } from "react-icons/md"
 import { Field, Form, Formik } from 'formik'
 import Text from '../../components/Form/Text'
 import Select from '../../components/Form/Select'
-import { useParams,useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
-import { useSelector,useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { setExtentios } from '../../control/rentSlice'
 
@@ -23,16 +23,16 @@ import { setExtentios } from '../../control/rentSlice'
 
 const CarDetail = (props) => {
 
-    const {id}= useParams();
+    const { id } = useParams();
 
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
 
     const [car, setCar] = useState({
         car: {},
         loadCar: false
     })
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
 
     const [extensions, setExtensions] = useState({
@@ -46,42 +46,42 @@ const CarDetail = (props) => {
 
     const [userComment, setUserCommnet] = useState(false)
     const { username, isLogin, token } = useSelector(store => store.login)
-    const { pickUpDate,dropOffDate} = useSelector(store => store.rent)
+    const { pickUpDate, dropOffDate } = useSelector(store => store.rent)
 
-    var day=Math.ceil((new Date(dropOffDate)-new Date(pickUpDate))/86400000)
+    var day = Math.ceil((new Date(dropOffDate) - new Date(pickUpDate)) / 86400000)
 
 
 
     const CheckExtra500Handler = (e) => {
         const data = e.target.checked;
-        dispatch(setExtentios(2))  
+        dispatch(setExtentios(2))
         setExtensions(previous => { return { ...previous, extra500: data } })
     }
 
     const CheckExtra1000Handler = (e) => {
         const data = e.target.checked;
-        dispatch(setExtentios(1))  
+        dispatch(setExtentios(1))
 
         setExtensions(previous => { return { ...previous, extra1000: data } })
     }
 
     const CheckExtra2000Handler = (e) => {
         const data = e.target.checked;
-        dispatch(setExtentios(3))  
+        dispatch(setExtentios(3))
 
         setExtensions(previous => { return { ...previous, extra2000: data } })
     }
 
     const CheckTiresHandler = (e) => {
         const data = e.target.checked;
-        dispatch(setExtentios(4))  
+        dispatch(setExtentios(4))
 
         setExtensions(previous => { return { ...previous, tires: data } })
     }
 
     const CheckChildHandler = (e) => {
         const data = e.target.checked;
-        dispatch(setExtentios(6))  
+        dispatch(setExtentios(6))
 
         setExtensions(previous => { return { ...previous, child: data } })
     }
@@ -90,13 +90,13 @@ const CarDetail = (props) => {
         const data = e.target.checked;
 
         setExtensions(previous => { return { ...previous, driver: data } })
-        dispatch(setExtentios(5))  
+        dispatch(setExtentios(5))
     }
 
 
-    
 
-    useEffect(()=>{
+
+    useEffect(() => {
         const getCar = async () => {
             try {
                 var data = await axios.get(`https://localhost:7079/api/Cars/${id}`)
@@ -110,7 +110,7 @@ const CarDetail = (props) => {
             }
         }
         getCar();
-    },[])
+    }, [userComment])
     return (
         <div className="col-lg-8">
             <div className='d-flex justify-content-between'>
@@ -353,7 +353,7 @@ const CarDetail = (props) => {
                         <div className='me-5'>
                             <p className='title'>Extra 1000 km</p>
                             <p className='price-daily'>12,89 $ x{day} days</p>
-                            <p className='price-total'>{(12.89* day).toFixed(2)} $</p>
+                            <p className='price-total'>{(12.89 * day).toFixed(2)} $</p>
                         </div>
                         <label className='check-div 1'>
 
@@ -371,7 +371,7 @@ const CarDetail = (props) => {
                         <div className='me-5'>
                             <p className='title'>Extra 500 km</p>
                             <p className='price-daily'>6.43 $ x{day} days</p>
-                            <p className='price-total'>{(6.43* day).toFixed(2)} $</p>
+                            <p className='price-total'>{(6.43 * day).toFixed(2)} $</p>
                         </div>
                         <label className='check-div second'>
 
@@ -390,7 +390,7 @@ const CarDetail = (props) => {
                         <div className='me-5'>
                             <p className='title'>Extra 2000 km</p>
                             <p className='price-daily'>25.72 $ x{day} days</p>
-                            <p className='price-total'>{(25.72* day).toFixed(2)} $</p>
+                            <p className='price-total'>{(25.72 * day).toFixed(2)} $</p>
                         </div>
                         <label className='check-div 3'>
 
@@ -408,7 +408,7 @@ const CarDetail = (props) => {
                         <div className='me-5'>
                             <p className='title'>Winter Tires</p>
                             <p className='price-daily'>3.47 $ x{day} days</p>
-                            <p className='price-total'>{(3.47* day).toFixed(2)} $</p>
+                            <p className='price-total'>{(3.47 * day).toFixed(2)} $</p>
                         </div>
                         <label className='check-div 4'>
 
@@ -426,7 +426,7 @@ const CarDetail = (props) => {
                         <div className='me-5'>
                             <p className='title'>Driver</p>
                             <p className='price-daily'>3.47 $ x{day} days</p>
-                            <p className='price-total'>{(3.47* day).toFixed(2)} $</p>
+                            <p className='price-total'>{(3.47 * day).toFixed(2)} $</p>
                         </div>
                         <label className='check-div 5'>
 
@@ -444,7 +444,7 @@ const CarDetail = (props) => {
                         <div className='me-5'>
                             <p className='title'>Child Seat</p>
                             <p className='price-daily'>4.98 $ x{day} days</p>
-                            <p className='price-total'>{(4.98* day).toFixed(2)} $</p>
+                            <p className='price-total'>{(4.98 * day).toFixed(2)} $</p>
                         </div>
                         <label className='check-div 6'>
 
@@ -470,10 +470,15 @@ const CarDetail = (props) => {
                                 personelPoint: 0,
                                 speedPoint: 0,
                                 cleannesPoint: 0,
-                                carId: car.id,
+                                carId: id,
                             }} onSubmit={async (values) => {
-                                const data = await axios.post('https://localhost:7079/api/Reviews', values, { headers: { "Authorization": `Bearer ${token}` } })
-                                setUserCommnet(true)
+                                try {
+                                    const data = await axios.post('https://localhost:7079/api/Reviews', values, { headers: { "Authorization": `Bearer ${token}` } })
+                                    setUserCommnet(true)
+                                } catch (error) {
+                                    console.log(error);
+                                    navigate("/error")
+                                }
                             }}>
                                 {({ values }) => (
                                     <Form>
@@ -519,7 +524,7 @@ const CarDetail = (props) => {
                                 4.8
                             </span>
                             <span style={{ fontSize: "12px", color: "#979797", textDecoration: "underline", marginLeft: "20px", fontWeight: "700" }}>
-                                214 comment
+                                {car.car.reviews ? car.car.reviews.length:0} comments
                             </span>
                         </div>
                         <div className='right'>
@@ -549,87 +554,36 @@ const CarDetail = (props) => {
                         </div>
                     </div>
                     <div className='users-comments'>
-                        <div className="user-comment">
-                            <div>
-                                <div className='d-flex align-items-center'>
-                                    <div className="user-name-div">
-                                        S.G
-                                    </div>
+                        {
+                            car.loadCar ?
+                            car.car.reviews.map((x,index)=>(
+                                
+                                <div className="user-comment" key={index}>
+                                    
                                     <div>
-                                        <BiSolidStar className='ms-2' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <span style={{ marginLeft: "15px", fontWeight: "600", color: "#384959" }}>5.0</span>
+                                        <div className='d-flex align-items-center'>
+                                            <div className="user-name-div">
+                                                {x.user.fullname.slice(0,3)}...
+                                            </div>
+                                            <div>
+                                                <BiSolidStar className='ms-2' color='#ffa900' />
+                                                <BiSolidStar className='ms-1' color='#ffa900' />
+                                                <BiSolidStar className='ms-1' color='#ffa900' />
+                                                <BiSolidStar className='ms-1' color='#ffa900' />
+                                                <BiSolidStar className='ms-1' color='#ffa900' />
+                                                <span style={{ marginLeft: "15px", fontWeight: "600", color: "#384959" }}>{((x.cleannesPoint+x.personelPoint+x.speedPoint)/3).toFixed(1)}</span>
 
+                                            </div>
+                                        </div>
+                                        <span className='review-time'>{(new Date()- new Date(x.createDate))>86400000?Math.floor((new Date()- new Date(x.createDate))/86400000).toFixed(0)+" days ago":(new Date()- new Date(x.createDate))>3600000?Math.floor((new Date()- new Date(x.createDate))/3600000).toFixed(0)+" hours ago":(new Date()- new Date(x.createDate))>60000?Math.floor((new Date()- new Date(x.createDate))/60000).toFixed(0)+" minutes ago":Math.floor((new Date()- new Date(x.createDate))/1000).toFixed(0)+" seconds ago"}</span>
                                     </div>
+                                    <p className='user-comment-text'>{x.comment}</p>
                                 </div>
-                                <span className='review-time'>7 days ago</span>
-                            </div>
-                            <p className='user-comment-text'>Herşey çok güzeldi taki aracın klimasını acana kadar kilima hiç soutmuyor Du tek sıkıntı oydu başkada Bi sıkıntı yaşamadım</p>
-                        </div>
-                        <div className="user-comment">
-                            <div>
-                                <div className='d-flex align-items-center'>
-                                    <div className="user-name-div">
-                                        S.G
-                                    </div>
-                                    <div>
-                                        <BiSolidStar className='ms-2' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <span style={{ marginLeft: "15px", fontWeight: "600", color: "#384959" }}>5.0</span>
+                            ))    
+                            
+                            : null
 
-                                    </div>
-                                </div>
-                                <span className='review-time'>7 days ago</span>
-                            </div>
-                            <p className='user-comment-text'>Herşey çok güzeldi taki aracın klimasını acana kadar kilima hiç soutmuyor Du tek sıkıntı oydu başkada Bi sıkıntı yaşamadım</p>
-                        </div>
-                        <div className="user-comment">
-                            <div>
-                                <div className='d-flex align-items-center'>
-                                    <div className="user-name-div">
-                                        S.G
-                                    </div>
-                                    <div>
-                                        <BiSolidStar className='ms-2' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <span style={{ marginLeft: "15px", fontWeight: "600", color: "#384959" }}>5.0</span>
-
-                                    </div>
-                                </div>
-                                <span className='review-time'>7 days ago</span>
-                            </div>
-                            <p className='user-comment-text'>Herşey çok güzeldi taki aracın klimasını acana kadar kilima hiç soutmuyor Du tek sıkıntı oydu başkada Bi sıkıntı yaşamadım</p>
-                        </div>
-                        <div className="user-comment">
-                            <div>
-                                <div className='d-flex align-items-center'>
-                                    <div className="user-name-div">
-                                        S.G
-                                    </div>
-                                    <div>
-                                        <BiSolidStar className='ms-2' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <BiSolidStar className='ms-1' color='#ffa900' />
-                                        <span style={{ marginLeft: "15px", fontWeight: "600", color: "#384959" }}>5.0</span>
-
-                                    </div>
-                                </div>
-                                <span className='review-time'>7 days ago</span>
-                            </div>
-                            <p className='user-comment-text'>Herşey çok güzeldi taki aracın klimasını acana kadar kilima hiç soutmuyor Du tek sıkıntı oydu başkada Bi sıkıntı yaşamadım</p>
-                        </div>
-
+                        }
                     </div>
                 </div>
             </div>
