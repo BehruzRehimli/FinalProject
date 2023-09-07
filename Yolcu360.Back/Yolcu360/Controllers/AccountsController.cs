@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Yolcu360.Core.Entities;
+using Yolcu360.Data;
 using Yolcu360.Service.Dtos.Account;
 using Yolcu360.Service.Exceptions;
 using Yolcu360.Service.Helpers;
@@ -20,12 +23,16 @@ namespace Yolcu360.API.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IMailService _mailService;
+        private readonly Yolcu360DbContext _context;
+        private readonly IMapper _mapper;
 
-        public AccountsController(UserManager<AppUser> userManager, IConfiguration configuration, IMailService mailService)
+        public AccountsController(UserManager<AppUser> userManager, IConfiguration configuration, IMailService mailService, Yolcu360DbContext context, IMapper mapper)
         {
             _userManager = userManager;
             _configuration = configuration;
             _mailService = mailService;
+            _context = context;
+            _mapper = mapper;
         }
 
         [HttpPost("Register")]
@@ -200,6 +207,16 @@ namespace Yolcu360.API.Controllers
             }
             return NoContent();
         }
-
+        [Authorize(Roles = "Member")]
+        [HttpGet("Profile")]
+        public  ActionResult<ProfileDto> Profile()
+        {
+            AppUser user = _context.Users.Include(x => x.Rents).ThenInclude(x => x.Car).FirstOrDefault(x => x.UserName == User.Identity.Name);
+            if (user==null)
+            {
+                return NotFound();
+            }
+            return _mapper.Map<ProfileDto>(user);
+        }
     }
 }

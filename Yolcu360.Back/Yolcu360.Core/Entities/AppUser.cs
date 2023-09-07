@@ -14,5 +14,6 @@ namespace Yolcu360.Core.Entities
         public string Pasport { get; set; }
         public string Address { get; set; }
         public string Birthday { get; set; }
+        public List<Rent> Rents { get; set; }
     }
 }
