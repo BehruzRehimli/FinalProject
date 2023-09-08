@@ -9,6 +9,7 @@ import RegisterModal from '../Modal/RegisterModal'
 import { useSelector,useDispatch } from 'react-redux'
 import { setToken,setUsername,logedYes,logedNo } from '../../control/loginSlice'
 import jwt_decode from "jwt-decode"
+import { Link } from 'react-router-dom'
 
 const Navbar = (props) => {
 
@@ -48,7 +49,7 @@ const Navbar = (props) => {
           {
             isLogin ?
               <>
-                <button className='text-start bg-transparent border-0' style={{ color: "#03437f" }}>{username}</button>
+                <Link to={"/profile"} className='text-start bg-transparent border-0' style={{ color: "#03437f" }}>{username}</Link>
                 <button onClick={()=>{
                   dispatch(logedNo())
                   dispatch(setToken(null))

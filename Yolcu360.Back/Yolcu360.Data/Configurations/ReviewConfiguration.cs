@@ -14,6 +14,7 @@ namespace Yolcu360.Data.Configurations
         public void Configure(EntityTypeBuilder<Review> builder)
         {
             builder.Property(x=>x.Comment).HasMaxLength(500);
+            builder.HasOne(x=>x.User).WithMany(x=>x.Reviews).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

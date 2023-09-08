@@ -33,6 +33,7 @@ import Error from './pages/Error/Error';
 import CarDetail from './pages/CarDetail/CarDetail';
 import RentInfo from './pages/RentInfo/RentInfo';
 import Profile from './pages/Profile/Profile';
+import ResetPasword from './pages/ResetPasword/ResetPasword';
 
 
 
@@ -52,6 +53,7 @@ function App() {
             </Route>
             <Route path="/profile" element={<Profile/>}/>
             <Route path='/error' element={<Error/>}/>
+            <Route path='/resetpasword/:id/:token' element={<ResetPasword/>}/>
 
           </Route>
           <Route path='/admin' element={<AdminLayout/>}>

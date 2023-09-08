@@ -7,6 +7,8 @@ import Success from '../../images/7efs.gif'
 import Fail from '../../images/fail1.gif'
 import { GiBackwardTime } from "react-icons/gi"
 import axios from "axios"
+import { AiOutlineClose } from 'react-icons/ai';
+import { CloseButton } from 'react-bootstrap';
 
 function RegisterModal() {
     const [show, setShow] = useState(false);
@@ -45,9 +47,9 @@ function RegisterModal() {
                 backdrop="static"
                 keyboard={false}
             >
-                <Modal.Header closeButton>
-                </Modal.Header>
-                {
+                <Modal.Header onClick={()=>{setPage(1)}} closeButton>
+                </Modal.Header>               
+                 {
                     page === 1 ?
                         <Modal.Body>
                             <div style={{ padding: "10px 30px" }}>
@@ -164,7 +166,7 @@ function RegisterModal() {
                                             <button onClick={async () => {
                                                 setPage(2)
                                                 var headerToken = `Bearer ${registerToken}`
-                                                const data = await axios.post('https://localhost:7079/api/Accounts/SendAgain',{confirmCode:"5678"},{ headers: { "Authorization": headerToken } })
+                                                const data = await axios.post('https://localhost:7079/api/Accounts/SendAgain', { confirmCode: "5678" }, { headers: { "Authorization": headerToken } })
                                             }} className='back-register-btn'><GiBackwardTime style={{ fontSize: "25px", marginRight: "10px" }} />Back Confirm</button>
                                         </div>
                                     </Modal.Body> : null

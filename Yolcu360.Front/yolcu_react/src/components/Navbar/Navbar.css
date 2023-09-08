@@ -47,11 +47,16 @@
     left: 0%;
 }
 
+.valyuta-tab a,
 .valyuta-tab button{
     font-size: 14px;
     font-weight: 700;
     padding: 10px;
     background-color: white;
+}
+.valyuta-tab a{
+    display: inline-block;
+    margin-top: 3px;
 }
 .my-navbar .my-nav-element:hover{
     cursor: pointer;
@@ -194,4 +199,25 @@
 .pagination.active{
     background-color: #ffa900;
     color: white;
+}
+.login-modal-close{
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9b9b9b;
+    font-size: 20px;
+}
+.login-modal-close:hover{
+    color: #4a4a4a;
+}
+.forget-pass-btn{
+    text-decoration: underline;
+    text-align: center;
+    color: #4a4a4a;
+    cursor: pointer;
+}
+.forget-pass-btn:hover{
+    color: #ffa900;
 }

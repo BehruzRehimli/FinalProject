@@ -22,6 +22,7 @@ namespace Yolcu360.Data.Configurations
             builder.Property(x=>x.CarPrice).IsRequired().HasColumnType("money");
             builder.Property(x => x.ExtPrice).IsRequired().HasColumnType("money");
             builder.HasOne(x=>x.Car).WithMany(x=>x.Rents).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x => x.User).WithMany(x => x.Rents).OnDelete(DeleteBehavior.SetNull);
 
         }
     }

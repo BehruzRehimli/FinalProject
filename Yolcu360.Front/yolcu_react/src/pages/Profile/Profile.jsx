@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import "./Profile.css"
 import { FaUserAlt } from 'react-icons/fa'
 import { IoMdCloseCircleOutline } from 'react-icons/io'
 import { Formik, Form, Field } from 'formik';
 import { MdOutlineDone } from 'react-icons/md'
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
+import { logedNo, setToken, setUsername } from '../../control/loginSlice';
 
 const Profile = () => {
     const [tab, setTab] = useState(1)
@@ -20,6 +21,31 @@ const Profile = () => {
         isLoad: false,
         isSaved: false
     })
+    const dispatch=useDispatch();
+
+    const [postValues, setPostValues] = useState({
+        fullname: user.user.fullname,
+        username: user.user.username,
+        phone: user.user.phoneNumber,
+        email: user.user.email,
+        birthday: user.user.birthday,
+        pasport: user.user.pasport,
+        address: user.user.address
+    })
+
+    useEffect(() => {
+        setPostValues({
+            fullname: user.user.fullname,
+            username: user.user.username,
+            phone: user.user.phoneNumber,
+            email: user.user.email,
+            birthday: user.user.birthday,
+            pasport: user.user.pasport,
+            address: user.user.address
+        })
+        console.log(user.user);
+    }, [user.user])
+
 
     const getUser = async () => {
         await axios.get('https://localhost:7079/api/Accounts/Profile', { headers: { "Authorization": `Bearer ${token}` } }).
@@ -34,11 +60,28 @@ const Profile = () => {
         getUser()
     }, [user.isSaved])
 
+
+    const InputHandler = (e) => {
+        setPostValues(prev => { return { ...prev, [e.target.name]: e.target.value } })
+    }
+    const DeleteUserHandler= ()=>{
+        axios.delete(`https://localhost:7079/api/Accounts/DeleteUser/${user.user.id}`).
+        then(res=>{
+            dispatch(logedNo())
+            dispatch(setToken(null))
+            dispatch(setUsername(null))
+            localStorage.setItem("YolcuToken",'')
+            navigate("/")
+        }).catch(errDel=>console.log(errDel.response))
+    }
+
+    var options = { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+
     return (
         <div style={{ overflow: "hidden" }}>
             <div className="navigation">
                 <div className="row">
-                    <div  className="col-lg-4 left">My Account</div>
+                    <div className="col-lg-4 left">My Account</div>
                     <div className="col-lg-8 right">
                         <div onClick={() => { setTab(1) }} className={tab === 1 ? "col-lg-3 profile-tab active" : "col-lg-3 profile-tab"}>Account Information</div>
                         <div onClick={() => { setTab(2) }} className={tab === 2 ? "col-lg-3 profile-tab active" : "col-lg-3 profile-tab"}>Past Reservations</div>
@@ -56,9 +99,9 @@ const Profile = () => {
                         className: '',
                         duration: 5000,
                         style: {
-                            background: '#363636',
+                            background: '#ffa900',
                             color: '#fff',
-                            marginTop:"70px"
+                            marginTop: "70px"
                         },
 
                         // Default options for specific types
@@ -82,7 +125,13 @@ const Profile = () => {
                                     <span>{user.user.fullname}</span> : null
                             }
                         </div>
-                        <p >Logout
+                        <p onClick={()=>{
+                            dispatch(logedNo())
+                            dispatch(setToken(null))
+                            dispatch(setUsername(null))
+                            localStorage.setItem("YolcuToken",'')
+                            navigate("/")
+                        }} style={{cursor:"pointer"}}>Logout
                             <IoMdCloseCircleOutline style={{ color: "#9b9b9b", fontSize: "14px", marginLeft: "15px" }} />
                         </p>
                     </div>
@@ -93,52 +142,47 @@ const Profile = () => {
                             <div>
                                 <p className="title-profile">
                                     Driver Information
-                                    <span className='delete-profile'>Delete My Account</span>
+                                    <span onClick={DeleteUserHandler} className='delete-profile'>Delete My Account</span>
                                 </p>
                                 <Formik>
                                     <Formik initialValues={{
-                                        fullname: user.user.fullname,
-                                        username: user.user.username,
-                                        phone: user.user.phone,
-                                        email: user.user.email,
-                                        birthday: user.user.birthday,
-                                        pasport: user.user.pasport,
-                                        address: user.user.address
                                     }} onSubmit={async (values) => {
+                                        axios.put("https://localhost:7079/api/Accounts/ChangeInfo", postValues, { headers: { "Authorization": `Bearer ${token}` } }).
+                                            then(res => setUser(prev => { return { ...prev, isSaved: true } }), toast.success("Changed your info!")).catch(error => navigate("/error"))
                                     }}>
                                         {({ values }) => (
                                             <Form>
                                                 <div className='mt-4 text-start'>
                                                     <label className='text-start rent-info-label' htmlFor="fullname">Fullname</label>
-                                                    <input defaultValue={user.user.fullname} type="text" id={"fullname"} className="driver-info w-100" name='fullname' />
+                                                    <input onChange={InputHandler} defaultValue={user.user.fullname} type="text" id={"fullname"} className="driver-info w-100" name='fullname' />
                                                 </div>
                                                 <div className='mt-4 text-start'>
                                                     <label className='text-start rent-info-label' htmlFor="username">Username</label>
-                                                    <input defaultValue={user.user.username} type="text" id={"username"} className="driver-info w-100" name='username' />
+                                                    <input onChange={InputHandler} defaultValue={user.user.username} type="text" id={"username"} className="driver-info w-100" name='username' />
                                                 </div>
                                                 <div className='d-flex justify-content-between'>
                                                     <div className='mt-4 text-start' style={{ width: "48%" }}>
                                                         <label className='text-start rent-info-label' htmlFor="phone">Phone</label>
-                                                        <input defaultValue={user.user.phone} type="phone" id={"phone"} className="driver-info w-100" name='phone' />
+                                                        <input onChange={InputHandler} defaultValue={user.user.phoneNumber} type="phone" id={"phone"} className="driver-info w-100" name='phone' />
                                                     </div>
                                                     <div className='mt-4 text-start' style={{ width: "48%" }}>
                                                         <label className='text-start rent-info-label' htmlFor="email">E-mail</label>
-                                                        <input defaultValue={user.user.email} type="email" id={"email"} className="driver-info w-100" name='email' />
+                                                        <input onChange={InputHandler} defaultValue={user.user.email} type="email" id={"email"} className="driver-info w-100" name='email' />
                                                     </div>
                                                 </div>
                                                 <div className='d-flex justify-content-between'>
                                                     <div className='mt-4 text-start' style={{ width: "48%" }}>
                                                         <label className='text-start rent-info-label' htmlFor="birthday">Driver's Birthday (Ex: 30/12/1995)</label>
-                                                        <input defaultValue={user.user.birthday} type="text" id={"birthday"} className="driver-info w-100" name='birthday' />
+                                                        <input onChange={InputHandler} defaultValue={user.user.birthday} type="text" id={"birthday"} className="driver-info w-100" name='birthday' />
                                                     </div>
                                                     <div className='mt-4 text-start' style={{ width: "48%" }}>
                                                         <label className='text-start rent-info-label' htmlFor="pasport">Passport Number</label>
-                                                        <input defaultValue={user.user.pasport} type="text" id={"pasport"} className="driver-info w-100" name='pasport' />
+                                                        <input onChange={InputHandler} defaultValue={user.user.pasport} type="text" id={"pasport"} className="driver-info w-100" name='pasport' />
                                                     </div>
                                                 </div>
                                                 <div className='mt-4 text-start'>
                                                     <label className='text-start rent-info-label' htmlFor="address">Address</label>
-                                                    <input defaultValue={user.user.address} type="text" id={"address"} className="driver-info w-100" name='address' />
+                                                    <input onChange={InputHandler} defaultValue={user.user.address} type="text" id={"address"} className="driver-info w-100" name='address' />
                                                 </div>
                                                 <button type='submit' className='btn login-btn register-btn form-control fs-6 mt-5' style={{ width: "200px", fontSize: "20px", fontWeight: "700" }}>Save <MdOutlineDone style={{ fontSize: "25px", marginLeft: '20px' }} /></button>
 
@@ -149,7 +193,45 @@ const Profile = () => {
                                 </Formik>
 
                             </div> : tab === 2 ?
-                                <div>Salam</div> :
+                                <div>
+                                    <p className="title-profile">
+                                        Your Past Rents
+                                    </p>
+                                    <table className="table table-hover my-5">
+                                        <thead>
+                                            <tr>
+                                                <th className="text-center ">#</th>
+                                                <th>Car Name</th>
+                                                <th>Sum Price</th>
+                                                <th>Pick Up Date</th>
+                                                <th>Drop Off Date</th>
+                                                <th>Car Image</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                user.isLoad ?
+                                                    user.user.rents.map((x, index) => (
+                                                        <tr key={x.id}>
+                                                            <td className="text-center">{index + 1}</td>
+                                                            <td className="txt-oflo">{x.car.name}</td>
+                                                            <td className="txt-oflo">{x.carPrice +x.extPrice}</td>
+                                                            <td className="txt-oflo" style={{color:"green"}}>{(new Date(x.pickUpDate)).toLocaleDateString('tr-TR',options)}</td>
+                                                            <td className="txt-oflo" style={{color:"red"}}>{(new Date(x.dropOffDate)).toLocaleDateString('tr-TR',options)}</td>
+
+                                                            <td className="txt-oflo">
+                                                                <img width={"150px"} src={x.car.imageName} alt="Car" />
+                                                            </td>
+
+                                                        </tr>
+
+                                                    )) : null
+                                            }
+                                        </tbody>
+                                    </table>
+
+
+                                </div> :
                                 <div>
                                     <p className="title-profile">
                                         Change Password

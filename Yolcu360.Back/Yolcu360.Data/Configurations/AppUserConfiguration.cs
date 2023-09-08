@@ -14,6 +14,9 @@ namespace Yolcu360.Data.Configurations
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
             builder.Property(x=>x.Fullname).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.Address).HasMaxLength(200);
+            builder.Property(x => x.Pasport).HasMaxLength(50);
+            builder.Property(x => x.Birthday).HasMaxLength(50);
         }
     }
 }
