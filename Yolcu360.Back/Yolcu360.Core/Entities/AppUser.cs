@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,5 +17,7 @@ namespace Yolcu360.Core.Entities
         public string Birthday { get; set; }
         public List<Rent> Rents { get; set; }
         public List<Review> Reviews { get; set; }
+        [NotMapped]
+        public List<string> Roles { get; set; } = new List<string>();
     }
 }

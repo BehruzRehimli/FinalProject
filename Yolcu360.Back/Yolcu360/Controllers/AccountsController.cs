@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using Yolcu360.Core.Entities;
 using Yolcu360.Data;
 using Yolcu360.Service.Dtos.Account;
@@ -275,17 +277,53 @@ namespace Yolcu360.API.Controllers
                 return BadRequest();
             }
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            byte[] tokenBytes = Encoding.UTF8.GetBytes(token);
+            token = WebEncoders.Base64UrlEncode(tokenBytes);
 
             var url = "http://localhost:3000/resetpasword/" + user.Id + "/" + token;
             await _mailService.SendEmailAsync(new MailRequest()
             {
                 ToEmail = email,
                 Subject = "Forget Password!!!",
-                Body = $"<h3>Salam hörmətli istifadəçi</h3><br/><h4></h4>Şifrənizi dəyişmək üçün zəhmət olmasa bu linkə <a href={url}>klikləyin</h1>."
+                Body = $"<h3>Salam hörmətli istifadəçi,</h3><br/><h4></h4>Şifrənizi dəyişmək üçün zəhmət olmasa bu linkə <a href={url}>klikləyin</h1>."
             });
             return NoContent();
 
         }
+        [HttpPost("ResetPassword")]
+        public async Task<ActionResult> ResetPassword([FromBody]ResetPasswordDto dto)
+        {
+            AppUser user = await _userManager.FindByIdAsync(dto.UserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            byte[] byteToken = WebEncoders.Base64UrlDecode(dto.Token);
+            var tokenmn = Encoding.UTF8.GetString(byteToken);
+
+            if (dto.NewPassword!=dto.AgainPassword)
+            {
+                throw new RestException(System.Net.HttpStatusCode.BadRequest, "Wrong Password");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, tokenmn, dto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                List<RestExceptionErrorItem> Errors = new List<RestExceptionErrorItem>();
+                foreach (var error in result.Errors)
+                {
+                    RestExceptionErrorItem resterror = new RestExceptionErrorItem(error.Code,error.Description);
+                    Errors.Add(resterror);
+
+                }
+                throw new RestException(System.Net.HttpStatusCode.BadRequest,Errors);
+            }
+
+            return NoContent();
+
+        }
+
 
     }
 }

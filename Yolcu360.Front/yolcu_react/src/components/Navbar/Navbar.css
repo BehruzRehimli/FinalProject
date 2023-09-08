@@ -221,3 +221,10 @@
 .forget-pass-btn:hover{
     color: #ffa900;
 }
+.reset-label{
+    font-size: 18px;
+    margin-left: 20px;
+    padding-bottom: 3px;
+    text-decoration: underline;
+    text-decoration-color: #2169aa;
+}

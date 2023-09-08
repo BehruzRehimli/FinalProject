@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Yolcu360.Core.Entities;
+using Yolcu360.Service.Dtos.Admin;
 
 namespace Yolcu360.API.Controllers
 {
@@ -11,11 +13,13 @@ namespace Yolcu360.API.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<AppUser> _userManeger;
+        private readonly IMapper _mapper;
 
-        public AdminsController(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManeger)
+        public AdminsController(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManeger, IMapper mapper)
         {
             _roleManager = roleManager;
             _userManeger = userManeger;
+            _mapper = mapper;
         }
         //[HttpGet("")]
         //public async Task<IActionResult> CreateRole()
@@ -43,5 +47,69 @@ namespace Yolcu360.API.Controllers
         //    await _userManeger.AddToRoleAsync(superAdmin,"SuperAdmin");
         //    return Ok();
         //}
+
+        [HttpGet("")]
+        public async Task<ActionResult> Get()
+        {
+            var users = _userManeger.GetUsersInRoleAsync("Admin").Result.ToList();
+
+
+            foreach (AppUser user in users)
+            {
+                var roles =await _userManeger.GetRolesAsync(user);
+                foreach (var role in roles)
+                {
+                    user.Roles.Add(role);
+                }
+            }
+            var datas = _mapper.Map<List<AdminGetAllDto>>(users);
+
+            return Ok(datas);
+        }
+        [HttpPost("")]
+        public async Task<ActionResult> Create(AdminCreateDto dto)
+        {
+            AppUser user=_mapper.Map<AppUser>(dto);
+            if (dto.Password==dto.AgainPassword)
+            {
+                await _userManeger.CreateAsync(user, dto.Password);
+            }
+            await _userManeger.UpdateAsync(user);
+            await _userManeger.AddToRoleAsync(user, "Admin");
+            return Ok();
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Get(string id)
+        {
+            var user =await _userManeger.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var roles = await _userManeger.GetRolesAsync(user);
+
+            foreach (string role in roles)
+            {
+                user.Roles.Add(role);
+            }
+
+            var datas = _mapper.Map<AdminGetAllDto>(user);
+
+            return Ok(datas);
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            var user = await _userManeger.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            await _userManeger.DeleteAsync(user);
+            await _userManeger.UpdateAsync(user);
+            return NoContent();
+        }
     }
 }

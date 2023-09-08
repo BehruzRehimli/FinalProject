@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Yolcu360.Core.Entities;
 using Yolcu360.Service.Dtos.AboutCity;
 using Yolcu360.Service.Dtos.Account;
+using Yolcu360.Service.Dtos.Admin;
 using Yolcu360.Service.Dtos.Brand;
 using Yolcu360.Service.Dtos.Car;
 using Yolcu360.Service.Dtos.City;
@@ -92,7 +93,8 @@ namespace Yolcu360.Service.Profiles
             CreateMap<Car, ProfileDtoCar>().ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("Car") + m.ImageName : null));
             CreateMap<Rent, ProfileDtoRent>();
             CreateMap<AppUser, ProfileDto>();
-
+            CreateMap<AppUser, AdminGetAllDto>();
+            CreateMap<AdminCreateDto, AppUser>();
 
 
 
