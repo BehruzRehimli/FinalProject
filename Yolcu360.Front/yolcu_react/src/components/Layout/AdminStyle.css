@@ -16707,9 +16707,6 @@ html body .waves-notransition {
         width: 200px;
     }
 
-    .d-flex {
-        display: block !important;
-    }
 
     .d-flex.no-block {
         display: -webkit-box !important;

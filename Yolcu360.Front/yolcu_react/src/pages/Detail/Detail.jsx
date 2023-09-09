@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./Detail.css"
 import { IoArrowBackOutline } from "react-icons/io5"
-import { Link, useParams,useNavigate, Outlet } from "react-router-dom"
+import { Link, useParams, useNavigate, Outlet } from "react-router-dom"
 import { TiArrowDownThick, TiArrowUpThick } from "react-icons/ti"
 import { BiSolidCar } from "react-icons/bi"
 import { AiOutlineRight } from "react-icons/ai"
@@ -12,21 +12,21 @@ import { setDay, setEmptyExt, setExPrice, setSumPrice } from '../../control/rent
 
 const Detail = () => {
     const { id } = useParams();
-    const navigate =useNavigate();
-    const dispatch=useDispatch();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const {sumPrice,exPrice} =useSelector(store=>store.rent)
+    const { sumPrice, exPrice } = useSelector(store => store.rent)
 
-    const finalPrice=(Number)(sumPrice)+(Number)(exPrice);
+    const finalPrice = (Number)(sumPrice) + (Number)(exPrice);
 
 
-    
+
     const [car, setCar] = useState({
         car: {},
         loadCar: false
     })
 
-    const {pickUpDate,dropOffDate} =useSelector(store=>{
+    const { pickUpDate, dropOffDate } = useSelector(store => {
         return {
             pickUpDate: new Date(store.rent.pickUpDate),
             dropOffDate: new Date(store.rent.dropOffDate)
@@ -34,7 +34,7 @@ const Detail = () => {
     })
 
 
-        var day=Math.ceil((dropOffDate-pickUpDate)/86400000)
+    var day = Math.ceil((dropOffDate - pickUpDate) / 86400000)
 
     var data = null;
     useEffect(() => {
@@ -61,11 +61,12 @@ const Detail = () => {
     return (
         <div>
             <div className="top-detail">
-                <div onClick={()=>{navigate(-1)}} className="go-back-btn">
+                <div onClick={() => { navigate(-1) }} className="go-back-btn">
                     <span style={{ marginRight: "10px", paddingRight: "10px", borderRight: "1px solid #9b9b9b" }}>Back</span>
                     <IoArrowBackOutline style={{ fontSize: "20px" }} />
                 </div>
             </div>
+            <Link to={`/detail/${id}/rentinfo`}  class=" fixed-res-btn"><div class="fixed-res-btn--left"><span class="display-switch ">Click for details</span><span class="display-price">{finalPrice.toFixed(2)} $</span></div><div class="fixed-res-btn--right"><span style={{fontSize:"16px"}}>Keep going!</span><i class="icon-btn-arrow-right-2"></i></div></Link>
             <div className="my-container" style={{ margin: "100px auto" }}>
                 <div className="road">
                     <div>
@@ -99,7 +100,7 @@ const Detail = () => {
                     }
                 </div>
                 <div className="row mt-3">
-                    <Outlet car={car}/>
+                    <Outlet car={car} />
                     <div className='col-lg-4'>
                         <div className="detail-sidebar">
                             {
@@ -123,7 +124,7 @@ const Detail = () => {
                                                 </div>
                                                 <div className='ms-3'>
                                                     <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
-                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontWeight: "700", fontSize: "14px" }}>{pickUpDate.toLocaleDateString('tr-TR',options)}</p>
+                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#008dd4", fontWeight: "700", fontSize: "14px" }}>{pickUpDate.toLocaleDateString('tr-TR', options)}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,7 +139,7 @@ const Detail = () => {
                                                 </div>
                                                 <div className='ms-3'>
                                                     <p style={{ marginBottom: "0", textAlign: "start", color: "#9b9b9b", fontSize: "13px", fontWeight: "600" }}>{car.car.office.name}</p>
-                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#ffa900", fontWeight: "700", fontSize: "14px" }}>{dropOffDate.toLocaleDateString('tr-TR',options)}</p>
+                                                    <p style={{ marginBottom: "0", textAlign: "start", color: "#ffa900", fontWeight: "700", fontSize: "14px" }}>{dropOffDate.toLocaleDateString('tr-TR', options)}</p>
                                                 </div>
                                             </div>
                                         </div>

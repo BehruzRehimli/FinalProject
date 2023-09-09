@@ -737,7 +737,7 @@ const Cars = () => {
                                             <span>Total Amount ({day} Days): </span>
                                             <BiInfoCircle color='#008dd4' style={{ fontSize: "20px" }} />
                                         </div>
-                                        <div className='text-start d-flex justify-content-between align-items-center'>
+                                        <div className='text-start price-info-car d-flex justify-content-between align-items-center'>
                                             <span style={{ color: "#2ecc71" }}>Daily price : {x.priceDaily} $</span>
                                             <span style={{ color: "#4a4a4a", fontSize: "20px", fontWeight: "700", marginRight: '10px' }}>{(x.priceDaily * day).toFixed(2)} $</span>
                                         </div>

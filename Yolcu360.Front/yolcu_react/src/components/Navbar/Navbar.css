@@ -228,13 +228,73 @@
     text-decoration: underline;
     text-decoration-color: #2169aa;
 }
+.fixed-res-btn{
+    margin: 0 !important;
+    padding: 0;
+    background-color: #39b54a;
+    height: 60px;
+    align-items: center;
+    border: 1px solid #7ed321;
+    flex-wrap: wrap;
+    color: #fff;
+    line-height: 1;
+    position: fixed;
+    width: 100%;
+    bottom: 0%;
+    left: 0;
+    z-index: 10;
+    display: none ;
+}
+.fixed-res-btn--left{
+    height: 100%;
+    padding: 12px 18px;
+    width: auto;
+    flex: 1;
+    border-right: 1px solid #fff;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.fixed-res-btn--right{
+    height: 100%;
+    align-items: center;
+    padding-left: 0;
+    padding-right: 15px;
+    width: auto;
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.fixed-res-btn--left > .display-switch {
+    font-size: 10px;
+    font-weight: 400;
+    text-decoration: underline;
+    margin-bottom: 10px;
+}
+.fixed-res-btn--left > .display-price {
+    font-size: 21px;
+    font-weight: 700;
+    font-family: 'Helvetica', sans-serif;
+}
+
 @media (max-width:540px){
     .road-name{
         display: none !important;
     }
+
 }
 
 @media (max-width:997px){
+    .fixed-res-btn{
+        display: flex !important;
+    }
+
+    .keep-go-btn a{
+        display: block !important;
+        position: fixed !important;
+        bottom: 0% !important;
+    }
     .car .car-info{
         flex-wrap: wrap !important;
     }
@@ -274,6 +334,14 @@
     }
     .detail-sidebar{
         display: none !important;
+    }
+    .price-info-car{
+        display: flex !important;
+        justify-content: space-between !important;
+    }
+    .top-all-reviews .left,
+    .top-all-reviews .right{
+        width: 100%  !important;
     }
 
 }
