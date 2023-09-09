@@ -34,6 +34,9 @@ import CarDetail from './pages/CarDetail/CarDetail';
 import RentInfo from './pages/RentInfo/RentInfo';
 import Profile from './pages/Profile/Profile';
 import ResetPasword from './pages/ResetPasword/ResetPasword';
+import Admin from './pages/Admin/Admin/Admin';
+import AdminCreate from './pages/Admin/Admin/AdminCreate';
+import AdminEdit from './pages/Admin/Admin/AdminEdit';
 
 
 
@@ -79,6 +82,9 @@ function App() {
             <Route path='/admin/car' element={<Car/>}/>
             <Route path='/admin/car/create' element={<CarCreate/>}/>
             <Route path='/admin/car/edit/:id' element={<CarEdit/>}/>
+            <Route path='/admin/admin' element={<Admin/>}/>
+            <Route path='/admin/admin/create' element={<AdminCreate/>}/>
+            <Route path='/admin/admin/edit/:id' element={<AdminEdit/>}/>
 
           </Route>
           <Route path='/admin/login' element={<Login/>}/>

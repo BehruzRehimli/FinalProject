@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using Yolcu360.Core.Entities;
 using Yolcu360.Service.Dtos.Admin;
 
@@ -47,6 +49,7 @@ namespace Yolcu360.API.Controllers
         //    await _userManeger.AddToRoleAsync(superAdmin,"SuperAdmin");
         //    return Ok();
         //}
+        [Authorize(Roles = "SuperAdmin")]
 
         [HttpGet("")]
         public async Task<ActionResult> Get()
@@ -66,6 +69,8 @@ namespace Yolcu360.API.Controllers
 
             return Ok(datas);
         }
+        [Authorize(Roles = "SuperAdmin")]
+
         [HttpPost("")]
         public async Task<ActionResult> Create(AdminCreateDto dto)
         {
@@ -78,6 +83,8 @@ namespace Yolcu360.API.Controllers
             await _userManeger.AddToRoleAsync(user, "Admin");
             return Ok();
         }
+        [Authorize(Roles = "SuperAdmin")]
+
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(string id)
         {
@@ -98,6 +105,8 @@ namespace Yolcu360.API.Controllers
 
             return Ok(datas);
         }
+        [Authorize(Roles = "SuperAdmin")]
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
         {
@@ -109,6 +118,32 @@ namespace Yolcu360.API.Controllers
             }
             await _userManeger.DeleteAsync(user);
             await _userManeger.UpdateAsync(user);
+            return NoContent();
+        }
+        [Authorize(Roles = "SuperAdmin")]
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Edit(string id,AdminEditDto dto)
+        {
+            var user = await _userManeger.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            user.Fullname = dto.Fullname;
+            user.UserName = dto.UserName;
+            user.PhoneNumber = dto.PhoneNumber;
+            user.Email = dto.PhoneNumber;
+
+            if (dto.Password!=null && dto.Password==dto.AgainPassword)
+            {
+                var token = await _userManeger.GeneratePasswordResetTokenAsync(user);
+                await _userManeger.ResetPasswordAsync(user, token, dto.Password);
+            }
+
+            await _userManeger.UpdateAsync(user);
+
             return NoContent();
         }
     }
