@@ -228,3 +228,52 @@
     text-decoration: underline;
     text-decoration-color: #2169aa;
 }
+@media (max-width:540px){
+    .road-name{
+        display: none !important;
+    }
+}
+
+@media (max-width:997px){
+    .car .car-info{
+        flex-wrap: wrap !important;
+    }
+    .cars .car .car-info .left,
+    .cars .car .car-info .right{
+        width: 100% !important;
+    }
+    .cars .car .car-title{
+        border-bottom: none !important;
+    }
+    .cars .car .car-title *{
+        text-align: center !important;
+    }
+    .car .car-img{
+        padding-left: 0% !important;
+        text-align: center !important;
+    }
+    .free-cancel>.d-flex{
+        display: flex !important;
+        justify-content: center !important;
+        padding-left: 0% !important;
+        padding-right: 0% !important;
+    }
+    .free-cancel{
+        padding-left: 0% !important;
+        padding-right: 0% !important;
+    }
+    .car .car-bottom{
+        display: block !important;
+    }
+    .car-rayting>div{
+        display: flex !important;
+    }
+    .car-bottom .car-rayting{
+        display: flex !important;
+        justify-content: space-between !important;
+    }
+    .detail-sidebar{
+        display: none !important;
+    }
+
+}

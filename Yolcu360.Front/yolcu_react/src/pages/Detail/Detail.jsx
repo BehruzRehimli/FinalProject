@@ -70,21 +70,21 @@ const Detail = () => {
                 <div className="road">
                     <div>
                         <span className='road-number'>1</span>
-                        <span style={{ color: "#434444", fontSize: "18px", fontWeight: "700", marginLeft: "10px" }}>Vehicle Selection</span>
+                        <span className='road-name' style={{ color: "#434444", fontSize: "18px", fontWeight: "700", marginLeft: "10px" }}>Vehicle Selection</span>
                     </div>
                     <div className='wizard-dot'>
                         <span className='line' />
                     </div>
                     <div>
                         <span className='road-number passive'>2</span>
-                        <span style={{ color: "#979797", fontSize: "18px", fontWeight: "700", marginLeft: "10px" }}>Driver Information</span>
+                        <span className='road-name' style={{ color: "#979797", fontSize: "18px", fontWeight: "700", marginLeft: "10px" }}>Driver Information</span>
                     </div>
                     <div className='wizard-dot'>
                         <span className='line' />
                     </div>
                     <div>
                         <span className='road-number passive'>3</span>
-                        <span style={{ color: "#979797", fontSize: "18px", fontWeight: "700", marginLeft: "10px" }}>Payment Information</span>
+                        <span className='road-name' style={{ color: "#979797", fontSize: "18px", fontWeight: "700", marginLeft: "10px" }}>Payment Information</span>
                     </div>
                 </div>
                 <div className="route-path text-start mt-3 ps-3">
