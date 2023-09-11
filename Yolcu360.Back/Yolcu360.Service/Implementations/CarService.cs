@@ -139,11 +139,37 @@ namespace Yolcu360.Service.Implementations
             _carRepository.Commit();
         }
 
-        public List<CarGetAllDto> CarsList(int id)
+        public List<CarGetAllDto> CarsList(int id,CarListDto dto)
         {
-            List<Car> cars = _carRepository.GetAll(x => x.OfficeId==id).Include(x => x.Type).Include(x => x.Model).ThenInclude(x => x.Brand).Include(x => x.Office)
-                .ThenInclude(x => x.City).ThenInclude(x => x.Country).Include(x => x.Reviews).ThenInclude(x => x.User).ToList();
-            return _mapper.Map<List<CarGetAllDto>>(cars);
+            var cars = _carRepository.GetAll(x => x.OfficeId == id)
+                 .Include(x => x.Type)
+                 .Include(x => x.Model).ThenInclude(x => x.Brand)
+                 .Include(x => x.Office).ThenInclude(x => x.City).ThenInclude(x => x.Country)
+                 .Include(x => x.Reviews).ThenInclude(x => x.User).
+                 Include(x=>x.Rents)
+                 .ToList(); // cars listesini veritabanından çekiyoruz
+
+            // Şimdi araçları filtreleyebiliriz
+            List<Car> availableCars = cars.Where(car =>
+            {
+                // Arabanın kiralama dönemlerini kontrol ediyoruz
+                bool isAvailable = true;
+                foreach (var rent in car.Rents)
+                {
+                    if ((dto.PickDate >= rent.PickUpDate && dto.PickDate <= rent.DropOffDate) || (dto.DropDate>=rent.PickUpDate && dto.DropDate <=rent.DropOffDate) || (rent.PickUpDate>=dto.PickDate && rent.PickUpDate<=dto.DropDate))
+                    {
+                        // Araba bu kiralama döneminde başka bir kiracıya verilmiş, uygun değil.
+                        isAvailable = false;
+                        break; // Kiralama dönemleri arasında çakışma bulduysak döngüyü kırabiliriz.
+                    }
+                }
+
+                // Araba uygunsa, true döndürüyoruz.
+                return isAvailable;
+            }).ToList();
+
+            // Sonuçları DTO'ya dönüştürün
+            return _mapper.Map<List<CarGetAllDto>>(availableCars);
         }
 
         public object GetAdmin(int page)

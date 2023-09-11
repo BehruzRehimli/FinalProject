@@ -46,10 +46,10 @@ namespace Yolcu360.API.Controllers
             _carService.Delete(id);
             return NoContent();
         }
-        [HttpGet("CarsList/{id}")]
-        public ActionResult<List<CarGetAllDto>> CarsList(int id)
+        [HttpPost("CarsList/{id}")]
+        public ActionResult<List<CarGetAllDto>> CarsList(int id,[FromForm] CarListDto dto)
         {
-            return _carService.CarsList(id);
+            return _carService.CarsList(id,dto);
         }
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet("GetAdmin/{page}")]

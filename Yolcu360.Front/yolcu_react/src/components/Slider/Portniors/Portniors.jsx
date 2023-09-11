@@ -17,25 +17,25 @@ const Portniors = () => {
     <Slider {...settings}>
           <div className="pt-4" >
             <div className="row g-3 partnior-row">
-                <div className="partnior">
+                <div className="partnior ">
                 <img src="	https://localhost:7079/Portniors/1.png" alt="partnior" />
                 </div>
-                <div className="partnior">
+                <div className="partnior ">
                 <img src="	https://localhost:7079/Portniors/2.png" alt="partnior" />
                 </div>
-                <div className="partnior">
+                <div className="partnior ">
                 <img src="	https://localhost:7079/Portniors/3.png" alt="partnior" />
                 </div>
-                <div className="partnior">
+                <div className="partnior ">
                 <img src="	https://localhost:7079/Portniors/4.png" alt="partnior" />
                 </div>
-                <div className="partnior">
+                <div className="partnior ">
                 <img src="	https://localhost:7079/Portniors/5.png" alt="partnior" />
                 </div>
-                <div className="partnior">
+                <div className="partnior ">
                 <img src="	https://localhost:7079/Portniors/6.png" alt="partnior" />
                 </div>
-                <div className="partnior">
+                <div className="partnior ">
                 <img src="	https://localhost:7079/Portniors/7.png" alt="partnior" />
                 </div>
             </div>

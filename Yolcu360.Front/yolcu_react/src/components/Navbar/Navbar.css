@@ -282,6 +282,16 @@
     .road-name{
         display: none !important;
     }
+    .searcing .my-container{
+        padding: 25px 0 !important;
+    }
+    .cars-heading .top-info{
+        flex-wrap: wrap !important;
+    }
+    .cars-heading .top-info .right-top-info{
+        width: 100% !important;
+        margin-top: 10px !important;
+    }
 
 }
 
@@ -342,6 +352,10 @@
     .top-all-reviews .left,
     .top-all-reviews .right{
         width: 100%  !important;
+    }
+    .right-profile{
+        padding-right: 3rem !important;
+        padding-left: 3rem !important;
     }
 
 }

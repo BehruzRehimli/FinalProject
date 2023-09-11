@@ -136,7 +136,7 @@ const OfficeEdit = () => {
                                 loader ?
                                     country.city.id > 0 ?
                                         <div>
-                                            <select value={country.city.id} name="cityId" className='login-input' onChange={(e) => {
+                                            <select defaultValue={country.city.id} name="cityId" className='login-input' onChange={(e) => {
                                                 setFieldValue("cityId", e.target.value)
                                                 setPostValues(prev => { return { ...prev, [e.target.name]: e.target.value } })
                                             }}  >

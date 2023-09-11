@@ -50,7 +50,6 @@ const CarDetail = (props) => {
 
     var day = Math.ceil((new Date(dropOffDate) - new Date(pickUpDate)) / 86400000)
 
-    const [point,setPoint]=useState(5)
 
     const CheckExtra500Handler = (e) => {
         const data = e.target.checked;
@@ -100,8 +99,9 @@ const CarDetail = (props) => {
             try {
                 var data = await axios.get(`https://localhost:7079/api/Cars/${id}`)
                 setCar(prev => { return { ...prev, car: data.data, loadCar: true } })
-                var review = data.data.reviews.find(x => x.user.username = username)
-                if (review) {
+                var review = data.data.reviews.find(x => x.user.username===username)
+                console.log(review);
+                if (review!=null) {
                     setUserCommnet(true)
                 }
             } catch (error) {
@@ -111,7 +111,9 @@ const CarDetail = (props) => {
         getCar();
     }, [userComment])
 
-    
+
+    const carPoint = car.car.reviews && car.car.reviews.length>0? car.car.reviews.reduce((total, review) => total + review.mainPoint, 0) / car.car.reviews.length:5.0
+
 
     return (
         <div className="col-lg-8">
@@ -125,11 +127,20 @@ const CarDetail = (props) => {
                     <span style={{ textAlign: "start", color: "#9b9b9b" }}>or similar</span>
                 </div>
                 <div className='text-end d-flex align-items-center me-4'>
-                    <BiSolidStar color='#ffbf35' />
-                    <BiSolidStar color='#ffbf35' className='ms-1' />
-                    <BiSolidStar color='#ffbf35' className='ms-1' />
-                    <BiSolidStar color='#ffbf35' className='ms-1' />
-                    <BiSolidStarHalf color='#ffbf35' className='ms-1' />
+                    {
+                        car.car.reviews &&
+
+                        [1, 2, 3, 4, 5].map((y) => (
+                            (carPoint) > y ?
+                                <BiSolidStar key={y} className='ms-1' color='#ffa900' /> :
+                                (carPoint) == y ?
+                                    <BiSolidStar key={y} className='ms-1' color='#ffa900' /> :
+                                    (carPoint) < y && (carPoint) > y - 1 ?
+                                        <BiSolidStarHalf key={y} className='ms-1' color='#ffa900' /> :
+                                        <AiOutlineStar key={y} className='ms-1' color='#ffa900' />
+
+                        ))
+                    }
                     <span className='car-point'>
                         {
                             car.loadCar ?
@@ -524,13 +535,13 @@ const CarDetail = (props) => {
                                 car.car.reviews &&
 
                                 [1, 2, 3, 4, 5].map((y) => (
-                                    (point ) > y ?
-                                        <BiSolidStar className='ms-2' color='#ffa900' /> :
-                                        (point ) == y ?
-                                            <BiSolidStar className='ms-2' color='#ffa900' /> :
-                                            (point ) < y && (point ) > y - 1 ?
-                                                <BiSolidStarHalf className='ms-2' color='#ffa900' /> :
-                                                <AiOutlineStar className='ms-2' color='#ffa900' />
+                                    (carPoint) > y ?
+                                        <BiSolidStar key={y} className='ms-2' color='#ffa900' /> :
+                                        (carPoint) == y ?
+                                            <BiSolidStar key={y} className='ms-2' color='#ffa900' /> :
+                                            (carPoint) < y && (carPoint) > y - 1 ?
+                                                <BiSolidStarHalf key={y} className='ms-2' color='#ffa900' /> :
+                                                <AiOutlineStar key={y} className='ms-2' color='#ffa900' />
 
                                 ))
                             }

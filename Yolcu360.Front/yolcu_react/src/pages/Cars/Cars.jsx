@@ -10,6 +10,8 @@ import { BiSolidStar, BiSolidStarHalf } from 'react-icons/bi'
 import ReactSlider from 'react-slider'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
+import {AiOutlineStar} from "react-icons/ai"
+
 
 const Cars = () => {
     const { id } = useParams();
@@ -32,6 +34,8 @@ const Cars = () => {
         loadFuel: false,
         fuels: [],
     });
+
+    const { pickUpDate, dropOffDate } = useSelector(store => store.rent)
 
     var countvisiblecars = 0
 
@@ -193,61 +197,73 @@ const Cars = () => {
 
     useEffect(() => {
         const getCars = async () => {
-            var datas = await axios.get(`https://localhost:7079/api/Cars/CarsList/${id}`)
-            var maxPrice = datas.data.reduce((max, car) => {
-                if (car.priceDaily > max) {
-                    return car.priceDaily;
+
+            const sentDto = {
+                pickDate: new Date(pickUpDate),
+                dropDate: new Date(dropOffDate),
+            }
+            var datasCars = await axios.post(`https://localhost:7079/api/Cars/CarsList/${id}`, sentDto, {
+                headers: {
+                    "Content-Type": 'multipart/form-data'
                 }
-                return max;
-            }, 0);
-            maxPrice = Math.ceil(maxPrice)
-            setTabs(prev => { return { ...prev, maxPrice: maxPrice } })
-            var minPrice = datas.data.reduce((min, car) => {
-                if (car.priceDaily < min) {
-                    return car.priceDaily;
-                }
-                return min;
-            }, Infinity);
-            minPrice = Math.floor(minPrice)
-            setTabs(prev => { return { ...prev, minPrice: minPrice } })
+            }).then(datas => {
+                var maxPrice = datas.data.reduce((max, car) => {
+                    if (car.priceDaily > max) {
+                        return car.priceDaily;
+                    }
+                    return max;
+                }, 0);
+                maxPrice = Math.ceil(maxPrice)
+                setTabs(prev => { return { ...prev, maxPrice: maxPrice } })
+                var minPrice = datas.data.reduce((min, car) => {
+                    if (car.priceDaily < min) {
+                        return car.priceDaily;
+                    }
+                    return min;
+                }, Infinity);
+                minPrice = Math.floor(minPrice)
+                setTabs(prev => { return { ...prev, minPrice: minPrice } })
 
 
-            var maxMillage = datas.data.reduce((max, car) => {
-                if (car.totalMillage > max) {
-                    return car.totalMillage;
-                }
-                return max;
-            }, 0);
-            setTabs(prev => { return { ...prev, maxMillage: maxMillage } })
-            var minMillage = datas.data.reduce((min, car) => {
-                if (car.totalMillage < min) {
-                    return car.totalMillage;
-                }
-                return min;
-            }, Infinity);
-            setTabs(prev => { return { ...prev, minMillage: minMillage } })
+                var maxMillage = datas.data.reduce((max, car) => {
+                    if (car.totalMillage > max) {
+                        return car.totalMillage;
+                    }
+                    return max;
+                }, 0);
+                setTabs(prev => { return { ...prev, maxMillage: maxMillage } })
+                var minMillage = datas.data.reduce((min, car) => {
+                    if (car.totalMillage < min) {
+                        return car.totalMillage;
+                    }
+                    return min;
+                }, Infinity);
+                setTabs(prev => { return { ...prev, minMillage: minMillage } })
 
 
-            var maxDeposit = datas.data.reduce((max, car) => {
-                if (car.depozitPrice > max) {
-                    return car.depozitPrice;
-                }
-                return max;
-            }, 0);
-            maxDeposit = Math.ceil(maxDeposit)
-            setTabs(prev => { return { ...prev, maxDeposit: maxDeposit } })
-            var minDeposit = datas.data.reduce((min, car) => {
-                if (car.depozitPrice < min) {
-                    return car.depozitPrice;
-                }
-                return min;
-            }, Infinity);
-            minDeposit = Math.floor(minDeposit)
-            setTabs(prev => { return { ...prev, minDeposit: minDeposit } })
+                var maxDeposit = datas.data.reduce((max, car) => {
+                    if (car.depozitPrice > max) {
+                        return car.depozitPrice;
+                    }
+                    return max;
+                }, 0);
+                maxDeposit = Math.ceil(maxDeposit)
+                setTabs(prev => { return { ...prev, maxDeposit: maxDeposit } })
+                var minDeposit = datas.data.reduce((min, car) => {
+                    if (car.depozitPrice < min) {
+                        return car.depozitPrice;
+                    }
+                    return min;
+                }, Infinity);
+                minDeposit = Math.floor(minDeposit)
+                setTabs(prev => { return { ...prev, minDeposit: minDeposit } })
 
-            setCars(previous => { return { ...previous, cars: [...datas.data], loadCars: true, visibleCarsCount: 7, displayedCars: [...datas.data.slice(0, 7)] } })
-            countvisiblecars = 7
-            setMainCars([...datas.data])
+                setCars(previous => { return { ...previous, cars: [...datas.data], loadCars: true, visibleCarsCount: 7, displayedCars: [...datas.data.slice(0, 7)] } })
+                countvisiblecars = 7
+                setMainCars([...datas.data])
+
+            })
+
         }
         const getOffice = async () => {
             var data = await axios.get(`https://localhost:7079/api/Offices/${id}`)
@@ -374,19 +390,14 @@ const Cars = () => {
     }, [filters])
 
 
-    const { pickUpDate, dropOffDate } = useSelector(store => {
-        return {
-            pickUpDate: new Date(store.rent.pickUpDate),
-            dropOffDate: new Date(store.rent.dropOffDate)
-        }
-    })
-
-
-    var day = Math.ceil((dropOffDate - pickUpDate) / 86400000)
 
 
 
+    var day = Math.ceil((new Date(dropOffDate) - new Date(pickUpDate)) / 86400000)
 
+
+
+    var point = 0
 
     return (
         <div className='my-container mt-5' style={{ margin: "0 auto" }}>
@@ -399,7 +410,7 @@ const Cars = () => {
                     cars.loadOffice ? <Link to={`/office/:${id}`}>{cars.office.name}</Link> : null
                 }
             </div>
-            <div className="row">
+            <div className="row cars-heading">
                 <div className="col-lg-3 col-xl-4 col-md-4 col-sm-4">
                     <div className="promo-code" style={{ height: "40px" }}>
                         <span>
@@ -707,19 +718,37 @@ const Cars = () => {
                                         </div>
 
                                     </div>
+                                    <span className='d-none'>
+                                        {
+                                            point =x.reviews.length > 0 ? x.reviews.reduce((total, review) => total + review.mainPoint, 0) / x.reviews.length:5.0
+                                        }
+                                    </span>
                                     <div className='car-rayting d-flex justify-content-beetween align-item-center p-2'>
                                         <div className='d-flex align-items-center ps-3'>
-                                            <BiSolidStar color='#ffbf35' />
-                                            <BiSolidStar color='#ffbf35' />
-                                            <BiSolidStar color='#ffbf35' />
-                                            <BiSolidStar color='#ffbf35' />
-                                            <BiSolidStarHalf color='#ffbf35' />
+                                            {
+                                                [1, 2, 3, 4, 5].map((y) => (
+                                                    point > y ?
+                                                        <BiSolidStar className='ms-1' color='#ffa900' /> :
+                                                        point == y ?
+                                                            <BiSolidStar className='ms-1' color='#ffa900' /> :
+                                                            point < y && point > y - 1 ?
+                                                                <BiSolidStarHalf className='ms-1' color='#ffa900' /> :
+                                                                <AiOutlineStar className='ms-1' color='#ffa900' />
+
+                                                ))
+
+                                            }
                                             <span className='car-point'>
                                                 {
-                                                    
-                                                    x.reviews.length>0?
-                                                    (x.reviews.reduce((total, review) => total + review.mainPoint, 0) / x.reviews.length).toFixed(1):
-                                                    "5.0"
+
+                                                    x.reviews.length > 0 ?
+
+                                                        (point).toFixed(1)
+
+
+
+                                                        :
+                                                        "5.0"
                                                 }
                                             </span>
 

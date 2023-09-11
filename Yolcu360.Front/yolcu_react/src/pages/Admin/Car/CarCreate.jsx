@@ -25,7 +25,7 @@ const CarCreate = () => {
         minYoungDriverAge: null,
         minDriverLisanseYear: null,
         minYoungDriverLisanseYear: null,
-        transmission: null,
+        transmission: 1,
         fuelType: null,
         modelId: 1,
         typeId: 1,
