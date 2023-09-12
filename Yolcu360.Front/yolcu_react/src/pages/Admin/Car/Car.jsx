@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { FiEdit } from "react-icons/fi"
 import { MdDeleteForever } from "react-icons/md"
 import { BiSolidChevronLeft } from "react-icons/bi";
-import { BiSolidChevronRight } from "react-icons/bi";
+import { BiSolidChevronRight, BiDownload } from "react-icons/bi";
 
 const Car = () => {
     const navigate = useNavigate();
@@ -34,30 +34,30 @@ const Car = () => {
         });
         e.target.classList.add("active")
     }
-    
-  const NextPageHandler = (e) => {
-    if (page<maxPage) {
-      const newPage = page + 1;
-      setPage(newPage);
-      var btns = document.querySelectorAll('.pagination')
-      btns.forEach(btn => {
-        btn.classList.remove("active")
-      });
+
+    const NextPageHandler = (e) => {
+        if (page < maxPage) {
+            const newPage = page + 1;
+            setPage(newPage);
+            var btns = document.querySelectorAll('.pagination')
+            btns.forEach(btn => {
+                btn.classList.remove("active")
+            });
+        }
+
     }
+    const PrevPageHandler = function () {
+        if (page > 1) {
+            const newPage = page - 1;
+            setPage(newPage);
+            var btns = document.querySelectorAll('.pagination')
+            btns.forEach(btn => {
+                btn.classList.remove("active")
+            });
+        }
 
-  }
-  const PrevPageHandler = function () {
-    if (page > 1) {
-      const newPage = page - 1;
-      setPage(newPage);
-      var btns = document.querySelectorAll('.pagination')
-      btns.forEach(btn => {
-        btn.classList.remove("active")
-      });
+
     }
-
-
-  }
 
 
 
@@ -83,11 +83,38 @@ const Car = () => {
     }, [page])
     let order = 1;
 
+    const exportHandle = async () => {
+        try {
+            const response = await axios.get(`https://localhost:7079/api/Cars/ExportExcel`, {
+                responseType: 'blob', // Tell Axios to treat the response as a binary blob
+            });
+
+            // Create a blob object from the response data
+            const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+            // Create a temporary URL to the blob
+            const url = window.URL.createObjectURL(blob);
+
+            // Create a link element and trigger a click event to download the file
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'Cars.xlsx';
+            document.body.appendChild(link);
+            link.click();
+
+            // Clean up the URL object
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <div className="admin-container">
             <h2 className='text-start  crud-header-entity pb-3' >Car</h2>
             <div className='text-end me-3'>
                 <Link className='btn btn-primary' to={"/admin/car/create"}>Create Car</Link>
+                <button onClick={exportHandle} className='btn btn-success ms-2 '><BiDownload style={{ fontSize: "20px", marginRight: "8px" }} /> Download Excel</button>
             </div>
             <div className="table-responsive mt-4">
                 <table className="table table-hover">
