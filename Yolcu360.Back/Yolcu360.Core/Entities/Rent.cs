@@ -23,5 +23,6 @@ namespace Yolcu360.Core.Entities
         public DateTime CreateDate { get; set; }
         public Car Car { get; set; }
         public AppUser User { get; set; }
+        public int Status { get; set; }
     }
 }

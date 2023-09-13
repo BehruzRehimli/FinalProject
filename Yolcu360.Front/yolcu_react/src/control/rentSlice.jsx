@@ -10,7 +10,8 @@ const initialState = {
     day: 3,
     extentions: [],
     sumPrice: 0,
-    exPrice: 0
+    exPrice: 0,
+    wrongChose:0
 };
 
 const rentSlice = createSlice({
@@ -18,11 +19,29 @@ const rentSlice = createSlice({
     initialState,
     reducers: {
         setPickUpDate: (state, action) => {
+            if(new Date()>new Date(action.payload)){
+                state.wrongChose++
+                return 
+            }
+            if (new Date(state.dropOffDate)<new Date(action.payload)) {
+                state.wrongChose++
+                var data=((new Date(action.payload)))
+                data.setDate(data.getDate()+3)
+                state.dropOffDate=data.toISOString()
+            }
             state.pickUpDate = action.payload;
         },
         setDropOffDate: (state, action) => {
+            if (new Date(state.pickUpDate)>new Date(action.payload)) {
+                state.wrongChose++
+                return
+            }
             state.dropOffDate = action.payload;
         },
+        setWrongChose:(state)=>{
+            state.wrongChose=0
+        }
+        ,
         setPickUpLoc: (state, action) => {
             state.pickUpLoc = action.payload;
         },
@@ -101,5 +120,5 @@ const rentSlice = createSlice({
     }
 });
 
-export const { setPickUpDate, setDropOffDate, setPickUpLoc, setDropOffLoc, setExtentios, setSumPrice, setDay,setEmptyExt,setExPrice } = rentSlice.actions;
+export const { setPickUpDate, setDropOffDate, setPickUpLoc, setDropOffLoc, setExtentios, setSumPrice, setDay,setEmptyExt,setExPrice,setWrongChose } = rentSlice.actions;
 export default rentSlice.reducer;

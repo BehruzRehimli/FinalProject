@@ -140,11 +140,16 @@ const AdminLayout = () => {
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/country"} aria-expanded="false"><i className="fa fa-user-circle-o"></i><span className="hide-menu">Country</span></Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/type"} aria-expanded="false"><i className="fa fa-table"></i><span className="hide-menu"></span>Type</Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/brand"} aria-expanded="false"><i className="fa fa-smile-o"></i><span className="hide-menu"></span>Brand</Link></li>
+                                <li> <Link className="waves-effect waves-dark" to={"/admin/rent"} aria-expanded="false"><i className="fa fa-smile-o"></i><span className="hide-menu"></span>Rent</Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/city"} aria-expanded="false"><i className="fa fa-globe"></i><span className="hide-menu"></span>City</Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/office"} aria-expanded="false"><i className="fa fa-bookmark-o"></i><span className="hide-menu"></span>Office</Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/model"} aria-expanded="false"><i className="fa fa-question-circle"></i><span className="hide-menu"></span>Model</Link></li>
                                 <li> <Link className="waves-effect waves-dark" to={"/admin/car"} aria-expanded="false"><i className="fa fa-table"></i><span className="hide-menu"></span>Car</Link></li>
-
+                                {
+                                    adminUsername==="SuperAdmin"?
+                                    <li> <Link className="waves-effect waves-dark" to={"/admin/admin"} aria-expanded="false"><i className="fa fa-user-circle-o"></i><span className="hide-menu"></span>Admin</Link></li>
+                                    :console.log(adminUsername)
+                                }
                             </ul>
                         </nav>
                         {/* <!-- End Sidebar navigation --> */}

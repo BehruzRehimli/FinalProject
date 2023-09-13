@@ -37,6 +37,7 @@ import ResetPasword from './pages/ResetPasword/ResetPasword';
 import Admin from './pages/Admin/Admin/Admin';
 import AdminCreate from './pages/Admin/Admin/AdminCreate';
 import AdminEdit from './pages/Admin/Admin/AdminEdit';
+import Rent from './pages/Admin/Rent/Rent';
 
 
 
@@ -85,6 +86,7 @@ function App() {
             <Route path='/admin/admin' element={<Admin/>}/>
             <Route path='/admin/admin/create' element={<AdminCreate/>}/>
             <Route path='/admin/admin/edit/:id' element={<AdminEdit/>}/>
+            <Route path='/admin/rent' element={<Rent/>}/>
 
           </Route>
           <Route path='/admin/login' element={<Login/>}/>

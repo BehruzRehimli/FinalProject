@@ -95,6 +95,8 @@ namespace Yolcu360.Service.Profiles
             CreateMap<AppUser, ProfileDto>();
             CreateMap<AppUser, AdminGetAllDto>();
             CreateMap<AdminCreateDto, AppUser>();
+            CreateMap<Car, RentGetAllDtoCar>().ForMember(x => x.ImageName, s => s.MapFrom(m => m.ImageName != null ? BaseUrl.GetUrl("Car") + m.ImageName : null));
+            CreateMap<Rent, RentGetAllDto>();
 
 
 

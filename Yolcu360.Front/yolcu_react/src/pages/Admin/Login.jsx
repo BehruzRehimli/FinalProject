@@ -35,7 +35,7 @@ const Login = () => {
                                         localStorage.setItem("YolcuAdmin", data.data.token)
                                         const decoded = jwt_decode(data.data.token);
                                         let user=decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
-                                        dispatch(setUsername(user))
+                                        dispatch(setAdminUsername(user))
                                         dispatch(setAdminToken(data.data.token))
                                         dispatch(adminLogedYes())
                                         navigate("/admin")

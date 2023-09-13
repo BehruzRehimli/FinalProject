@@ -156,7 +156,7 @@ namespace Yolcu360.Service.Implementations
                 bool isAvailable = true;
                 foreach (var rent in car.Rents)
                 {
-                    if ((dto.PickDate >= rent.PickUpDate && dto.PickDate <= rent.DropOffDate) || (dto.DropDate>=rent.PickUpDate && dto.DropDate <=rent.DropOffDate) || (rent.PickUpDate>=dto.PickDate && rent.PickUpDate<=dto.DropDate))
+                    if (rent.Status==1 && ((dto.PickDate >= rent.PickUpDate && dto.PickDate <= rent.DropOffDate) || (dto.DropDate>=rent.PickUpDate && dto.DropDate <=rent.DropOffDate) || (rent.PickUpDate>=dto.PickDate && rent.PickUpDate<=dto.DropDate)))
                     {
                         // Araba bu kiralama döneminde başka bir kiracıya verilmiş, uygun değil.
                         isAvailable = false;
